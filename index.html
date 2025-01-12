@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>द्राक्ष नोंदवाई</title>
   <style>
-    /* Same styles as before */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
@@ -96,6 +95,9 @@
     .delete-btn:hover {
       background-color: #cc0000;
     }
+    .input-group .unit-select {
+      flex: 0 0 30%;
+    }
   </style>
 </head>
 <body>
@@ -103,19 +105,50 @@
   
   <!-- Input Section -->
   <div id="input-section">
+    <div class="actions">
+      <input type="text" id="newPlotName" placeholder="नवीन प्लॉट जोडा">
+      <button onclick="addPlot()">प्लॉट जोडा</button>
+    </div>
     <div class="input-group">
+      <select id="plotSelection" required>
+        <option value="" disabled selected>प्लॉट निवडा</option>
+      </select>
       <input type="number" id="serialNumber" placeholder="Serial Number" required>
       <input type="date" id="date" required>
       <input type="number" id="daysAfter" placeholder="छाटणी नंतरचे दिवस" required>
       <input type="text" id="medicineName" placeholder="औषध व खतांचे नाव" required>
-      <input type="text" id="dosePerLiter" placeholder="औषधाची मात्रा प्रति लिटर">
-      <input type="text" id="dosePerPlot" placeholder="औषधाची मात्रा प्रती प्लॉट">
-      <input type="text" id="waterPerPlot" placeholder="पाणी प्रती प्लॉट">
-      <input type="text" id="sprayTime" placeholder="फवारणीची वेळ">
-      <!-- Dropdown for plot selection -->
-      <select id="plotSelection" required>
-        <option value="" disabled selected>प्लॉट निवडा</option>
-      </select>
+
+      <!-- Medicine Quantity per Liter and Unit -->
+      <div style="flex: 1; display: flex;">
+        <input type="number" id="dosePerLiter" placeholder="औषधाची मात्रा प्रति लिटर" required>
+        <select id="doseUnit" class="unit-select" required>
+          <option value="ml">ml</option>
+          <option value="g">g</option>
+        </select>
+      </div>
+
+      <!-- Medicine Quantity per Plot and Unit -->
+      <div style="flex: 1; display: flex;">
+        <input type="number" id="dosePerPlot" placeholder="औषधाची मात्रा प्रती प्लॉट" required>
+        <select id="dosePlotUnit" class="unit-select" required>
+          <option value="ml">ml</option>
+          <option value="l">l</option>
+          <option value="g">g</option>
+          <option value="kg">kg</option>
+        </select>
+      </div>
+
+      <!-- Water per Plot (Only in Liters) -->
+      <input type="number" id="waterPerPlot" placeholder="पाणी प्रती प्लॉट (लिटर मध्ये)" required>
+
+      <!-- Spray Time with AM/PM -->
+      <div style="flex: 1; display: flex;">
+        <input type="time" id="sprayTime" placeholder="फवारणीची वेळ" required>
+        <select id="timeAMPM" class="unit-select" required>
+          <option value="AM">AM</option>
+          <option value="PM">PM</option>
+        </select>
+      </div>
     </div>
     <div style="text-align: center; margin-top: 15px;">
       <button onclick="addRowFromInputs()">टेबलमध्ये जोडा</button>
@@ -132,12 +165,6 @@
       <input type="date" id="filterDate" onchange="filterTable()">
       <input type="number" id="filterYear" placeholder="वर्ष" onchange="filterTable()">
     </div>
-  </div>
-
-  <!-- Plot Add Section -->
-  <div class="actions">
-    <input type="text" id="newPlotName" placeholder="नवीन प्लॉट जोडा">
-    <button onclick="addPlot()">प्लॉट जोडा</button>
   </div>
 
   <!-- Table -->
@@ -157,7 +184,6 @@
       </tr>
     </thead>
     <tbody id="table-body">
-      <!-- Rows will be added dynamically -->
     </tbody>
   </table>
 
@@ -168,18 +194,59 @@
   </div>
 
   <script>
+    // Load plots from localStorage
+    function loadPlots() {
+      const plots = JSON.parse(localStorage.getItem("plots")) || [];
+      const plotSelection = document.getElementById("plotSelection");
+      const filterPlot = document.getElementById("filterPlot");
+
+      plotSelection.innerHTML = '<option value="" disabled selected>प्लॉट निवडा</option>';
+      filterPlot.innerHTML = '<option value="">सर्व प्लॉट्स</option>';
+
+      plots.forEach(plot => {
+        const option = document.createElement("option");
+        option.value = plot;
+        option.textContent = plot;
+        plotSelection.appendChild(option);
+        filterPlot.appendChild(option.cloneNode(true));
+      });
+    }
+
+    function addPlot() {
+      const newPlotName = document.getElementById("newPlotName").value.trim();
+      if (!newPlotName) {
+        alert("कृपया वैध प्लॉट नाव प्रविष्ट करा.");
+        return;
+      }
+
+      const plots = JSON.parse(localStorage.getItem("plots")) || [];
+      if (!plots.includes(newPlotName)) {
+        plots.push(newPlotName);
+        localStorage.setItem("plots", JSON.stringify(plots));
+        loadPlots();
+        alert("प्लॉट यशस्वीरित्या जोडला!");
+      } else {
+        alert("हा प्लॉट आधीच जोडलेला आहे.");
+      }
+
+      document.getElementById("newPlotName").value = "";
+    }
+
     function addRowFromInputs() {
       const serialNumber = document.getElementById("serialNumber").value;
       const date = document.getElementById("date").value;
       const daysAfter = document.getElementById("daysAfter").value;
       const medicineName = document.getElementById("medicineName").value;
       const dosePerLiter = document.getElementById("dosePerLiter").value;
+      const doseUnit = document.getElementById("doseUnit").value;
       const dosePerPlot = document.getElementById("dosePerPlot").value;
+      const dosePlotUnit = document.getElementById("dosePlotUnit").value;
       const waterPerPlot = document.getElementById("waterPerPlot").value;
       const sprayTime = document.getElementById("sprayTime").value;
+      const timeAMPM = document.getElementById("timeAMPM").value;
       const plotSelection = document.getElementById("plotSelection").value;
 
-      if (!serialNumber || !date || !daysAfter || !medicineName || !plotSelection) {
+      if (!serialNumber || !date || !daysAfter || !medicineName || !plotSelection || !dosePerLiter || !doseUnit || !dosePerPlot || !dosePlotUnit) {
         alert("कृपया सर्व आवश्यक फील्ड भरा.");
         return;
       }
@@ -191,88 +258,23 @@
         <td>${date}</td>
         <td>${daysAfter}</td>
         <td>${medicineName}</td>
-        <td>${dosePerLiter}</td>
-        <td>${dosePerPlot}</td>
-        <td>${waterPerPlot}</td>
-        <td>${sprayTime}</td>
+        <td>${dosePerLiter} ${doseUnit}</td>
+        <td>${dosePerPlot} ${dosePlotUnit}</td>
+        <td>${waterPerPlot} L</td>
+        <td>${sprayTime} ${timeAMPM}</td>
         <td>${plotSelection}</td>
         <td><button class="delete-btn" onclick="deleteRow(this)">हटवा</button></td>
       `;
       tableBody.appendChild(newRow);
-      updateFilterPlots();
 
+      // Clear inputs after adding row
       document.querySelectorAll("#input-section input").forEach(input => input.value = "");
       document.getElementById("plotSelection").selectedIndex = 0;
-    }
-
-    function addPlot() {
-      const newPlotName = document.getElementById("newPlotName").value.trim();
-      if (!newPlotName) {
-        alert("कृपया वैध प्लॉट नाव प्रविष्ट करा.");
-        return;
-      }
-
-      const plotSelection = document.getElementById("plotSelection");
-      const filterPlot = document.getElementById("filterPlot");
-      const existingOptions = Array.from(plotSelection.options).map(option => option.value);
-
-      if (!existingOptions.includes(newPlotName)) {
-        const newOption = document.createElement("option");
-        newOption.value = newPlotName;
-        newOption.textContent = newPlotName;
-        plotSelection.appendChild(newOption);
-        filterPlot.appendChild(newOption.cloneNode(true));
-        alert("प्लॉट यशस्वीरित्या जोडला!");
-      } else {
-        alert("हा प्लॉट आधीच जोडलेला आहे.");
-      }
-
-      document.getElementById("newPlotName").value = "";
-    }
-
-    function updateFilterPlots() {
-      const filterPlot = document.getElementById("filterPlot");
-      const tableBody = document.getElementById("table-body");
-      const plots = new Set();
-
-      tableBody.querySelectorAll("tr").forEach(row => {
-        const plot = row.children[8]?.textContent || "";
-        if (plot) plots.add(plot);
-      });
-
-      filterPlot.innerHTML = `<option value="">सर्व प्लॉट्स</option>`;
-      plots.forEach(plot => {
-        const option = document.createElement("option");
-        option.value = plot;
-        option.textContent = plot;
-        filterPlot.appendChild(option);
-      });
-    }
-
-    function filterTable() {
-      const filterPlot = document.getElementById("filterPlot").value.toLowerCase();
-      const filterDate = document.getElementById("filterDate").value;
-      const filterYear = document.getElementById("filterYear").value;
-
-      const rows = document.querySelectorAll("#table-body tr");
-      rows.forEach(row => {
-        const cells = row.querySelectorAll("td");
-        const plot = cells[8]?.textContent.toLowerCase();
-        const date = cells[1]?.textContent;
-        const year = date ? new Date(date).getFullYear() : "";
-
-        const plotMatch = !filterPlot || plot === filterPlot;
-        const dateMatch = !filterDate || date === filterDate;
-        const yearMatch = !filterYear || year == filterYear;
-
-        row.style.display = plotMatch && dateMatch && yearMatch ? "" : "none";
-      });
     }
 
     function deleteRow(button) {
       const row = button.parentElement.parentElement;
       row.remove();
-      updateFilterPlots();
     }
 
     function saveData() {
@@ -296,8 +298,13 @@
           .join("") + `<td><button class="delete-btn" onclick="deleteRow(this)">हटवा</button></td>`;
         tableBody.appendChild(newRow);
       });
-      updateFilterPlots();
     }
+
+    // Load existing plots and data on page load
+    window.onload = function() {
+      loadPlots();
+      loadData();
+    };
   </script>
 </body>
 </html>
