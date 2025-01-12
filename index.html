@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>द्राक्ष नोंदवाई</title>
+  <title>Vineyard Data Entry</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -98,10 +98,30 @@
     .input-group .unit-select {
       flex: 0 0 30%;
     }
+    .download-btn {
+      background-color: #28a745;
+      margin-top: 15px;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      display: block;
+      text-align: center;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .download-btn:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 <body>
-  <h2>द्राक्ष नोंदवाई फॉर्म</h2>
+  <h2>वळणी डेटा एंट्री फॉर्म</h2>
   
   <!-- Input Section -->
   <div id="input-section">
@@ -113,45 +133,35 @@
       <select id="plotSelection" required>
         <option value="" disabled selected>प्लॉट निवडा</option>
       </select>
-      <input type="number" id="serialNumber" placeholder="Serial Number" required>
+      <input type="number" id="serialNumber" placeholder="सिरियल नंबर" required>
       <input type="date" id="date" required>
-      <input type="number" id="daysAfter" placeholder="छाटणी नंतरचे दिवस" required>
-      <input type="text" id="medicineName" placeholder="औषध व खतांचे नाव" required>
+      <input type="number" id="daysAfter" placeholder="कापणीनंतरचे दिवस" required>
+      <input type="text" id="medicineName" placeholder="औषधे आणि खतांचे नाव" required>
 
-      <!-- Medicine Quantity per Liter and Unit -->
       <div style="flex: 1; display: flex;">
-        <input type="number" id="dosePerLiter" placeholder="औषधाची मात्रा प्रति लिटर" required>
+        <input type="number" id="dosePerLiter" placeholder="प्रति लिटर डोस" required>
         <select id="doseUnit" class="unit-select" required>
-          <option value="ml">ml</option>
-          <option value="g">g</option>
+          <option value="ml">मि.ली.</option>
+          <option value="g">ग्राम</option>
         </select>
       </div>
 
-      <!-- Medicine Quantity per Plot and Unit -->
       <div style="flex: 1; display: flex;">
-        <input type="number" id="dosePerPlot" placeholder="औषधाची मात्रा प्रती प्लॉट" required>
+        <input type="number" id="dosePerPlot" placeholder="प्रति प्लॉट डोस" required>
         <select id="dosePlotUnit" class="unit-select" required>
-          <option value="ml">ml</option>
-          <option value="l">l</option>
-          <option value="g">g</option>
-          <option value="kg">kg</option>
+          <option value="ml">मि.ली.</option>
+          <option value="l">लिटर</option>
+          <option value="g">ग्राम</option>
+          <option value="kg">किलो</option>
         </select>
       </div>
 
-      <!-- Water per Plot (Only in Liters) -->
-      <input type="number" id="waterPerPlot" placeholder="पाणी प्रती प्लॉट (लिटर मध्ये)" required>
+      <input type="number" id="waterPerPlot" placeholder="प्रति प्लॉट पाणी (लिटर)" required>
 
-      <!-- Spray Time with AM/PM -->
-      <div style="flex: 1; display: flex;">
-        <input type="time" id="sprayTime" placeholder="फवारणीची वेळ" required>
-        <select id="timeAMPM" class="unit-select" required>
-          <option value="AM">AM</option>
-          <option value="PM">PM</option>
-        </select>
-      </div>
+      <input type="time" id="sprayTime" placeholder="स्प्रे करण्याचा वेळ" required>
     </div>
     <div style="text-align: center; margin-top: 15px;">
-      <button onclick="addRowFromInputs()">टेबलमध्ये जोडा</button>
+      <button onclick="addRowFromInputs()">तक्त्यात जोडा</button>
     </div>
   </div>
 
@@ -160,7 +170,7 @@
     <h3>फिल्टर पर्याय</h3>
     <div class="filter-group">
       <select id="filterPlot" onchange="filterTable()">
-        <option value="">सर्व प्लॉट्स</option>
+        <option value="">सर्व प्लॉट</option>
       </select>
       <input type="date" id="filterDate" onchange="filterTable()">
       <input type="number" id="filterYear" placeholder="वर्ष" onchange="filterTable()">
@@ -171,37 +181,40 @@
   <table>
     <thead>
       <tr>
-        <th>Serial Number</th>
-        <th>दिनांक</th>
-        <th>छाटणी नंतरचे दिवस</th>
-        <th>औषध व खतांचे नाव</th>
-        <th>औषधाची मात्रा प्रति लिटर</th>
-        <th>औषधाची मात्रा प्रती प्लॉट</th>
-        <th>पाणी प्रती प्लॉट</th>
-        <th>फवारणीची वेळ</th>
+        <th>सिरियल नंबर</th>
+        <th>तारीख</th>
+        <th>कापणीनंतरचे दिवस</th>
+        <th>औषधे आणि खतांचे नाव</th>
+        <th>प्रति लिटर डोस</th>
+        <th>प्रति प्लॉट डोस</th>
+        <th>प्रति प्लॉट पाणी</th>
+        <th>स्प्रे करण्याचा वेळ</th>
         <th>प्लॉट</th>
-        <th>क्रिया</th>
+        <th>कारवाया</th>
       </tr>
     </thead>
     <tbody id="table-body">
     </tbody>
   </table>
 
-  <!-- Save and Load Section -->
+  <!-- Save, Load, and Download Section -->
   <div class="actions">
-    <button onclick="saveData()">डेटा सेव्ह करा</button>
+    <button onclick="saveData()">डेटा जतन करा</button>
     <button onclick="loadData()">डेटा लोड करा</button>
+    <button onclick="downloadPDF()">PDF म्हणून डाउनलोड करा</button>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.22/jspdf.plugin.autotable.min.js"></script>
+
   <script>
-    // Load plots from localStorage
     function loadPlots() {
       const plots = JSON.parse(localStorage.getItem("plots")) || [];
       const plotSelection = document.getElementById("plotSelection");
       const filterPlot = document.getElementById("filterPlot");
 
       plotSelection.innerHTML = '<option value="" disabled selected>प्लॉट निवडा</option>';
-      filterPlot.innerHTML = '<option value="">सर्व प्लॉट्स</option>';
+      filterPlot.innerHTML = '<option value="">सर्व प्लॉट</option>';
 
       plots.forEach(plot => {
         const option = document.createElement("option");
@@ -215,7 +228,7 @@
     function addPlot() {
       const newPlotName = document.getElementById("newPlotName").value.trim();
       if (!newPlotName) {
-        alert("कृपया वैध प्लॉट नाव प्रविष्ट करा.");
+        alert("कृपया वैध प्लॉट नाव द्या.");
         return;
       }
 
@@ -224,7 +237,7 @@
         plots.push(newPlotName);
         localStorage.setItem("plots", JSON.stringify(plots));
         loadPlots();
-        alert("प्लॉट यशस्वीरित्या जोडला!");
+        alert("प्लॉट यशस्वीरित्या जोडला.");
       } else {
         alert("हा प्लॉट आधीच जोडलेला आहे.");
       }
@@ -243,7 +256,6 @@
       const dosePlotUnit = document.getElementById("dosePlotUnit").value;
       const waterPerPlot = document.getElementById("waterPerPlot").value;
       const sprayTime = document.getElementById("sprayTime").value;
-      const timeAMPM = document.getElementById("timeAMPM").value;
       const plotSelection = document.getElementById("plotSelection").value;
 
       if (!serialNumber || !date || !daysAfter || !medicineName || !plotSelection || !dosePerLiter || !doseUnit || !dosePerPlot || !dosePlotUnit) {
@@ -261,13 +273,12 @@
         <td>${dosePerLiter} ${doseUnit}</td>
         <td>${dosePerPlot} ${dosePlotUnit}</td>
         <td>${waterPerPlot} L</td>
-        <td>${sprayTime} ${timeAMPM}</td>
+        <td>${sprayTime}</td>
         <td>${plotSelection}</td>
-        <td><button class="delete-btn" onclick="deleteRow(this)">हटवा</button></td>
+        <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
       `;
       tableBody.appendChild(newRow);
 
-      // Clear inputs after adding row
       document.querySelectorAll("#input-section input").forEach(input => input.value = "");
       document.getElementById("plotSelection").selectedIndex = 0;
     }
@@ -280,31 +291,88 @@
     function saveData() {
       const rows = document.querySelectorAll("#table-body tr");
       const data = Array.from(rows).map(row => {
-        const cells = row.querySelectorAll("td");
-        return Array.from(cells).map(cell => cell.textContent);
+        return Array.from(row.children).slice(0, -1).map(cell => cell.textContent);
       });
+
       localStorage.setItem("tableData", JSON.stringify(data));
-      alert("डेटा यशस्वीरित्या सेव्ह केला!");
+      alert("डेटा जतन केला.");
     }
 
     function loadData() {
       const data = JSON.parse(localStorage.getItem("tableData")) || [];
       const tableBody = document.getElementById("table-body");
-      tableBody.innerHTML = ""; // Clear existing rows
+      tableBody.innerHTML = "";
+
       data.forEach(rowData => {
         const newRow = document.createElement("tr");
-        newRow.innerHTML = rowData
-          .map((value, index) => `<td>${value}</td>`)
-          .join("") + `<td><button class="delete-btn" onclick="deleteRow(this)">हटवा</button></td>`;
+        rowData.forEach(cellData => {
+          const newCell = document.createElement("td");
+          newCell.textContent = cellData;
+          newRow.appendChild(newCell);
+        });
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.classList.add("delete-btn");
+        deleteButton.onclick = function() {
+          newRow.remove();
+        };
+        const actionCell = document.createElement("td");
+        actionCell.appendChild(deleteButton);
+        newRow.appendChild(actionCell);
         tableBody.appendChild(newRow);
       });
     }
 
-    // Load existing plots and data on page load
-    window.onload = function() {
-      loadPlots();
-      loadData();
-    };
+    function filterTable() {
+      const filterPlot = document.getElementById("filterPlot").value.toLowerCase();
+      const filterDate = document.getElementById("filterDate").value;
+      const filterYear = document.getElementById("filterYear").value;
+      const rows = document.querySelectorAll("#table-body tr");
+
+      rows.forEach(row => {
+        const cells = row.children;
+        const plot = cells[8].textContent.toLowerCase();
+        const date = cells[1].textContent;
+        const year = new Date(date).getFullYear();
+
+        const matchPlot = filterPlot ? plot.includes(filterPlot) : true;
+        const matchDate = filterDate ? date.includes(filterDate) : true;
+        const matchYear = filterYear ? year.toString().includes(filterYear) : true;
+
+        if (matchPlot && matchDate && matchYear) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+    }
+
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      const tableHeaders = [
+        ["Serial Number", "Date", "Days After Pruning", "Medicine and Fertilizers",
+        "Dose per Liter", "Dose per Plot", "Water per Plot", "Spraying Time", "Plot"]
+      ];
+
+      const tableData = Array.from(document.querySelectorAll("#table-body tr")).map(row => {
+        return Array.from(row.children).slice(0, -1).map(cell => cell.textContent);
+      });
+
+      doc.autoTable({
+        head: tableHeaders,
+        body: tableData,
+        theme: 'grid',
+        margin: { top: 10 },
+        styles: { fontSize: 12, cellPadding: 2, font: "helvetica" }
+      });
+
+      doc.save("table_data.pdf");
+    }
+
+    loadPlots();
   </script>
 </body>
 </html>
