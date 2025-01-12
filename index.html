@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>द्राक्ष नोंदवाई</title>
   <style>
-    /* Styles remain the same as before */
+    /* Same styles as before */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
@@ -18,7 +18,7 @@
       color: #444;
       margin-top: 20px;
     }
-    #input-section {
+    #input-section, #filter-section {
       max-width: 800px;
       margin: 20px auto;
       padding: 20px;
@@ -26,13 +26,14 @@
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    .input-group {
+    .input-group, .filter-group {
       display: flex;
       flex-wrap: wrap;
       gap: 15px;
       justify-content: space-between;
     }
-    .input-group input, .input-group select {
+    .input-group input, .input-group select,
+    .filter-group input, .filter-group select {
       flex: 1 1 48%;
       padding: 10px;
       border: 1px solid #ccc;
@@ -40,7 +41,8 @@
       font-size: 14px;
       outline: none;
     }
-    .input-group input:focus, .input-group select:focus {
+    .input-group input:focus, .input-group select:focus,
+    .filter-group input:focus, .filter-group select:focus {
       border-color: #007BFF;
     }
     button {
@@ -87,11 +89,19 @@
     .actions button {
       margin: 0 10px;
     }
+    .delete-btn {
+      background-color: #ff4d4d;
+      margin: 5px;
+    }
+    .delete-btn:hover {
+      background-color: #cc0000;
+    }
   </style>
 </head>
 <body>
   <h2>द्राक्ष नोंदवाई फॉर्म</h2>
   
+  <!-- Input Section -->
   <div id="input-section">
     <div class="input-group">
       <input type="number" id="serialNumber" placeholder="Serial Number" required>
@@ -112,11 +122,25 @@
     </div>
   </div>
 
-  <div class="actions" style="margin: 20px;">
+  <!-- Filter Section -->
+  <div id="filter-section">
+    <h3>फिल्टर पर्याय</h3>
+    <div class="filter-group">
+      <select id="filterPlot" onchange="filterTable()">
+        <option value="">सर्व प्लॉट्स</option>
+      </select>
+      <input type="date" id="filterDate" onchange="filterTable()">
+      <input type="number" id="filterYear" placeholder="वर्ष" onchange="filterTable()">
+    </div>
+  </div>
+
+  <!-- Plot Add Section -->
+  <div class="actions">
     <input type="text" id="newPlotName" placeholder="नवीन प्लॉट जोडा">
     <button onclick="addPlot()">प्लॉट जोडा</button>
   </div>
 
+  <!-- Table -->
   <table>
     <thead>
       <tr>
@@ -129,6 +153,7 @@
         <th>पाणी प्रती प्लॉट</th>
         <th>फवारणीची वेळ</th>
         <th>प्लॉट</th>
+        <th>क्रिया</th>
       </tr>
     </thead>
     <tbody id="table-body">
@@ -136,6 +161,7 @@
     </tbody>
   </table>
 
+  <!-- Save and Load Section -->
   <div class="actions">
     <button onclick="saveData()">डेटा सेव्ह करा</button>
     <button onclick="loadData()">डेटा लोड करा</button>
@@ -170,8 +196,10 @@
         <td>${waterPerPlot}</td>
         <td>${sprayTime}</td>
         <td>${plotSelection}</td>
+        <td><button class="delete-btn" onclick="deleteRow(this)">हटवा</button></td>
       `;
       tableBody.appendChild(newRow);
+      updateFilterPlots();
 
       document.querySelectorAll("#input-section input").forEach(input => input.value = "");
       document.getElementById("plotSelection").selectedIndex = 0;
@@ -185,6 +213,7 @@
       }
 
       const plotSelection = document.getElementById("plotSelection");
+      const filterPlot = document.getElementById("filterPlot");
       const existingOptions = Array.from(plotSelection.options).map(option => option.value);
 
       if (!existingOptions.includes(newPlotName)) {
@@ -192,12 +221,58 @@
         newOption.value = newPlotName;
         newOption.textContent = newPlotName;
         plotSelection.appendChild(newOption);
+        filterPlot.appendChild(newOption.cloneNode(true));
         alert("प्लॉट यशस्वीरित्या जोडला!");
       } else {
         alert("हा प्लॉट आधीच जोडलेला आहे.");
       }
 
       document.getElementById("newPlotName").value = "";
+    }
+
+    function updateFilterPlots() {
+      const filterPlot = document.getElementById("filterPlot");
+      const tableBody = document.getElementById("table-body");
+      const plots = new Set();
+
+      tableBody.querySelectorAll("tr").forEach(row => {
+        const plot = row.children[8]?.textContent || "";
+        if (plot) plots.add(plot);
+      });
+
+      filterPlot.innerHTML = `<option value="">सर्व प्लॉट्स</option>`;
+      plots.forEach(plot => {
+        const option = document.createElement("option");
+        option.value = plot;
+        option.textContent = plot;
+        filterPlot.appendChild(option);
+      });
+    }
+
+    function filterTable() {
+      const filterPlot = document.getElementById("filterPlot").value.toLowerCase();
+      const filterDate = document.getElementById("filterDate").value;
+      const filterYear = document.getElementById("filterYear").value;
+
+      const rows = document.querySelectorAll("#table-body tr");
+      rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        const plot = cells[8]?.textContent.toLowerCase();
+        const date = cells[1]?.textContent;
+        const year = date ? new Date(date).getFullYear() : "";
+
+        const plotMatch = !filterPlot || plot === filterPlot;
+        const dateMatch = !filterDate || date === filterDate;
+        const yearMatch = !filterYear || year == filterYear;
+
+        row.style.display = plotMatch && dateMatch && yearMatch ? "" : "none";
+      });
+    }
+
+    function deleteRow(button) {
+      const row = button.parentElement.parentElement;
+      row.remove();
+      updateFilterPlots();
     }
 
     function saveData() {
@@ -216,9 +291,12 @@
       tableBody.innerHTML = ""; // Clear existing rows
       data.forEach(rowData => {
         const newRow = document.createElement("tr");
-        newRow.innerHTML = rowData.map(value => `<td>${value}</td>`).join("");
+        newRow.innerHTML = rowData
+          .map((value, index) => `<td>${value}</td>`)
+          .join("") + `<td><button class="delete-btn" onclick="deleteRow(this)">हटवा</button></td>`;
         tableBody.appendChild(newRow);
       });
+      updateFilterPlots();
     }
   </script>
 </body>
