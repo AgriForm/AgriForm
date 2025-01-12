@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>द्राक्ष नोंदवाई</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h2 {
+      text-align: center;
+      color: #444;
+      margin-top: 20px;
+    }
+    #input-section {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .input-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+    }
+    .input-group input {
+      flex: 1 1 48%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      outline: none;
+    }
+    .input-group input:focus {
+      border-color: #007BFF;
+    }
+    button {
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #eaeaea;
+    }
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+    .actions {
+      text-align: center;
+      margin: 20px;
+    }
+    .actions button {
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>डद्राक्ष नोंदवाई फॉर्म</h2>
+  
+  <div id="input-section">
+    <div class="input-group">
+      <input type="number" id="serialNumber" placeholder="Serial Number" required>
+      <input type="date" id="date" required>
+      <input type="number" id="daysAfter" placeholder="छाटणी नंतरचे दिवस" required>
+      <input type="text" id="medicineName" placeholder="औषध व खतांचे नाव" required>
+      <input type="text" id="dosePerLiter" placeholder="औषधाची मात्रा प्रति लिटर">
+      <input type="text" id="dosePerPlot" placeholder="औषधाची मात्रा प्रती प्लॉट">
+      <input type="text" id="waterPerPlot" placeholder="पाणी प्रती प्लॉट">
+      <input type="text" id="sprayTime" placeholder="फवारणीची वेळ">
+    </div>
+    <div style="text-align: center; margin-top: 15px;">
+      <button onclick="addRowFromInputs()">टेबलमध्ये जोडा</button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Serial Number</th>
+        <th>दिनांक</th>
+        <th>छाटणी नंतरचे दिवस</th>
+        <th>औषध व खतांचे नाव</th>
+        <th>औषधाची मात्रा प्रति लिटर</th>
+        <th>औषधाची मात्रा प्रती प्लॉट</th>
+        <th>पाणी प्रती प्लॉट</th>
+        <th>फवारणीची वेळ</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+      <!-- Rows will be added dynamically -->
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <button onclick="saveData()">डेटा सेव्ह करा</button>
+    <button onclick="loadData()">डेटा लोड करा</button>
+  </div>
+
+  <script>
+    function addRowFromInputs() {
+      const serialNumber = document.getElementById("serialNumber").value;
+      const date = document.getElementById("date").value;
+      const daysAfter = document.getElementById("daysAfter").value;
+      const medicineName = document.getElementById("medicineName").value;
+      const dosePerLiter = document.getElementById("dosePerLiter").value;
+      const dosePerPlot = document.getElementById("dosePerPlot").value;
+      const waterPerPlot = document.getElementById("waterPerPlot").value;
+      const sprayTime = document.getElementById("sprayTime").value;
+
+      if (!serialNumber || !date || !daysAfter || !medicineName) {
+        alert("कृपया सर्व आवश्यक फील्ड भरा.");
+        return;
+      }
+
+      const tableBody = document.getElementById("table-body");
+      const newRow = document.createElement("tr");
+      newRow.innerHTML = `
+        <td>${serialNumber}</td>
+        <td>${date}</td>
+        <td>${daysAfter}</td>
+        <td>${medicineName}</td>
+        <td>${dosePerLiter}</td>
+        <td>${dosePerPlot}</td>
+        <td>${waterPerPlot}</td>
+        <td>${sprayTime}</td>
+      `;
+      tableBody.appendChild(newRow);
+
+      document.querySelectorAll("#input-section input").forEach(input => input.value = "");
+    }
+
+    function saveData() {
+      const rows = document.querySelectorAll("#table-body tr");
+      const data = Array.from(rows).map(row => {
+        const cells = row.querySelectorAll("td");
+        return Array.from(cells).map(cell => cell.textContent);
+      });
+      localStorage.setItem("tableData", JSON.stringify(data));
+      alert("डेटा यशस्वीरित्या सेव्ह केला!");
+    }
+
+    function loadData() {
+      const data = JSON.parse(localStorage.getItem("tableData")) || [];
+      const tableBody = document.getElementById("table-body");
+      tableBody.innerHTML = ""; // Clear existing rows
+      data.forEach(rowData => {
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = rowData.map(value => `<td>${value}</td>`).join("");
+        tableBody.appendChild(newRow);
+      });
+    }
+  </script>
+</body>
+</html>
