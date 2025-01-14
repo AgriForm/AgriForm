@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>शेती डेटा एंट्री</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h2 {
+      text-align: center;
+      color: #444;
+      margin-top: 20px;
+    }
+    #input-section, #filter-section {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .input-group, .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+    }
+    .input-group input, .input-group select,
+    .filter-group input, .filter-group select {
+      flex: 1 1 48%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      outline: none;
+    }
+    .input-group input:focus, .input-group select:focus,
+    .filter-group input:focus, .filter-group select:focus {
+      border-color: #007BFF;
+    }
+    button {
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #eaeaea;
+    }
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+    .actions {
+      text-align: center;
+      margin: 20px;
+    }
+    .actions button {
+      margin: 0 10px;
+    }
+    .delete-btn {
+      background-color: #ff4d4d;
+      margin: 5px;
+    }
+    .delete-btn:hover {
+      background-color: #cc0000;
+    }
+    .input-group .unit-select {
+      flex: 0 0 30%;
+    }
+    .download-btn {
+      background-color: #28a745;
+      margin-top: 15px;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      display: block;
+      text-align: center;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .download-btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <h2>शेती डेटा एंट्री फॉर्म</h2>
+
+  <!-- Input Section -->
+  <div id="input-section">
+    <div class="actions">
+      <input type="text" id="newPlotName" placeholder="नवीन प्लॉट जोडा">
+      <button onclick="addPlot()">प्लॉट जोडा</button>
+    </div>
+    <div class="input-group">
+      <select id="plotSelection" required>
+        <option value="" disabled selected>प्लॉट निवडा</option>
+      </select>
+      <input type="date" id="date" placeholder="तारीख" required>
+      <input type="number" id="hours" placeholder="पाण्याचे तास" required>
+      <input type="number" id="waterPerUnit" placeholder="प्रति झाड पाणी" required>
+      <input type="text" id="fertilizerName" placeholder="खताचे नाव" required>
+      <input type="number" id="fertilizerAmount" placeholder="खताची मात्रा (प्रति एकर)" required>
+    </div>
+    <div style="text-align: center; margin-top: 15px;">
+      <button onclick="addRowFromInputs()">डेटा जोडा</button>
+    </div>
+  </div>
+
+  <!-- Filter Section -->
+  <div id="filter-section">
+    <h3>फिल्टर </h3>
+    <div class="filter-group">
+      <select id="filterPlot" onchange="filterTable()">
+        <option value="">सर्व प्लॉट</option>
+      </select>
+      <input type="date" id="filterDate" onchange="filterTable()">
+      <input type="number" id="filterYear" placeholder="वर्ष" onchange="filterTable()">
+    </div>
+  </div>
+
+  <!-- Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>तारीख</th>
+        <th>पाण्याचे तास</th>
+        <th>प्रति झाड पाणी</th>
+        <th>खताचे नाव</th>
+        <th>खताची मात्रा (प्रति एकर)</th>
+        <th>प्लॉट</th>
+        <th>कारवाया</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+    </tbody>
+  </table>
+
+  <!-- Save, Load, and Download Section -->
+  <div class="actions">
+    <button onclick="saveData()">डेटा जतन करा</button>
+    <button onclick="loadData()">डेटा लोड करा</button>
+    <button onclick="downloadPDF()">PDF म्हणून डाउनलोड करा</button>
+    <button onclick="redirectToIndex()">मुख्यपृष्ठ</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.22/jspdf.plugin.autotable.min.js"></script>
+
+  <script>
+    let currentUser = "";
+
+    console.log("Script loaded");
+
+    // Function to load the plots from localStorage
+    function loadPlots() {
+      console.log("loadPlots function called");
+      const plots = JSON.parse(localStorage.getItem(`farmingPlots_${currentUser}`)) || [];
+      const plotSelection = document.getElementById("plotSelection");
+      const filterPlot = document.getElementById("filterPlot");
+
+      plotSelection.innerHTML = '<option value="" disabled selected>प्लॉट निवडा</option>';
+      filterPlot.innerHTML = '<option value="">सर्व प्लॉट</option>';
+
+      plots.forEach(plot => {
+        const option = document.createElement("option");
+        option.value = plot;
+        option.textContent = plot;
+        plotSelection.appendChild(option);
+        filterPlot.appendChild(option.cloneNode(true));
+      });
+    }
+
+    // Function to add a new plot
+    function addPlot() {
+      console.log("addPlot function called");
+      const newPlotName = document.getElementById("newPlotName").value.trim();
+      if (!newPlotName) {
+        alert("कृपया वैध प्लॉट नाव द्या.");
+        return;
+      }
+
+      const plots = JSON.parse(localStorage.getItem(`farmingPlots_${currentUser}`)) || [];
+      if (!plots.includes(newPlotName)) {
+        plots.push(newPlotName);
+        localStorage.setItem(`farmingPlots_${currentUser}`, JSON.stringify(plots));
+        loadPlots();
+        alert("प्लॉट यशस्वीरित्या जोडला.");
+      } else {
+        alert("हा प्लॉट आधीच जोडलेला आहे.");
+      }
+
+      document.getElementById("newPlotName").value = "";
+    }
+
+    // Function to add a row from inputs to the table
+    function addRowFromInputs() {
+      console.log("addRowFromInputs function called");
+      const date = document.getElementById("date").value;
+      const hours = document.getElementById("hours").value;
+      const waterPerUnit = document.getElementById("waterPerUnit").value;
+      const fertilizerName = document.getElementById("fertilizerName").value;
+      const fertilizerAmount = document.getElementById("fertilizerAmount").value;
+      const plotSelection = document.getElementById("plotSelection").value;
+
+      if (!date || !hours || !waterPerUnit || !fertilizerName || !plotSelection) {
+        alert("कृपया सर्व आवश्यक फील्ड भरा.");
+        return;
+      }
+
+      const tableBody = document.getElementById("table-body");
+      const newRow = document.createElement("tr");
+      newRow.innerHTML = `
+        <td>${date}</td>
+        <td>${hours}</td>
+        <td>${waterPerUnit}</td>
+        <td>${fertilizerName}</td>
+        <td>${fertilizerAmount}</td>
+        <td>${plotSelection}</td>
+        <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+      `;
+      tableBody.appendChild(newRow);
+
+      document.querySelectorAll("#input-section input").forEach(input => input.value = "");
+      document.getElementById("plotSelection").selectedIndex = 0;
+    }
+
+    // Function to delete a row
+    function deleteRow(button) {
+      console.log("deleteRow function called");
+      const row = button.parentElement.parentElement;
+      row.remove();
+    }
+
+    // Function to save data to localStorage
+    function saveData() {
+      console.log("saveData function called");
+      const rows = document.querySelectorAll("#table-body tr");
+      const data = Array.from(rows).map(row => {
+        return Array.from(row.children).slice(0, -1).map(cell => cell.textContent);
+      });
+
+      localStorage.setItem(`farmingTableData_${currentUser}`, JSON.stringify(data));
+      alert("डेटा जतन केला.");
+    }
+
+    // Function to load data from localStorage
+    function loadData() {
+      console.log("loadData function called");
+      const data = JSON.parse(localStorage.getItem(`farmingTableData_${currentUser}`)) || [];
+      const tableBody = document.getElementById("table-body");
+      tableBody.innerHTML = "";
+
+      data.forEach(rowData => {
+        const newRow = document.createElement("tr");
+        rowData.forEach(cellData => {
+          const newCell = document.createElement("td");
+          newCell.textContent = cellData;
+          newRow.appendChild(newCell);
+        });
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.classList.add("delete-btn");
+        deleteButton.onclick = function() {
+          newRow.remove();
+        };
+        const actionCell = document.createElement("td");
+        actionCell.appendChild(deleteButton);
+        newRow.appendChild(actionCell);
+        tableBody.appendChild(newRow);
+      });
+    }
+
+    // Function to filter the table
+    function filterTable() {
+      console.log("filterTable function called");
+      const filterPlot = document.getElementById("filterPlot").value.toLowerCase();
+      const filterDate = document.getElementById("filterDate").value;
+      const filterYear = document.getElementById("filterYear").value;
+      const rows = document.querySelectorAll("#table-body tr");
+
+      rows.forEach(row => {
+        const cells = row.children;
+        const plot = cells[5].textContent.toLowerCase();
+        const date = cells[0].textContent;
+        const year = new Date(date).getFullYear();
+
+        const matchPlot = filterPlot ? plot.includes(filterPlot) : true;
+        const matchDate = filterDate ? date.includes(filterDate) : true;
+        const matchYear = filterYear ? year.toString().includes(filterYear) : true;
+
+        if (matchPlot && matchDate && matchYear) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+    }
+
+    // Function to download the table data as a PDF
+    function downloadPDF() {
+      console.log("downloadPDF function called");
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const tableHeaders = [
+        ["Date", "Watering Hours", "Water Per Unit", "Fertilizer Name", "Fertilizer Amount (Per Acre)", "Plot"]
+      ];
+
+      const tableData = Array.from(document.querySelectorAll("#table-body tr")).map(row => {
+        return Array.from(row.children).slice(0, -1).map(cell => cell.textContent);
+      });
+
+      doc.autoTable({
+        head: tableHeaders,
+        body: tableData,
+        theme: 'grid',
+        margin: { top: 10 },
+        styles: { fontSize: 12, cellPadding: 2, font: "helvetica" }
+      });
+
+      doc.save("table_data.pdf");
+    }
+
+    // Function to redirect to the index page
+    function redirectToIndex() {
+      console.log("redirectToIndex function called");
+      window.location.href = 'index.html';
+    }
+
+    // Load plots on page load
+    window.onload = function() {
+      console.log("window.onload function called");
+      const urlParams = new URLSearchParams(window.location.search);
+      currentUser = urlParams.get('user');
+      if (currentUser) {
+        loadPlots();
+      } else {
+        alert("User not found. Please login first.");
+        window.location.href = 'index.html';
+      }
+    };
+  </script>
+</body>
+</html>
