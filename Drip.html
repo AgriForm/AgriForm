@@ -118,10 +118,21 @@
     .download-btn:hover {
       background-color: #218838;
     }
+    .subtitle {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+    .date-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
   </style>
 </head>
 <body>
-  <h2>शेती डेटा एंट्री फॉर्म</h2>
+  <h2>इरिगेशन</h2>
 
   <!-- Input Section -->
   <div id="input-section">
@@ -133,11 +144,25 @@
       <select id="plotSelection" required>
         <option value="" disabled selected>प्लॉट निवडा</option>
       </select>
-      <input type="date" id="date" placeholder="तारीख" required>
+      <div class="date-container">
+        <div class="subtitle">तारीख</div>
+        <input type="date" id="date" placeholder="तारीख" required>
+      </div>
       <input type="number" id="hours" placeholder="पाण्याचे तास" required>
-      <input type="number" id="waterPerUnit" placeholder="प्रति झाड पाणी" required>
-      <input type="text" id="fertilizerName" placeholder="खताचे नाव" required>
-      <input type="number" id="fertilizerAmount" placeholder="खताची मात्रा (प्रति एकर)" required>
+      <input type="number" id="waterPerUnit" placeholder="प्रति झाड पाणी (L)" required>
+      <div id="medicine-container">
+        <div class="medicine-row">
+          <input type="text" class="fertilizerName" placeholder="खताचे नाव" required>
+          <input type="number" class="fertilizerAmount" placeholder="खताची मात्रा (प्रति एकर)" required>
+          <select class="fertilizerUnit unit-select" required>
+            <option value="" disabled selected>एकक निवडा</option>
+            <option value="Kg">Kg</option>
+            <option value="L">L</option>
+          </select>
+          <button type="button" class="remove-medicine-btn" onclick="removeMedicineRow(this)">Remove</button>
+        </div>
+      </div>
+      <button type="button" onclick="addMedicineRow()">Add Medicine</button>
     </div>
     <div style="text-align: center; margin-top: 15px;">
       <button onclick="addRowFromInputs()">डेटा जोडा</button>
@@ -151,7 +176,10 @@
       <select id="filterPlot" onchange="filterTable()">
         <option value="">सर्व प्लॉट</option>
       </select>
-      <input type="date" id="filterDate" onchange="filterTable()">
+      <div class="date-container">
+        <div class="subtitle">तारीख निवडा</div>
+        <input type="date" id="filterDate" onchange="filterTable()">
+      </div>
       <input type="number" id="filterYear" placeholder="वर्ष" onchange="filterTable()">
     </div>
   </div>
@@ -162,9 +190,10 @@
       <tr>
         <th>तारीख</th>
         <th>पाण्याचे तास</th>
-        <th>प्रति झाड पाणी</th>
+        <th>प्रति झाड पाणी (L)</th>
         <th>खताचे नाव</th>
-        <th>खताची मात्रा (प्रति एकर)</th>
+        <!-- <th>खताची मात्रा (प्रति एकर)</th> -->
+        <!-- <th>एकक</th> -->
         <th>प्लॉट</th>
         <th>कारवाया</th>
       </tr>
@@ -230,29 +259,65 @@
       document.getElementById("newPlotName").value = "";
     }
 
+    // Function to add a medicine row
+    function addMedicineRow() {
+      console.log("addMedicineRow function called");
+      const medicineContainer = document.getElementById("medicine-container");
+      const newRow = document.createElement("div");
+      newRow.className = "medicine-row";
+      newRow.innerHTML = `
+        <input type="text" class="fertilizerName" placeholder="खताचे नाव" required>
+        <input type="number" class="fertilizerAmount" placeholder="खताची मात्रा (प्रति एकर)" required>
+        <select class="fertilizerUnit unit-select" required>
+          <option value="" disabled selected>एकक निवडा</option>
+          <option value="Kg">Kg</option>
+          <option value="L">L</option>
+        </select>
+        <button type="button" class="remove-medicine-btn" onclick="removeMedicineRow(this)">Remove</button>
+      `;
+      medicineContainer.appendChild(newRow);
+    }
+
+    // Function to remove a medicine row
+    function removeMedicineRow(button) {
+      console.log("removeMedicineRow function called");
+      const row = button.parentElement;
+      row.remove();
+    }
+
     // Function to add a row from inputs to the table
     function addRowFromInputs() {
       console.log("addRowFromInputs function called");
       const date = document.getElementById("date").value;
       const hours = document.getElementById("hours").value;
       const waterPerUnit = document.getElementById("waterPerUnit").value;
-      const fertilizerName = document.getElementById("fertilizerName").value;
-      const fertilizerAmount = document.getElementById("fertilizerAmount").value;
       const plotSelection = document.getElementById("plotSelection").value;
+      const medicineRows = document.querySelectorAll(".medicine-row");
 
-      if (!date || !hours || !waterPerUnit || !fertilizerName || !plotSelection) {
+      if (!date || !hours || !waterPerUnit || !plotSelection) {
         alert("कृपया सर्व आवश्यक फील्ड भरा.");
         return;
       }
+
+      let medicines = [];
+      medicineRows.forEach(row => {
+        const fertilizerName = row.querySelector(".fertilizerName").value;
+
+        if (!fertilizerName) {
+          alert("कृपया सर्व आवश्यक फील्ड भरा.");
+          return;
+        }
+
+        medicines.push(`${fertilizerName}`);
+      });
 
       const tableBody = document.getElementById("table-body");
       const newRow = document.createElement("tr");
       newRow.innerHTML = `
         <td>${date}</td>
         <td>${hours}</td>
-        <td>${waterPerUnit}</td>
-        <td>${fertilizerName}</td>
-        <td>${fertilizerAmount}</td>
+        <td>${waterPerUnit} L</td>
+        <td>${medicines.join(', ')}</td>
         <td>${plotSelection}</td>
         <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
       `;
@@ -260,6 +325,9 @@
 
       document.querySelectorAll("#input-section input").forEach(input => input.value = "");
       document.getElementById("plotSelection").selectedIndex = 0;
+      document.querySelectorAll(".medicine-row").forEach(row => {
+        row.querySelector(".fertilizerName").value = "";
+      });
     }
 
     // Function to delete a row
@@ -319,7 +387,7 @@
 
       rows.forEach(row => {
         const cells = row.children;
-        const plot = cells[5].textContent.toLowerCase();
+        const plot = cells[4].textContent.toLowerCase();
         const date = cells[0].textContent;
         const year = new Date(date).getFullYear();
 
@@ -342,7 +410,7 @@
       const doc = new jsPDF();
 
       const tableHeaders = [
-        ["Date", "Watering Hours", "Water Per Unit", "Fertilizer Name", "Fertilizer Amount (Per Acre)", "Plot"]
+        ["Date", "Watering Hours", "Water Per Tree (L)", "Fertilizer Name", "Plot"]
       ];
 
       const tableData = Array.from(document.querySelectorAll("#table-body tr")).map(row => {
