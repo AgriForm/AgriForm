@@ -140,6 +140,17 @@
     .download-btn:hover {
       background-color: #218838;
     }
+    .subtitle {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+    .date-container, .time-container, .pruning-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
   </style>
 </head>
 <body>
@@ -165,8 +176,14 @@
         <select id="plotSelection" required>
           <option value="" disabled selected>प्लॉट निवडा</option>
         </select>
-        <input type="date" id="date" required>
-        <input type="number" id="daysAfter" placeholder="कापणीनंतरचे दिवस" required>
+        <div class="date-container">
+          <div class="subtitle">तारीख</div>
+          <input type="date" id="date" required>
+        </div>
+        <div class="pruning-container">
+          <div class="subtitle">छाटणी ची तारीख</div>
+          <input type="date" id="pruningDate" required>
+        </div>
         <input type="text" id="medicineName" placeholder="औषधे आणि खतांचे नाव" required>
 
         <div style="flex: 1; display: flex;">
@@ -189,7 +206,10 @@
 
         <input type="number" id="waterPerPlot" placeholder="प्रति प्लॉट पाणी (लिटर)" required>
 
-        <input type="time" id="sprayTime" placeholder="स्प्रे करण्याचा वेळ" required>
+        <div class="time-container">
+          <div class="subtitle">स्प्रे करण्याचा वेळ</div>
+          <input type="time" id="sprayTime" required>
+        </div>
       </div>
       <div style="text-align: center; margin-top: 15px;">
         <button onclick="addRowFromInputs()">डेटा जोडा</button>
@@ -213,7 +233,8 @@
       <thead>
         <tr>
           <th>तारीख</th>
-          <th>कापणीनंतरचे दिवस</th>
+          <th>छाटणी ची तारीख</th>
+          <th>छाटणीनंतरचे दिवस</th>
           <th>औषधे आणि खतांचे नाव</th>
           <th>प्रति लिटर डोस</th>
           <th>प्रति प्लॉट डोस</th>
@@ -232,7 +253,7 @@
       <button onclick="saveData()">डेटा जतन करा</button>
       <button onclick="loadData()">डेटा लोड करा</button>
       <button onclick="downloadPDF()">PDF म्हणून डाउनलोड करा</button>
-      <button onclick="redirectToSecondPage()">शेती डेटा एंट्री फॉर्म</button>
+      <button onclick="redirectToSecondPage()">इरिगेशन</button>
     </div>
   </div>
 
@@ -251,7 +272,7 @@
       const validUsers = [
         { username: "admin", password: "password" },
         { username: "Bhavesh", password: "Bhavesh" },
-		{ username: "Ravi", password: "Farm@1234" }
+        { username: "Ravi", password: "Farm@1234" }
       ];
 
       const user = validUsers.find(u => u.username === username && u.password === password);
@@ -308,7 +329,7 @@
     // Function to add a row from inputs to the table
     function addRowFromInputs() {
       const date = document.getElementById("date").value;
-      const daysAfter = document.getElementById("daysAfter").value;
+      const pruningDate = document.getElementById("pruningDate").value;
       const medicineName = document.getElementById("medicineName").value;
       const dosePerLiter = document.getElementById("dosePerLiter").value;
       const doseUnit = document.getElementById("doseUnit").value;
@@ -318,16 +339,19 @@
       const sprayTime = document.getElementById("sprayTime").value;
       const plotSelection = document.getElementById("plotSelection").value;
 
-      if (!date || !daysAfter || !medicineName || !plotSelection || !dosePerLiter || !doseUnit || !dosePerPlot || !dosePlotUnit) {
+      if (!date || !pruningDate || !medicineName || !plotSelection || !dosePerLiter || !doseUnit || !dosePerPlot || !dosePlotUnit) {
         alert("कृपया सर्व आवश्यक फील्ड भरा.");
         return;
       }
+
+      const daysAfterPruning = calculateDaysAfterPruning(date, pruningDate);
 
       const tableBody = document.getElementById("table-body");
       const newRow = document.createElement("tr");
       newRow.innerHTML = `
         <td>${date}</td>
-        <td>${daysAfter}</td>
+        <td>${pruningDate}</td>
+        <td>${daysAfterPruning}</td>
         <td>${medicineName}</td>
         <td>${dosePerLiter} ${doseUnit}</td>
         <td>${dosePerPlot} ${dosePlotUnit}</td>
@@ -340,6 +364,15 @@
 
       document.querySelectorAll("#input-section input").forEach(input => input.value = "");
       document.getElementById("plotSelection").selectedIndex = 0;
+    }
+
+    // Function to calculate days after pruning
+    function calculateDaysAfterPruning(date, pruningDate) {
+      const dateObj = new Date(date);
+      const pruningDateObj = new Date(pruningDate);
+      const differenceInTime = dateObj.getTime() - pruningDateObj.getTime();
+      const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+      return differenceInDays;
     }
 
     // Function to delete a row
@@ -395,7 +428,7 @@
 
       rows.forEach(row => {
         const cells = row.children;
-        const plot = cells[7].textContent.toLowerCase();
+        const plot = cells[8].textContent.toLowerCase();
         const date = cells[0].textContent;
         const year = new Date(date).getFullYear();
 
@@ -417,7 +450,7 @@
       const doc = new jsPDF();
 
       const tableHeaders = [
-        ["Date", "Days After Pruning", "Medicine and Fertilizers",
+        ["Date", "Pruning Date", "Days After Pruning", "Medicine and Fertilizers",
         "Dose per Liter", "Dose per Plot", "Water per Plot", "Spraying Time", "Plot"]
       ];
 
