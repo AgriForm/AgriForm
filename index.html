@@ -250,8 +250,6 @@
 
     <!-- Save, Load, and Download Section -->
     <div class="actions">
-      <button onclick="saveData()">डेटा जतन करा</button>
-      <button onclick="loadData()">डेटा लोड करा</button>
       <button onclick="downloadPDF()">PDF म्हणून डाउनलोड करा</button>
       <button onclick="redirectToSecondPage()">इरिगेशन</button>
     </div>
@@ -272,7 +270,8 @@
       const validUsers = [
         { username: "admin", password: "password" },
         { username: "Bhavesh", password: "Bhavesh" },
-        { username: "Ravi", password: "123456789" }
+        { username: "Ravi", password: "Farm@1234" },
+		{ username: "123456789", password: "Grape@1234" }
       ];
 
       const user = validUsers.find(u => u.username === username && u.password === password);
@@ -282,6 +281,7 @@
         document.getElementById("login-section").style.display = "none";
         document.getElementById("data-entry-section").style.display = "block";
         loadPlots();
+        loadData();
       } else {
         alert("Invalid username or password");
       }
@@ -364,6 +364,8 @@
 
       document.querySelectorAll("#input-section input").forEach(input => input.value = "");
       document.getElementById("plotSelection").selectedIndex = 0;
+
+      saveData();
     }
 
     // Function to calculate days after pruning
@@ -379,6 +381,7 @@
     function deleteRow(button) {
       const row = button.parentElement.parentElement;
       row.remove();
+      saveData();
     }
 
     // Function to save data to localStorage
@@ -389,7 +392,6 @@
       });
 
       localStorage.setItem(`grapesTableData_${currentUser}`, JSON.stringify(data));
-      alert("डेटा जतन केला.");
     }
 
     // Function to load data from localStorage
@@ -411,6 +413,7 @@
         deleteButton.classList.add("delete-btn");
         deleteButton.onclick = function() {
           newRow.remove();
+          saveData();
         };
         const actionCell = document.createElement("td");
         actionCell.appendChild(deleteButton);
