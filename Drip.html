@@ -192,8 +192,6 @@
         <th>पाण्याचे तास</th>
         <th>प्रति झाड पाणी (L)</th>
         <th>खताचे नाव</th>
-        <!-- <th>खताची मात्रा (प्रति एकर)</th> -->
-        <!-- <th>एकक</th> -->
         <th>प्लॉट</th>
         <th>कारवाया</th>
       </tr>
@@ -204,8 +202,6 @@
 
   <!-- Save, Load, and Download Section -->
   <div class="actions">
-    <button onclick="saveData()">डेटा जतन करा</button>
-    <button onclick="loadData()">डेटा लोड करा</button>
     <button onclick="downloadPDF()">PDF म्हणून डाउनलोड करा</button>
     <button onclick="redirectToIndex()">मुख्यपृष्ठ</button>
   </div>
@@ -217,6 +213,20 @@
     let currentUser = "";
 
     console.log("Script loaded");
+
+    // Load plots on page load
+    window.onload = function() {
+      console.log("window.onload function called");
+      const urlParams = new URLSearchParams(window.location.search);
+      currentUser = urlParams.get('user');
+      if (currentUser) {
+        loadPlots();
+        loadData();
+      } else {
+        alert("User not found. Please login first.");
+        window.location.href = 'index.html';
+      }
+    };
 
     // Function to load the plots from localStorage
     function loadPlots() {
@@ -302,13 +312,15 @@
       let medicines = [];
       medicineRows.forEach(row => {
         const fertilizerName = row.querySelector(".fertilizerName").value;
+        const fertilizerAmount = row.querySelector(".fertilizerAmount").value;
+        const fertilizerUnit = row.querySelector(".fertilizerUnit").value;
 
-        if (!fertilizerName) {
+        if (!fertilizerName || !fertilizerAmount || !fertilizerUnit) {
           alert("कृपया सर्व आवश्यक फील्ड भरा.");
           return;
         }
 
-        medicines.push(`${fertilizerName}`);
+        medicines.push(`${fertilizerName} (${fertilizerAmount} ${fertilizerUnit})`);
       });
 
       const tableBody = document.getElementById("table-body");
@@ -327,7 +339,11 @@
       document.getElementById("plotSelection").selectedIndex = 0;
       document.querySelectorAll(".medicine-row").forEach(row => {
         row.querySelector(".fertilizerName").value = "";
+        row.querySelector(".fertilizerAmount").value = "";
+        row.querySelector(".fertilizerUnit").selectedIndex = 0;
       });
+
+      saveData();
     }
 
     // Function to delete a row
@@ -335,6 +351,7 @@
       console.log("deleteRow function called");
       const row = button.parentElement.parentElement;
       row.remove();
+      saveData();
     }
 
     // Function to save data to localStorage
@@ -346,7 +363,6 @@
       });
 
       localStorage.setItem(`farmingTableData_${currentUser}`, JSON.stringify(data));
-      alert("डेटा जतन केला.");
     }
 
     // Function to load data from localStorage
@@ -369,6 +385,7 @@
         deleteButton.classList.add("delete-btn");
         deleteButton.onclick = function() {
           newRow.remove();
+          saveData();
         };
         const actionCell = document.createElement("td");
         actionCell.appendChild(deleteButton);
@@ -410,7 +427,7 @@
       const doc = new jsPDF();
 
       const tableHeaders = [
-        ["Date", "Watering Hours", "Water Per Tree (L)", "Fertilizer Name", "Plot"]
+        ["Date", "Watering Hours", "Water Per Tree (L)", "Fertilizer", "Plot"]
       ];
 
       const tableData = Array.from(document.querySelectorAll("#table-body tr")).map(row => {
@@ -433,19 +450,6 @@
       console.log("redirectToIndex function called");
       window.location.href = 'index.html';
     }
-
-    // Load plots on page load
-    window.onload = function() {
-      console.log("window.onload function called");
-      const urlParams = new URLSearchParams(window.location.search);
-      currentUser = urlParams.get('user');
-      if (currentUser) {
-        loadPlots();
-      } else {
-        alert("User not found. Please login first.");
-        window.location.href = 'index.html';
-      }
-    };
   </script>
 </body>
 </html>
