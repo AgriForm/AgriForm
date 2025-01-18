@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>शेती डेटा एंट्री</title>
+  <title>इरिगेशन</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -88,12 +88,18 @@
     .actions button {
       margin: 0 10px;
     }
-    .delete-btn {
+    .delete-btn, .edit-btn {
       background-color: #ff4d4d;
       margin: 5px;
     }
     .delete-btn:hover {
       background-color: #cc0000;
+    }
+    .edit-btn {
+      background-color: #ffc107;
+    }
+    .edit-btn:hover {
+      background-color: #e0a800;
     }
     .input-group .unit-select {
       flex: 0 0 30%;
@@ -188,11 +194,11 @@
   <table>
     <thead>
       <tr>
+        <th>प्लॉट</th>
         <th>तारीख</th>
         <th>पाण्याचे तास</th>
         <th>प्रति झाड पाणी (L)</th>
         <th>खताचे नाव</th>
-        <th>प्लॉट</th>
         <th>कारवाया</th>
       </tr>
     </thead>
@@ -211,6 +217,7 @@
 
   <script>
     let currentUser = "";
+    let editingRow = null;
 
     console.log("Script loaded");
 
@@ -326,12 +333,15 @@
       const tableBody = document.getElementById("table-body");
       const newRow = document.createElement("tr");
       newRow.innerHTML = `
+        <td>${plotSelection}</td>
         <td>${date}</td>
         <td>${hours}</td>
         <td>${waterPerUnit} L</td>
         <td>${medicines.join(', ')}</td>
-        <td>${plotSelection}</td>
-        <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+        <td>
+          <button class="edit-btn" onclick="editRow(this)">Edit</button>
+          <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
       `;
       tableBody.appendChild(newRow);
 
@@ -344,6 +354,38 @@
       });
 
       saveData();
+    }
+
+    // Function to edit a row
+    function editRow(button) {
+      console.log("editRow function called");
+      const row = button.parentElement.parentElement;
+      editingRow = row;
+
+      const cells = row.children;
+      document.getElementById("plotSelection").value = cells[0].textContent;
+      document.getElementById("date").value = cells[1].textContent;
+      document.getElementById("hours").value = cells[2].textContent;
+      document.getElementById("waterPerUnit").value = cells[3].textContent.replace(" L", "");
+
+      const medicineRows = document.querySelectorAll(".medicine-row");
+      medicineRows.forEach((row, index) => {
+        if (index < cells[4].textContent.split(',').length) {
+          const medicineData = cells[4].textContent.split(',')[index].trim();
+          const [fertilizerName, fertilizerAmountUnit] = medicineData.split('(');
+          const [fertilizerAmount, fertilizerUnit] = fertilizerAmountUnit.replace(')', '').split(' ');
+
+          row.querySelector(".fertilizerName").value = fertilizerName.trim();
+          row.querySelector(".fertilizerAmount").value = fertilizerAmount.trim();
+          row.querySelector(".fertilizerUnit").value = fertilizerUnit.trim();
+        } else {
+          row.querySelector(".fertilizerName").value = "";
+          row.querySelector(".fertilizerAmount").value = "";
+          row.querySelector(".fertilizerUnit").selectedIndex = 0;
+        }
+      });
+
+      row.remove();
     }
 
     // Function to delete a row
@@ -380,6 +422,13 @@
           newRow.appendChild(newCell);
         });
 
+        const actionCell = document.createElement("td");
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.classList.add("edit-btn");
+        editButton.onclick = function() {
+          editRow(editButton);
+        };
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete";
         deleteButton.classList.add("delete-btn");
@@ -387,7 +436,7 @@
           newRow.remove();
           saveData();
         };
-        const actionCell = document.createElement("td");
+        actionCell.appendChild(editButton);
         actionCell.appendChild(deleteButton);
         newRow.appendChild(actionCell);
         tableBody.appendChild(newRow);
@@ -404,8 +453,8 @@
 
       rows.forEach(row => {
         const cells = row.children;
-        const plot = cells[4].textContent.toLowerCase();
-        const date = cells[0].textContent;
+        const plot = cells[0].textContent.toLowerCase();
+        const date = cells[1].textContent;
         const year = new Date(date).getFullYear();
 
         const matchPlot = filterPlot ? plot.includes(filterPlot) : true;
@@ -427,10 +476,10 @@
       const doc = new jsPDF();
 
       const tableHeaders = [
-        ["Date", "Watering Hours", "Water Per Tree (L)", "Fertilizer", "Plot"]
+        ["Plot", "Date", "Watering Hours", "Water Per Tree (L)", "Fertilizer"]
       ];
 
-      const tableData = Array.from(document.querySelectorAll("#table-body tr")).map(row => {
+      const tableData = Array.from(document.querySelectorAll("#table-body tr")).filter(row => row.style.display !== "none").map(row => {
         return Array.from(row.children).slice(0, -1).map(cell => cell.textContent);
       });
 
