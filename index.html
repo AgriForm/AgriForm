@@ -110,12 +110,18 @@
     .actions button {
       margin: 0 10px;
     }
-    .delete-btn {
+    .delete-btn, .edit-btn {
       background-color: #ff4d4d;
       margin: 5px;
     }
     .delete-btn:hover {
       background-color: #cc0000;
+    }
+    .edit-btn {
+      background-color: #ffc107;
+    }
+    .edit-btn:hover {
+      background-color: #e0a800;
     }
     .input-group .unit-select {
       flex: 0 0 30%;
@@ -232,6 +238,7 @@
     <table>
       <thead>
         <tr>
+          <th>प्लॉट</th>
           <th>तारीख</th>
           <th>छाटणी ची तारीख</th>
           <th>छाटणीनंतरचे दिवस</th>
@@ -240,7 +247,6 @@
           <th>प्रति प्लॉट डोस</th>
           <th>प्रति प्लॉट पाणी</th>
           <th>स्प्रे करण्याचा वेळ</th>
-          <th>प्लॉट</th>
           <th>कारवाया</th>
         </tr>
       </thead>
@@ -260,6 +266,7 @@
 
   <script>
     let currentUser = "";
+    let editingRow = null;
 
     // Function to handle login
     function login() {
@@ -271,7 +278,7 @@
         { username: "admin", password: "password" },
         { username: "Bhavesh", password: "Bhavesh" },
         { username: "Ravi", password: "Farm@1234" },
-		{ username: "123456789", password: "Grape@1234" }
+        { username: "123456789", password: "Grape@1234" }
       ];
 
       const user = validUsers.find(u => u.username === username && u.password === password);
@@ -349,6 +356,7 @@
       const tableBody = document.getElementById("table-body");
       const newRow = document.createElement("tr");
       newRow.innerHTML = `
+        <td>${plotSelection}</td>
         <td>${date}</td>
         <td>${pruningDate}</td>
         <td>${daysAfterPruning}</td>
@@ -357,8 +365,10 @@
         <td>${dosePerPlot} ${dosePlotUnit}</td>
         <td>${waterPerPlot} L</td>
         <td>${sprayTime}</td>
-        <td>${plotSelection}</td>
-        <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+        <td>
+          <button class="edit-btn" onclick="editRow(this)">Edit</button>
+          <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
       `;
       tableBody.appendChild(newRow);
 
@@ -377,8 +387,30 @@
       return differenceInDays;
     }
 
+    // Function to edit a row
+    function editRow(button) {
+      console.log("editRow function called");
+      const row = button.parentElement.parentElement;
+      editingRow = row;
+
+      const cells = row.children;
+      document.getElementById("plotSelection").value = cells[0].textContent;
+      document.getElementById("date").value = cells[1].textContent;
+      document.getElementById("pruningDate").value = cells[2].textContent;
+      document.getElementById("medicineName").value = cells[4].textContent;
+      document.getElementById("dosePerLiter").value = cells[5].textContent.split(' ')[0];
+      document.getElementById("doseUnit").value = cells[5].textContent.split(' ')[1];
+      document.getElementById("dosePerPlot").value = cells[6].textContent.split(' ')[0];
+      document.getElementById("dosePlotUnit").value = cells[6].textContent.split(' ')[1];
+      document.getElementById("waterPerPlot").value = cells[7].textContent.replace(" L", "");
+      document.getElementById("sprayTime").value = cells[8].textContent;
+
+      row.remove();
+    }
+
     // Function to delete a row
     function deleteRow(button) {
+      console.log("deleteRow function called");
       const row = button.parentElement.parentElement;
       row.remove();
       saveData();
@@ -386,6 +418,7 @@
 
     // Function to save data to localStorage
     function saveData() {
+      console.log("saveData function called");
       const rows = document.querySelectorAll("#table-body tr");
       const data = Array.from(rows).map(row => {
         return Array.from(row.children).slice(0, -1).map(cell => cell.textContent);
@@ -396,6 +429,7 @@
 
     // Function to load data from localStorage
     function loadData() {
+      console.log("loadData function called");
       const data = JSON.parse(localStorage.getItem(`grapesTableData_${currentUser}`)) || [];
       const tableBody = document.getElementById("table-body");
       tableBody.innerHTML = "";
@@ -408,6 +442,13 @@
           newRow.appendChild(newCell);
         });
 
+        const actionCell = document.createElement("td");
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.classList.add("edit-btn");
+        editButton.onclick = function() {
+          editRow(editButton);
+        };
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete";
         deleteButton.classList.add("delete-btn");
@@ -415,7 +456,7 @@
           newRow.remove();
           saveData();
         };
-        const actionCell = document.createElement("td");
+        actionCell.appendChild(editButton);
         actionCell.appendChild(deleteButton);
         newRow.appendChild(actionCell);
         tableBody.appendChild(newRow);
@@ -424,6 +465,7 @@
 
     // Function to filter the table
     function filterTable() {
+      console.log("filterTable function called");
       const filterPlot = document.getElementById("filterPlot").value.toLowerCase();
       const filterDate = document.getElementById("filterDate").value;
       const filterYear = document.getElementById("filterYear").value;
@@ -431,8 +473,8 @@
 
       rows.forEach(row => {
         const cells = row.children;
-        const plot = cells[8].textContent.toLowerCase();
-        const date = cells[0].textContent;
+        const plot = cells[0].textContent.toLowerCase();
+        const date = cells[1].textContent;
         const year = new Date(date).getFullYear();
 
         const matchPlot = filterPlot ? plot.includes(filterPlot) : true;
@@ -449,15 +491,16 @@
 
     // Function to download the table data as a PDF
     function downloadPDF() {
+      console.log("downloadPDF function called");
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
 
       const tableHeaders = [
-        ["Date", "Pruning Date", "Days After Pruning", "Medicine and Fertilizers",
-        "Dose per Liter", "Dose per Plot", "Water per Plot", "Spraying Time", "Plot"]
+        ["Plot", "Date", "Pruning Date", "Days After Pruning", "Medicine and Fertilizers",
+        "Dose per Liter", "Dose per Plot", "Water per Plot", "Spraying Time"]
       ];
 
-      const tableData = Array.from(document.querySelectorAll("#table-body tr")).map(row => {
+      const tableData = Array.from(document.querySelectorAll("#table-body tr")).filter(row => row.style.display !== "none").map(row => {
         return Array.from(row.children).slice(0, -1).map(cell => cell.textContent);
       });
 
