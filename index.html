@@ -4,260 +4,572 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grapes Data Entry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    :root {
+      --primary: #4a6b57;
+      --secondary: #f8f9fa;
+      --accent: #8ba888;
+      --text: #333;
+      --light: #fff;
+      --danger: #e74c3c;
+      --warning: #f39c12;
+      --success: #2ecc71;
+      --info: #3498db;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
       margin: 0;
       padding: 0;
-      background-color: #f9f9f9;
-      color: #333;
+      box-sizing: border-box;
     }
-    .login-container, #input-section, #filter-section {
-      max-width: 800px;
-      margin: 20px auto;
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f7fa;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 20px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+
+    /* Login Section */
     .login-container {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
     }
-    .login-container input {
+
+    .login-card {
+      background: var(--light);
+      padding: 40px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-      outline: none;
-    }
-    .login-container button {
-      background-color: #007BFF;
-      color: #fff;
-      border: none;
-      padding: 10px 15px;
-      font-size: 14px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .login-container button:hover {
-      background-color: #0056b3;
-    }
-    .input-group, .filter-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      justify-content: space-between;
-    }
-    .input-group input, .input-group select,
-    .filter-group input, .filter-group select {
-      flex: 1 1 48%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-      outline: none;
-    }
-    .input-group input:focus, .input-group select:focus,
-    .filter-group input:focus, .filter-group select:focus {
-      border-color: #007BFF;
-    }
-    button {
-      background-color: #007BFF;
-      color: #fff;
-      border: none;
-      padding: 10px 15px;
-      font-size: 14px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    table {
-      width: 90%;
-      margin: 20px auto;
-      border-collapse: collapse;
-      background: #fff;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    th, td {
-      padding: 12px;
+      max-width: 450px;
       text-align: center;
-      border-bottom: 1px solid #eaeaea;
+      transform: translateY(0);
+      transition: var(--transition);
     }
-    th {
-      background-color: #f2f2f2;
-      font-weight: bold;
+
+    .login-card:hover {
+      transform: translateY(-5px);
     }
-    tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
+
+    .login-card h2 {
+      color: var(--primary);
+      margin-bottom: 30px;
+      font-size: 28px;
+      font-weight: 600;
     }
-    tbody tr:hover {
-      background-color: #f1f1f1;
+
+    .input-group {
+      position: relative;
+      margin-bottom: 25px;
     }
-    .actions {
-      text-align: center;
-      margin: 20px;
+
+    .input-group i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+      opacity: 0.7;
     }
-    .actions button {
-      margin: 0 10px;
-    }
-    .delete-btn, .edit-btn {
-      background-color: #ff4d4d;
-      margin: 5px;
-    }
-    .delete-btn:hover {
-      background-color: #cc0000;
-    }
-    .edit-btn {
-      background-color: #ffc107;
-    }
-    .edit-btn:hover {
-      background-color: #e0a800;
-    }
-    .input-group .unit-select {
-      flex: 0 0 30%;
-    }
-    .download-btn {
-      background-color: #28a745;
-      margin-top: 15px;
-      padding: 12px 20px;
+
+    .login-card input {
+      width: 100%;
+      padding: 15px 15px 15px 45px;
+      border: 2px solid #e0e0e0;
+      border-radius: var(--border-radius);
       font-size: 16px;
-      border-radius: 5px;
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: var(--transition);
+      background-color: #f8f9fa;
+    }
+
+    .login-card input:focus {
+      border-color: var(--primary);
+      outline: none;
+      background-color: var(--light);
+      box-shadow: 0 0 0 3px rgba(74, 107, 87, 0.2);
+    }
+
+    .login-card button {
       width: 100%;
-      display: block;
-      text-align: center;
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      padding: 15px;
+      background-color: var(--primary);
+      color: var(--light);
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 10px;
     }
-    .download-btn:hover {
-      background-color: #218838;
+
+    .login-card button:hover {
+      background-color: #3a5747;
+      transform: translateY(-2px);
     }
-    .subtitle {
-      text-align: center;
-      margin-bottom: 10px;
-      font-size: 14px;
-      color: #555;
+
+    /* Data Entry Section */
+    #data-entry-section {
+      display: none;
+      animation: fadeIn 0.5s ease;
     }
-    .date-container, .time-container, .pruning-container {
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header h2 {
+      color: var(--primary);
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .card {
+      background: var(--light);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 25px;
+      margin-bottom: 30px;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
-      gap: 10px;
+    }
+
+    .card-title i {
+      margin-right: 10px;
+      font-size: 22px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      flex: 1 1 calc(33.333% - 20px);
+      min-width: 250px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: var(--border-radius);
+      font-size: 15px;
+      transition: var(--transition);
+      background-color: #f8f9fa;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      outline: none;
+      background-color: var(--light);
+      box-shadow: 0 0 0 3px rgba(74, 107, 87, 0.2);
+    }
+
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+
+    .input-with-unit input {
+      flex: 1;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .input-with-unit select {
+      width: 80px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-left: none;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      border-radius: var(--border-radius);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn i {
+      margin-right: 8px;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--light);
+    }
+
+    .btn-primary:hover {
+      background-color: #3a5747;
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background-color: var(--success);
+      color: var(--light);
+    }
+
+    .btn-success:hover {
+      background-color: #27ae60;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: var(--light);
+    }
+
+    .btn-danger:hover {
+      background-color: #c0392b;
+      transform: translateY(-2px);
+    }
+
+    .btn-warning {
+      background-color: var(--warning);
+      color: var(--light);
+    }
+
+    .btn-warning:hover {
+      background-color: #e67e22;
+      transform: translateY(-2px);
+    }
+
+    .btn-info {
+      background-color: var(--info);
+      color: var(--light);
+    }
+
+    .btn-info:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    .btn-sm {
+      padding: 8px 15px;
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    /* Table Styles */
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      background: var(--light);
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    th {
+      background-color: var(--primary);
+      color: var(--light);
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .form-group {
+        flex: 1 1 100%;
+      }
+      
+      .form-row {
+        gap: 15px;
+      }
+      
+      .login-card {
+        padding: 30px 20px;
+      }
+      
+      .card {
+        padding: 20px 15px;
+      }
+      
+      th, td {
+        padding: 12px 8px;
+        font-size: 14px;
+      }
+      
+      .btn {
+        padding: 10px 15px;
+      }
+    }
+
+    /* Animations */
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .animate-slide-in {
+      animation: slideIn 0.4s ease forwards;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3a5747;
     }
   </style>
 </head>
 <body>
   <!-- Login Section -->
   <div class="login-container" id="login-section">
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Username" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button onclick="login()">Login</button>
+    <div class="login-card animate-slide-in">
+      <h2><i class="fas fa-user-shield"></i> Login</h2>
+      <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="username" placeholder="Username" required>
+      </div>
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" placeholder="Password" required>
+      </div>
+      <button onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </div>
   </div>
 
   <!-- Data Entry Form Section -->
   <div id="data-entry-section" style="display: none;">
-    <h2>डेटा एंट्री फॉर्म</h2>
+    <div class="container">
+      <div class="header">
+        <h2><i class="fas fa-wine-bottle"></i> डेटा एंट्री फॉर्म</h2>
+        <div class="user-info">
+          <span id="current-user-display"></span>
+        </div>
+      </div>
 
-    <!-- Input Section -->
-    <div id="input-section">
+      <!-- Input Section -->
+      <div class="card">
+        <div class="card-title"><i class="fas fa-plus-circle"></i> नवीन प्लॉट जोडा</div>
+        <div class="form-row">
+          <div class="form-group" style="flex-grow: 2;">
+            <input type="text" id="newPlotName" class="form-control" placeholder="नवीन प्लॉट नाव">
+          </div>
+          <div class="form-group">
+            <button onclick="addPlot()" class="btn btn-primary"><i class="fas fa-plus"></i> प्लॉट जोडा</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i class="fas fa-edit"></i> डेटा एंट्री</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="plotSelection">प्लॉट निवडा</label>
+            <select id="plotSelection" class="form-control" required>
+              <option value="" disabled selected>प्लॉट निवडा</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="date">तारीख</label>
+            <input type="date" id="date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="pruningDate">छाटणी ची तारीख</label>
+            <input type="date" id="pruningDate" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="medicineName">औषधे आणि खतांचे नाव</label>
+            <input type="text" id="medicineName" class="form-control" placeholder="औषधे आणि खतांचे नाव" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dosePerLiter">प्रति लिटर डोस</label>
+            <div class="input-with-unit">
+              <input type="number" id="dosePerLiter" class="form-control" placeholder="डोस" required>
+              <select id="doseUnit" class="form-control" required>
+                <option value="ml">मि.ली.</option>
+                <option value="g">ग्राम</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="dosePerPlot">प्रति प्लॉट डोस</label>
+            <div class="input-with-unit">
+              <input type="number" id="dosePerPlot" class="form-control" placeholder="डोस" required>
+              <select id="dosePlotUnit" class="form-control" required>
+                <option value="ml">मि.ली.</option>
+                <option value="l">लिटर</option>
+                <option value="g">ग्राम</option>
+                <option value="kg">किलो</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="waterPerPlot">प्रति प्लॉट पाणी</label>
+            <div class="input-with-unit">
+              <input type="number" id="waterPerPlot" class="form-control" placeholder="पाणी (लिटर)" required>
+              <span style="padding: 0 15px; background: #f8f9fa; display: flex; align-items: center; border: 2px solid #e0e0e0; border-left: none; border-radius: 0 var(--border-radius) var(--border-radius) 0;">L</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="sprayTime">स्प्रे करण्याचा वेळ</label>
+            <input type="time" id="sprayTime" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button onclick="addRowFromInputs()" class="btn btn-success"><i class="fas fa-save"></i> डेटा जोडा</button>
+        </div>
+      </div>
+
+      <!-- Filter Section -->
+      <div class="card">
+        <div class="card-title"><i class="fas fa-filter"></i> फिल्टर</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="filterPlot">प्लॉट</label>
+            <select id="filterPlot" class="form-control" onchange="filterTable()">
+              <option value="">सर्व प्लॉट</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="filterDate">तारीख</label>
+            <input type="date" id="filterDate" class="form-control" onchange="filterTable()">
+          </div>
+          <div class="form-group">
+            <label for="filterYear">वर्ष</label>
+            <input type="number" id="filterYear" class="form-control" placeholder="वर्ष" onchange="filterTable()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="card">
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>प्लॉट</th>
+                <th>तारीख</th>
+                <th>छाटणी ची तारीख</th>
+                <th>छाटणीनंतरचे दिवस</th>
+                <th>औषधे आणि खतांचे नाव</th>
+                <th>प्रति लिटर डोस</th>
+                <th>प्रति प्लॉट डोस</th>
+                <th>प्रति प्लॉट पाणी</th>
+                <th>स्प्रे करण्याचा वेळ</th>
+                <th>कारवाया</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Actions -->
       <div class="actions">
-        <input type="text" id="newPlotName" placeholder="नवीन प्लॉट जोडा">
-        <button onclick="addPlot()">प्लॉट जोडा</button>
+        <button onclick="downloadPDF()" class="btn btn-info"><i class="fas fa-file-pdf"></i> PDF डाउनलोड</button>
+        <button onclick="redirectToSecondPage()" class="btn btn-primary"><i class="fas fa-tint"></i> इरिगेशन</button>
       </div>
-      <div class="input-group">
-        <select id="plotSelection" required>
-          <option value="" disabled selected>प्लॉट निवडा</option>
-        </select>
-        <div class="date-container">
-          <div class="subtitle">तारीख</div>
-          <input type="date" id="date" required>
-        </div>
-        <div class="pruning-container">
-          <div class="subtitle">छाटणी ची तारीख</div>
-          <input type="date" id="pruningDate" required>
-        </div>
-        <input type="text" id="medicineName" placeholder="औषधे आणि खतांचे नाव" required>
-
-        <div style="flex: 1; display: flex;">
-          <input type="number" id="dosePerLiter" placeholder="प्रति लिटर डोस" required>
-          <select id="doseUnit" class="unit-select" required>
-            <option value="ml">मि.ली.</option>
-            <option value="g">ग्राम</option>
-          </select>
-        </div>
-
-        <div style="flex: 1; display: flex;">
-          <input type="number" id="dosePerPlot" placeholder="प्रति प्लॉट डोस" required>
-          <select id="dosePlotUnit" class="unit-select" required>
-            <option value="ml">मि.ली.</option>
-            <option value="l">लिटर</option>
-            <option value="g">ग्राम</option>
-            <option value="kg">किलो</option>
-          </select>
-        </div>
-
-        <input type="number" id="waterPerPlot" placeholder="प्रति प्लॉट पाणी (लिटर)" required>
-
-        <div class="time-container">
-          <div class="subtitle">स्प्रे करण्याचा वेळ</div>
-          <input type="time" id="sprayTime" required>
-        </div>
-      </div>
-      <div style="text-align: center; margin-top: 15px;">
-        <button onclick="addRowFromInputs()">डेटा जोडा</button>
-      </div>
-    </div>
-
-    <!-- Filter Section -->
-    <div id="filter-section">
-      <h3>फिल्टर </h3>
-      <div class="filter-group">
-        <select id="filterPlot" onchange="filterTable()">
-          <option value="">सर्व प्लॉट</option>
-        </select>
-        <input type="date" id="filterDate" onchange="filterTable()">
-        <input type="number" id="filterYear" placeholder="वर्ष" onchange="filterTable()">
-      </div>
-    </div>
-
-    <!-- Table -->
-    <table>
-      <thead>
-        <tr>
-          <th>प्लॉट</th>
-          <th>तारीख</th>
-          <th>छाटणी ची तारीख</th>
-          <th>छाटणीनंतरचे दिवस</th>
-          <th>औषधे आणि खतांचे नाव</th>
-          <th>प्रति लिटर डोस</th>
-          <th>प्रति प्लॉट डोस</th>
-          <th>प्रति प्लॉट पाणी</th>
-          <th>स्प्रे करण्याचा वेळ</th>
-          <th>कारवाया</th>
-        </tr>
-      </thead>
-      <tbody id="table-body">
-      </tbody>
-    </table>
-
-    <!-- Save, Load, and Download Section -->
-    <div class="actions">
-      <button onclick="downloadPDF()">PDF म्हणून डाउनलोड करा</button>
-      <button onclick="redirectToSecondPage()">इरिगेशन</button>
     </div>
   </div>
 
@@ -265,6 +577,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.22/jspdf.plugin.autotable.min.js"></script>
 
   <script>
+    // Your existing JavaScript code remains exactly the same
     let currentUser = "";
     let editingRow = null;
 
@@ -287,6 +600,7 @@
         currentUser = username;
         document.getElementById("login-section").style.display = "none";
         document.getElementById("data-entry-section").style.display = "block";
+        document.getElementById("current-user-display").textContent = `User: ${currentUser}`;
         loadPlots();
         loadData();
       } else {
@@ -366,8 +680,10 @@
         <td>${waterPerPlot} L</td>
         <td>${sprayTime}</td>
         <td>
-          <button class="edit-btn" onclick="editRow(this)">Edit</button>
-          <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+          <div class="action-buttons">
+            <button class="btn btn-warning btn-sm" onclick="editRow(this)"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="deleteRow(this)"><i class="fas fa-trash"></i></button>
+          </div>
         </td>
       `;
       tableBody.appendChild(newRow);
@@ -390,7 +706,7 @@
     // Function to edit a row
     function editRow(button) {
       console.log("editRow function called");
-      const row = button.parentElement.parentElement;
+      const row = button.closest("tr");
       editingRow = row;
 
       const cells = row.children;
@@ -411,7 +727,7 @@
     // Function to delete a row
     function deleteRow(button) {
       console.log("deleteRow function called");
-      const row = button.parentElement.parentElement;
+      const row = button.closest("tr");
       row.remove();
       saveData();
     }
@@ -443,21 +759,12 @@
         });
 
         const actionCell = document.createElement("td");
-        const editButton = document.createElement("button");
-        editButton.textContent = "Edit";
-        editButton.classList.add("edit-btn");
-        editButton.onclick = function() {
-          editRow(editButton);
-        };
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete";
-        deleteButton.classList.add("delete-btn");
-        deleteButton.onclick = function() {
-          newRow.remove();
-          saveData();
-        };
-        actionCell.appendChild(editButton);
-        actionCell.appendChild(deleteButton);
+        actionCell.innerHTML = `
+          <div class="action-buttons">
+            <button class="btn btn-warning btn-sm" onclick="editRow(this)"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="this.closest('tr').remove(); saveData();"><i class="fas fa-trash"></i></button>
+          </div>
+        `;
         newRow.appendChild(actionCell);
         tableBody.appendChild(newRow);
       });
