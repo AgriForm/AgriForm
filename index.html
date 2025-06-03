@@ -124,6 +124,13 @@
       transform: translateY(-2px);
     }
 
+    .create-account-link {
+      margin-top: 20px;
+      color: var(--primary);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
     /* Data Entry Section */
     #data-entry-section {
       display: none;
@@ -413,7 +420,7 @@
 <body>
   <!-- Login Section -->
   <div class="login-container" id="login-section">
-    <div class="login-card animate-slide-in">
+    <div class="login-card animate-slide-in" id="login-card">
       <h2><i class="fas fa-user-shield"></i> Login</h2>
       <div class="input-group">
         <i class="fas fa-user"></i>
@@ -424,6 +431,25 @@
         <input type="password" id="password" placeholder="Password" required>
       </div>
       <button onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
+      <div class="create-account-link" onclick="showCreateAccount()">Create new account</div>
+    </div>
+
+    <div class="login-card animate-slide-in" id="create-account-card" style="display: none;">
+      <h2><i class="fas fa-user-plus"></i> Create Account</h2>
+      <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="new-username" placeholder="Choose a username" required>
+      </div>
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="new-password" placeholder="Choose a password" required>
+      </div>
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="confirm-password" placeholder="Confirm password" required>
+      </div>
+      <button onclick="createAccount()"><i class="fas fa-user-plus"></i> Create Account</button>
+      <div class="create-account-link" onclick="showLogin()">Back to login</div>
     </div>
   </div>
 
@@ -581,20 +607,78 @@
     let currentUser = "";
     let editingRow = null;
 
+    // Function to show create account form
+    function showCreateAccount() {
+      document.getElementById("login-card").style.display = "none";
+      document.getElementById("create-account-card").style.display = "block";
+    }
+
+    // Function to show login form
+    function showLogin() {
+      document.getElementById("create-account-card").style.display = "none";
+      document.getElementById("login-card").style.display = "block";
+    }
+
+    // Function to create a new account
+    function createAccount() {
+      const username = document.getElementById("new-username").value.trim();
+      const password = document.getElementById("new-password").value;
+      const confirmPassword = document.getElementById("confirm-password").value;
+
+      if (!username || !password || !confirmPassword) {
+        alert("Please fill in all fields");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+      }
+
+      // Get existing users or initialize empty array
+      const users = JSON.parse(localStorage.getItem("grapesUsers")) || [];
+
+      // Check if username already exists
+      if (users.some(user => user.username === username)) {
+        alert("Username already exists");
+        return;
+      }
+
+      // Add new user
+      users.push({ username, password });
+      localStorage.setItem("grapesUsers", JSON.stringify(users));
+
+      // Initialize user-specific data
+      localStorage.setItem(`grapesPlots_${username}`, JSON.stringify([]));
+      localStorage.setItem(`grapesTableData_${username}`, JSON.stringify([]));
+
+      alert("Account created successfully!");
+      showLogin();
+      document.getElementById("username").value = username;
+      document.getElementById("password").value = "";
+      document.getElementById("new-username").value = "";
+      document.getElementById("new-password").value = "";
+      document.getElementById("confirm-password").value = "";
+    }
+
     // Function to handle login
     function login() {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      // Hardcoded credentials for demonstration purposes
+      // Get all users
+      const users = JSON.parse(localStorage.getItem("grapesUsers")) || [];
+
+      // Hardcoded credentials for backward compatibility
       const validUsers = [
         { username: "admin", password: "password" },
-        { username: "Bhavesh", password: "1234" },
+        { username: "Bhavesh", password: "Bhavesh" },
         { username: "Ravi", password: "Farm@1234" },
         { username: "123456789", password: "Grape@1234" }
       ];
 
-      const user = validUsers.find(u => u.username === username && u.password === password);
+      // Check both hardcoded and stored users
+      const user = [...validUsers, ...users].find(u => u.username === username && u.password === password);
 
       if (user) {
         currentUser = username;
