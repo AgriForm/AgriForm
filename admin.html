@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - User Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4a6b57;
+      --secondary: #f8f9fa;
+      --accent: #8ba888;
+      --text: #333;
+      --light: #fff;
+      --danger: #e74c3c;
+      --warning: #f39c12;
+      --success: #2ecc71;
+      --info: #3498db;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f7fa;
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .container {
+      width: 100%;
+      padding: 15px;
+      margin: 0 auto;
+    }
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .header h2 {
+      color: var(--primary);
+      font-size: 22px;
+      font-weight: 600;
+    }
+    .card {
+      background: var(--light);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 20px 15px;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-title i {
+      margin-right: 8px;
+      font-size: 18px;
+    }
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .form-group {
+      width: 100%;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #555;
+      font-size: 14px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: var(--border-radius);
+      font-size: 15px;
+      transition: var(--transition);
+      background-color: #f8f9fa;
+    }
+    .form-control:focus {
+      border-color: var(--primary);
+      outline: none;
+      background-color: var(--light);
+      box-shadow: 0 0 0 2px rgba(74, 107, 87, 0.2);
+    }
+    .btn {
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px; /* Minimum touch target size */
+    }
+    .btn i {
+      margin-right: 6px;
+      font-size: 14px;
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--light);
+    }
+    .btn-primary:hover {
+      background-color: #3a5747;
+    }
+    .btn-danger {
+      background-color: var(--danger);
+      color: var(--light);
+    }
+    .btn-danger:hover {
+      background-color: #c0392b;
+    }
+    .btn-success {
+      background-color: var(--success);
+      color: var(--light);
+    }
+    .btn-success:hover {
+      background-color: #27ae60;
+    }
+    .btn-info {
+      background-color: var(--info);
+      color: var(--light);
+    }
+    .btn-info:hover {
+      background-color: #2980b9;
+    }
+    .btn-sm {
+      padding: 8px 12px;
+      font-size: 13px;
+      min-height: 36px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    /* Table Styles */
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      background: var(--light);
+      margin-bottom: 20px;
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 400px; /* Minimum table width for small screens */
+    }
+    th, td {
+      padding: 12px 8px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 13px;
+    }
+    th {
+      background-color: var(--primary);
+      color: var(--light);
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+      white-space: nowrap;
+    }
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 6px;
+    }
+    /* Refresh Button */
+    .refresh-btn {
+      background-color: var(--info);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .refresh-btn:hover {
+      background-color: #2980b9;
+      transform: rotate(180deg);
+    }
+    .refresh-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .auto-refresh-label {
+      font-size: 14px;
+      color: #555;
+    }
+    /* Toggle Switch */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--success);
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    /* Mobile Navigation */
+    .mobile-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--light);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      font-size: 12px;
+      color: #555;
+      text-decoration: none;
+      border-radius: var(--border-radius);
+      min-width: 60px;
+    }
+    .nav-btn i {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .nav-btn.active {
+      color: var(--primary);
+      background: #f0f5f2;
+    }
+    /* Status Indicator */
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    .status-on {
+      background-color: var(--success);
+    }
+    .status-off {
+      background-color: #ccc;
+    }
+    /* Responsive adjustments */
+    @media (min-width: 768px) {
+      body {
+        font-size: 15px;
+      }
+      .container {
+        max-width: 1200px;
+        padding: 20px;
+      }
+      .header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .form-row {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .form-group {
+        flex: 1 1 calc(50% - 10px);
+      }
+      .card {
+        padding: 25px 20px;
+      }
+      th, td {
+        padding: 12px 10px;
+        font-size: 14px;
+      }
+      .btn {
+        padding: 12px 20px;
+      }
+      .mobile-nav {
+        display: none; /* Hide mobile nav on desktop */
+      }
+    }
+    @media (min-width: 992px) {
+      .form-group {
+        flex: 1 1 calc(33.333% - 15px);
+      }
+    }
+    @media (max-width: 767px) {
+      .actions {
+        flex-direction: column;
+      }
+      .actions .btn {
+        width: 100%;
+      }
+      .user-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .card-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .refresh-container {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2><i class="fas fa-users-cog"></i> User Management</h2>
+      <div class="user-info">
+        <span id="current-user-display"></span>
+        <button onclick="logout()" class="btn btn-danger btn-sm"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title">
+        <span><i class="fas fa-user-plus"></i> Add New User</span>
+        <div class="refresh-container">
+          <span class="auto-refresh-label">
+            <span class="status-indicator" id="status-indicator"></span>
+            Auto-Refresh: 
+          </span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="autoRefreshToggle">
+            <span class="slider"></span>
+          </label>
+          <button onclick="loadUsers()" class="refresh-btn" id="refresh-btn" title="Refresh Data">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="newUsername">Username</label>
+          <input type="text" id="newUsername" class="form-control" placeholder="Username" required>
+        </div>
+        <div class="form-group">
+          <label for="newPassword">Password</label>
+          <input type="password" id="newPassword" class="form-control" placeholder="Password" required>
+        </div>
+        <div class="form-group">
+          <button onclick="addUser()" class="btn btn-primary" style="margin-top: 28px;"><i class="fas fa-plus"></i> Add User</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title"><i class="fas fa-users"></i> Existing Users</div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav">
+    <a href="index.html" class="nav-btn">
+      <i class="fas fa-home"></i>
+      <span>मुख्य</span>
+    </a>
+    <a href="drip.html" class="nav-btn">
+      <i class="fas fa-tint"></i>
+      <span>इरिगेशन</span>
+    </a>
+    <a href="admin.html" class="nav-btn active">
+      <i class="fas fa-users-cog"></i>
+      <span>Admin</span>
+    </a>
+  </div>
+
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <!-- Firebase Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDvGRPEIhwZ3-k9YNL597xsNXayTMW6YrE",
+      authDomain: "grapes-7477e.firebaseapp.com",
+      projectId: "grapes-7477e",
+      storageBucket: "grapes-7477e.firebasestorage.app",
+      messagingSenderId: "995160881797",
+      appId: "1:995160881797:web:89fb268a4601129c8d87ec"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    let currentUser = "";
+    let refreshInterval = null;
+    const refreshTime = 30000; // 30 seconds
+    
+    // Check if user is passed in URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const userFromUrl = urlParams.get('user');
+    if (userFromUrl) {
+      currentUser = userFromUrl;
+      document.getElementById("current-user-display").textContent = `User: ${currentUser}`;
+      loadUsers();
+    }
+    
+    // Set up auto-refresh toggle
+    const autoRefreshToggle = document.getElementById('autoRefreshToggle');
+    const statusIndicator = document.getElementById('status-indicator');
+    const refreshBtn = document.getElementById('refresh-btn');
+    
+    autoRefreshToggle.addEventListener('change', function() {
+      if (this.checked) {
+        startAutoRefresh();
+        statusIndicator.className = 'status-indicator status-on';
+      } else {
+        stopAutoRefresh();
+        statusIndicator.className = 'status-indicator status-off';
+      }
+    });
+    
+    // Function to start auto-refresh
+    function startAutoRefresh() {
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+      }
+      refreshInterval = setInterval(function() {
+        loadUsers();
+        // Visual feedback that refresh happened
+        refreshBtn.classList.add('rotating');
+        setTimeout(() => {
+          refreshBtn.classList.remove('rotating');
+        }, 1000);
+      }, refreshTime);
+    }
+    
+    // Function to stop auto-refresh
+    function stopAutoRefresh() {
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+        refreshInterval = null;
+      }
+    }
+    
+    // Function to logout
+    function logout() {
+      window.location.href = 'index.html';
+    }
+    
+    // Function to load users from Firestore
+    function loadUsers() {
+      db.collection("usernames").get()
+        .then((querySnapshot) => {
+          const tableBody = document.getElementById("users-table-body");
+          tableBody.innerHTML = "";
+          querySnapshot.forEach((doc) => {
+            const user = doc.data();
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+              <td>${user.username}</td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn btn-danger btn-sm" onclick="deleteUser('${doc.id}')"><i class="fas fa-trash"></i> Delete</button>
+                </div>
+              </td>
+            `;
+            tableBody.appendChild(newRow);
+          });
+          
+          // Update last refresh time
+          const now = new Date();
+          document.getElementById('refresh-btn').title = `Last refreshed: ${now.toLocaleTimeString()}`;
+        })
+        .catch((error) => {
+          console.error("Error loading users: ", error);
+        });
+    }
+    
+    // Function to add a new user
+    function addUser() {
+      const newUsername = document.getElementById("newUsername").value.trim();
+      const newPassword = document.getElementById("newPassword").value.trim();
+      if (!newUsername || !newPassword) {
+        alert("Please enter both username and password.");
+        return;
+      }
+      db.collection("usernames").add({
+        username: newUsername,
+        password: newPassword
+      })
+      .then(() => {
+        loadUsers();
+        alert("User added successfully.");
+        document.getElementById("newUsername").value = "";
+        document.getElementById("newPassword").value = "";
+      })
+      .catch((error) => {
+        alert("Error adding user: " + error.message);
+      });
+    }
+    
+    // Function to delete a user
+    function deleteUser(docId) {
+      if (confirm("Are you sure you want to delete this user?")) {
+        db.collection("usernames").doc(docId).delete()
+          .then(() => {
+            loadUsers();
+          })
+          .catch((error) => {
+            alert("Error deleting user: " + error.message);
+          });
+      }
+    }
+    
+    // Load users on page load
+    window.onload = function() {
+      if (userFromUrl) {
+        currentUser = userFromUrl;
+        document.getElementById("current-user-display").textContent = `User: ${currentUser}`;
+      }
+      loadUsers();
+      
+      // Start with auto-refresh enabled by default
+      autoRefreshToggle.checked = true;
+      statusIndicator.className = 'status-indicator status-on';
+      startAutoRefresh();
+    };
+    
+    // Clean up interval when page is closed
+    window.addEventListener('beforeunload', function() {
+      stopAutoRefresh();
+    });
+  </script>
+</body>
+</html>
