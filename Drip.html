@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agri Form - Irrigation</title>
+  <title>Irrigation Form</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -111,7 +111,6 @@
     #data-entry-section {
       display: none;
       animation: fadeIn 0.5s ease;
-      padding-bottom: 70px; /* Space for mobile nav */
     }
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -313,33 +312,6 @@
       display: flex;
       gap: 6px;
     }
-    /* Medicine/Fertilizer Section */
-    .medicine-container {
-      margin-top: 15px;
-    }
-    .medicine-row {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 15px;
-      padding: 12px;
-      background: #f8f9fa;
-      border-radius: var(--border-radius);
-      position: relative;
-    }
-    .medicine-row .form-group {
-      margin-bottom: 0;
-    }
-    .medicine-row .unit-select {
-      width: 100%;
-    }
-    .remove-medicine-btn {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      padding: 5px;
-      min-height: auto;
-    }
     /* Animations */
     @keyframes slideIn {
       from { transform: translateY(20px); opacity: 0; }
@@ -375,39 +347,6 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-    /* Mobile Navigation */
-    .mobile-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--light);
-      display: flex;
-      justify-content: space-around;
-      padding: 10px;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-    }
-    .nav-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 8px;
-      font-size: 12px;
-      color: #555;
-      text-decoration: none;
-      border-radius: var(--border-radius);
-      min-width: 60px;
-    }
-    .nav-btn i {
-      font-size: 18px;
-      margin-bottom: 4px;
-    }
-    .nav-btn.active {
-      color: var(--primary);
-      background: #f0f5f2;
-    }
     /* Responsive adjustments */
     @media (min-width: 768px) {
       body {
@@ -441,23 +380,6 @@
       }
       .btn {
         padding: 12px 20px;
-      }
-      .medicine-row {
-        flex-direction: row;
-        align-items: flex-end;
-      }
-      .medicine-row .form-group {
-        flex: 1;
-      }
-      .remove-medicine-btn {
-        position: static;
-        margin-left: 10px;
-      }
-      #data-entry-section {
-        padding-bottom: 0; /* Remove padding for desktop */
-      }
-      .mobile-nav {
-        display: none; /* Hide mobile nav on desktop */
       }
     }
     @media (min-width: 992px) {
@@ -501,7 +423,7 @@
   <div id="data-entry-section" style="display: none;">
     <div class="container">
       <div class="header">
-        <h2><i class="fas fa-tint"></i> इरिगेशन</h2>
+        <h2><i class="fas fa-tint"></i> इरिगेशन फॉर्म</h2>
         <div class="user-info">
           <span id="current-user-display"></span>
           <button onclick="logout()" class="btn btn-danger btn-sm"><i class="fas fa-sign-out-alt"></i> Logout</button>
@@ -534,46 +456,30 @@
             <label for="date">तारीख</label>
             <input type="date" id="date" class="form-control" required>
           </div>
+          <div class="form-group">
+            <label for="pruningDate">छाटणी ची तारीख</label>
+            <input type="date" id="pruningDate" class="form-control" required>
+          </div>
         </div>
         
         <div class="form-row">
           <div class="form-group">
-            <label for="hours">पाण्याचे तास</label>
-            <input type="number" id="hours" class="form-control" placeholder="पाण्याचे तास" required>
+            <label for="irrigationTime">इरिगेशन वेळ (मिनिटे)</label>
+            <input type="number" id="irrigationTime" class="form-control" placeholder="वेळ (मिनिटे)" required>
           </div>
           <div class="form-group">
-            <label for="waterPerUnit">प्रति झाड पाणी</label>
-            <div class="input-with-unit">
-              <input type="number" id="waterPerUnit" class="form-control" placeholder="पाणी" required>
-              <span>L</span>
-            </div>
+            <label for="waterUsed">वापरलेले पाणी (लिटर)</label>
+            <input type="number" id="waterUsed" class="form-control" placeholder="पाणी (लिटर)" required>
           </div>
-        </div>
-        
-        <div class="medicine-container">
-          <div class="card-title"><i class="fas fa-pills"></i> खते</div>
-          <div id="medicine-container">
-            <div class="medicine-row">
-              <div class="form-group">
-                <label>खताचे नाव</label>
-                <input type="text" class="fertilizerName form-control" required>
-              </div>
-              <div class="form-group">
-                <label>खताची मात्रा</label>
-                <input type="number" class="fertilizerAmount form-control" required>
-              </div>
-              <div class="form-group">
-                <label>एकक निवडा</label>
-                <select class="fertilizerUnit form-control unit-select" required>
-                  <option value="" disabled selected>निवडा</option>
-                  <option value="Kg">Kg</option>
-                  <option value="L">L</option>
-                </select>
-              </div>
-              <button type="button" class="btn btn-danger btn-sm remove-medicine-btn" onclick="removeMedicineRow(this)"><i class="fas fa-trash"></i></button>
-            </div>
+          <div class="form-group">
+            <label for="irrigationType">इरिगेशन प्रकार</label>
+            <select id="irrigationType" class="form-control" required>
+              <option value="" disabled selected>प्रकार निवडा</option>
+              <option value="ड्रिप">ड्रिप</option>
+              <option value="स्प्रिंकलर">स्प्रिंकलर</option>
+              <option value="फवारणी">फवारणी</option>
+            </select>
           </div>
-          <button type="button" class="btn btn-primary" onclick="addMedicineRow()" style="margin-top: 10px;"><i class="fas fa-plus"></i> खत जोडा</button>
         </div>
         
         <div class="actions">
@@ -610,9 +516,11 @@
               <tr>
                 <th>प्लॉट</th>
                 <th>तारीख</th>
-                <th>पाण्याचे तास</th>
-                <th>प्रति झाड पाणी</th>
-                <th>खताचे नाव</th>
+                <th>छाटणी ची तारीख</th>
+                <th>छाटणीनंतरचे दिवस</th>
+                <th>इरिगेशन वेळ (मिनिटे)</th>
+                <th>वापरलेले पाणी (लिटर)</th>
+                <th>इरिगेशन प्रकार</th>
                 <th>कारवाया</th>
               </tr>
             </thead>
@@ -625,24 +533,9 @@
       <!-- Actions -->
       <div class="actions">
         <button onclick="downloadPDF()" class="btn btn-info"><i class="fas fa-file-pdf"></i> PDF डाउनलोड</button>
-        <button onclick="redirectToIndex()" class="btn btn-primary"><i class="fas fa-home"></i> मुख्यपृष्ठ</button>
+        <button onclick="redirectToMainPage()" class="btn btn-primary"><i class="fas fa-wine-bottle"></i> मुख्य पृष्ठ</button>
+        <button id="adminPanelBtn" onclick="redirectToAdminPanel()" class="btn btn-warning" style="display: none;"><i class="fas fa-users-cog"></i> Admin Panel</button>
       </div>
-    </div>
-    
-    <!-- Mobile Navigation -->
-    <div class="mobile-nav">
-      <a href="index.html" class="nav-btn">
-        <i class="fas fa-home"></i>
-        <span>मुख्य</span>
-      </a>
-      <a href="drip.html" class="nav-btn active">
-        <i class="fas fa-tint"></i>
-        <span>इरिगेशन</span>
-      </a>
-      <a href="admin.html" class="nav-btn">
-        <i class="fas fa-users-cog"></i>
-        <span>Admin</span>
-      </a>
     </div>
   </div>
 
@@ -669,9 +562,20 @@
     let editingRow = null;
     let tableData = [];
     
-    // Check if user is passed in URL parameter
+    // Check if user parameter is present in URL
     const urlParams = new URLSearchParams(window.location.search);
     const userFromUrl = urlParams.get('user');
+    if (userFromUrl) {
+      currentUser = userFromUrl;
+      document.getElementById("login-section").style.display = "none";
+      document.getElementById("data-entry-section").style.display = "block";
+      document.getElementById("current-user-display").textContent = `User: ${currentUser}`;
+      if (currentUser === "admin") {
+        document.getElementById("adminPanelBtn").style.display = "inline-flex";
+      }
+      loadPlots();
+      loadData();
+    }
     
     // Function to handle login
     function login() {
@@ -688,6 +592,9 @@
             document.getElementById("login-section").style.display = "none";
             document.getElementById("data-entry-section").style.display = "block";
             document.getElementById("current-user-display").textContent = `User: ${currentUser}`;
+            if (username === "admin") {
+              document.getElementById("adminPanelBtn").style.display = "inline-flex";
+            }
             loadPlots();
             loadData();
           } else {
@@ -712,10 +619,21 @@
       document.getElementById("password").value = "";
     }
     
+    // Function to redirect to admin panel
+    function redirectToAdminPanel() {
+      window.location.href = 'admin.html?user=' + currentUser;
+    }
+    
+    // Function to redirect to main page
+    function redirectToMainPage() {
+      window.location.href = 'index.html?user=' + currentUser;
+    }
+    
     // Function to load the plots from Firestore
     function loadPlots() {
       if (!currentUser) return;
       db.collection("users").doc(currentUser).collection("plots")
+        .orderBy("createdAt", "asc")
         .get()
         .then((querySnapshot) => {
           const plotSelection = document.getElementById("plotSelection");
@@ -758,124 +676,54 @@
       });
     }
     
-    // Function to add a medicine row
-    function addMedicineRow() {
-      const medicineContainer = document.getElementById("medicine-container");
-      const newRow = document.createElement("div");
-      newRow.className = "medicine-row";
-      newRow.innerHTML = `
-        <div class="form-group">
-          <label>खताचे नाव</label>
-          <input type="text" class="fertilizerName form-control" required>
-        </div>
-        <div class="form-group">
-          <label>खताची मात्रा</label>
-          <input type="number" class="fertilizerAmount form-control" required>
-        </div>
-        <div class="form-group">
-          <label>एकक</label>
-          <select class="fertilizerUnit form-control unit-select" required>
-            <option value="" disabled selected>निवडा</option>
-            <option value="Kg">Kg</option>
-            <option value="L">L</option>
-          </select>
-        </div>
-        <button type="button" class="btn btn-danger btn-sm remove-medicine-btn" onclick="removeMedicineRow(this)"><i class="fas fa-trash"></i></button>
-      `;
-      medicineContainer.appendChild(newRow);
-    }
-    
-    // Function to remove a medicine row
-    function removeMedicineRow(button) {
-      const row = button.closest(".medicine-row");
-      if (document.querySelectorAll(".medicine-row").length > 1) {
-        row.remove();
-      } else {
-        alert("कमीत कमी एक खताची पंक्ती आवश्यक आहे.");
-      }
-    }
-    
     // Function to add a row from inputs to the table
     function addRowFromInputs() {
       if (!currentUser) return;
       const date = document.getElementById("date").value;
-      const hours = document.getElementById("hours").value;
-      const waterPerUnit = document.getElementById("waterPerUnit").value;
+      const pruningDate = document.getElementById("pruningDate").value;
+      const irrigationTime = document.getElementById("irrigationTime").value;
+      const waterUsed = document.getElementById("waterUsed").value;
+      const irrigationType = document.getElementById("irrigationType").value;
       const plotSelection = document.getElementById("plotSelection").value;
-      const medicineRows = document.querySelectorAll(".medicine-row");
       
-      if (!date || !hours || !waterPerUnit || !plotSelection) {
+      if (!date || !pruningDate || !irrigationTime || !waterUsed || !irrigationType || !plotSelection) {
         alert("कृपया सर्व आवश्यक फील्ड भरा.");
         return;
       }
       
-      let fertilizers = [];
-      let hasEmptyFields = false;
-      medicineRows.forEach(row => {
-        const fertilizerName = row.querySelector(".fertilizerName").value;
-        const fertilizerAmount = row.querySelector(".fertilizerAmount").value;
-        const fertilizerUnit = row.querySelector(".fertilizerUnit").value;
-        if (!fertilizerName || !fertilizerAmount || !fertilizerUnit) {
-          hasEmptyFields = true;
-          return;
-        }
-        fertilizers.push({
-          name: fertilizerName,
-          amount: fertilizerAmount,
-          unit: fertilizerUnit
-        });
-      });
-      
-      if (hasEmptyFields) {
-        alert("कृपया सर्व खताची फील्ड भरा.");
-        return;
-      }
-      
-      if (fertilizers.length === 0) {
-        alert("कृपया किमान एक खत जोडा.");
-        return;
-      }
+      const daysAfterPruning = calculateDaysAfterPruning(date, pruningDate);
       
       db.collection("users").doc(currentUser).collection("irrigationData").add({
         plot: plotSelection,
         date: date,
-        hours: hours,
-        waterPerUnit: waterPerUnit + " L",
-        fertilizers: fertilizers,
+        pruningDate: pruningDate,
+        daysAfterPruning: daysAfterPruning,
+        irrigationTime: irrigationTime + " minutes",
+        waterUsed: waterUsed + " L",
+        irrigationType: irrigationType,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
         document.getElementById("date").value = "";
-        document.getElementById("hours").value = "";
-        document.getElementById("waterPerUnit").value = "";
+        document.getElementById("pruningDate").value = "";
+        document.getElementById("irrigationTime").value = "";
+        document.getElementById("waterUsed").value = "";
+        document.getElementById("irrigationType").selectedIndex = 0;
         document.getElementById("plotSelection").selectedIndex = 0;
-        const medicineContainer = document.getElementById("medicine-container");
-        medicineContainer.innerHTML = `
-          <div class="medicine-row">
-            <div class="form-group">
-              <label>खताचे नाव</label>
-              <input type="text" class="fertilizerName form-control" required>
-            </div>
-            <div class="form-group">
-              <label>खताची मात्रा</label>
-              <input type="number" class="fertilizerAmount form-control" required>
-            </div>
-            <div class="form-group">
-              <label>एकक</label>
-              <select class="fertilizerUnit form-control unit-select" required>
-                <option value="" disabled selected>निवडा</option>
-                <option value="Kg">Kg</option>
-                <option value="L">L</option>
-              </select>
-            </div>
-            <button type="button" class="btn btn-danger btn-sm remove-medicine-btn" onclick="removeMedicineRow(this)"><i class="fas fa-trash"></i></button>
-          </div>
-        `;
         loadData();
       })
       .catch((error) => {
         alert("Error saving data: " + error.message);
       });
+    }
+    
+    // Function to calculate days after pruning
+    function calculateDaysAfterPruning(date, pruningDate) {
+      const dateObj = new Date(date);
+      const pruningDateObj = new Date(pruningDate);
+      const differenceInTime = dateObj.getTime() - pruningDateObj.getTime();
+      const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+      return Math.floor(differenceInDays);
     }
     
     // Function to load data from Firestore
@@ -891,16 +739,15 @@
           querySnapshot.forEach((doc) => {
             const data = doc.data();
             tableData.push({id: doc.id, ...data});
-            const fertilizersDisplay = data.fertilizers.map(f =>
-              `${f.name} (${f.amount} ${f.unit})`
-            ).join(', ');
             const newRow = document.createElement("tr");
             newRow.innerHTML = `
               <td>${data.plot}</td>
               <td>${data.date}</td>
-              <td>${data.hours}</td>
-              <td>${data.waterPerUnit}</td>
-              <td>${fertilizersDisplay}</td>
+              <td>${data.pruningDate}</td>
+              <td>${data.daysAfterPruning}</td>
+              <td>${data.irrigationTime}</td>
+              <td>${data.waterUsed}</td>
+              <td>${data.irrigationType}</td>
               <td>
                 <div class="action-buttons">
                   <button class="btn btn-warning btn-sm" onclick="editRow('${doc.id}')"><i class="fas fa-edit"></i></button>
@@ -923,37 +770,25 @@
       
       document.getElementById("plotSelection").value = data.plot;
       document.getElementById("date").value = data.date;
-      document.getElementById("hours").value = data.hours;
-      document.getElementById("waterPerUnit").value = data.waterPerUnit.replace(" L", "");
+      document.getElementById("pruningDate").value = data.pruningDate;
       
-      const medicineContainer = document.getElementById("medicine-container");
-      medicineContainer.innerHTML = "";
-      data.fertilizers.forEach(fertilizer => {
-        const newRow = document.createElement("div");
-        newRow.className = "medicine-row";
-        newRow.innerHTML = `
-          <div class="form-group">
-            <label>खताचे नाव</label>
-            <input type="text" class="fertilizerName form-control" value="${fertilizer.name}" required>
-          </div>
-          <div class="form-group">
-            <label>खताची मात्रा</label>
-            <input type="number" class="fertilizerAmount form-control" value="${fertilizer.amount}" required>
-          </div>
-          <div class="form-group">
-            <label>एकक</label>
-            <select class="fertilizerUnit form-control unit-select" required>
-              <option value="" disabled>निवडा</option>
-              <option value="Kg" ${fertilizer.unit === 'Kg' ? 'selected' : ''}>Kg</option>
-              <option value="L" ${fertilizer.unit === 'L' ? 'selected' : ''}>L</option>
-            </select>
-          </div>
-          <button type="button" class="btn btn-danger btn-sm remove-medicine-btn" onclick="removeMedicineRow(this)"><i class="fas fa-trash"></i></button>
-        `;
-        medicineContainer.appendChild(newRow);
-      });
+      const irrigationTimeParts = data.irrigationTime.split(' ');
+      document.getElementById("irrigationTime").value = irrigationTimeParts[0];
+      
+      const waterUsedParts = data.waterUsed.split(' ');
+      document.getElementById("waterUsed").value = waterUsedParts[0];
+      
+      document.getElementById("irrigationType").value = data.irrigationType;
       
       editingRow = docId;
+      
+      db.collection("users").doc(currentUser).collection("irrigationData").doc(docId).delete()
+        .then(() => {
+          loadData();
+        })
+        .catch((error) => {
+          alert("Error preparing for edit: " + error.message);
+        });
     }
     
     // Function to delete a row
@@ -999,7 +834,8 @@
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
       const tableHeaders = [
-        ["Plot", "Date", "Watering Hours", "Water Per Tree (L)", "Fertilizer"]
+        ["Plot", "Date", "Pruning Date", "Days After Pruning", "Irrigation Time", 
+        "Water Used", "Irrigation Type"]
       ];
       const tableData = Array.from(document.querySelectorAll("#table-body tr")).filter(row => row.style.display !== "none").map(row => {
         return Array.from(row.children).slice(0, -1).map(cell => cell.textContent);
@@ -1013,22 +849,7 @@
         styles: { fontSize: 12, cellPadding: 2, font: "helvetica" }
       });
       
-      doc.save("table_data.pdf");
-    }
-    
-    // Function to redirect to the index page
-    function redirectToIndex() {
-      window.location.href = 'index.html?user=' + currentUser;
-    }
-    
-    // Auto-login if user is passed in URL
-    if (userFromUrl) {
-      currentUser = userFromUrl;
-      document.getElementById("login-section").style.display = "none";
-      document.getElementById("data-entry-section").style.display = "block";
-      document.getElementById("current-user-display").textContent = `User: ${currentUser}`;
-      loadPlots();
-      loadData();
+      doc.save("irrigation_data.pdf");
     }
   </script>
 </body>
