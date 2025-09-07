@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agro Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4a6b57;
+      --secondary: #f8f9fa;
+      --accent: #8ba888;
+      --text: #333;
+      --light: #fff;
+      --danger: #e74c3c;
+      --warning: #f39c12;
+      --success: #2ecc71;
+      --info: #3498db;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f7fa;
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .container {
+      width: 100%;
+      padding: 15px;
+      margin: 0 auto;
+    }
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .header h2 {
+      color: var(--primary);
+      font-size: 22px;
+      font-weight: 600;
+    }
+    .card {
+      background: var(--light);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 20px 15px;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+    .card-title i {
+      margin-right: 8px;
+      font-size: 18px;
+    }
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .form-group {
+      width: 100%;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #555;
+      font-size: 14px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: var(--border-radius);
+      font-size: 15px;
+      transition: var(--transition);
+      background-color: #f8f9fa;
+    }
+    .form-control:focus {
+      border-color: var(--primary);
+      outline: none;
+      background-color: var(--light);
+      box-shadow: 0 0 0 2px rgba(74, 107, 87, 0.2);
+    }
+    .btn {
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px; /* Minimum touch target size */
+    }
+    .btn i {
+      margin-right: 6px;
+      font-size: 14px;
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--light);
+    }
+    .btn-primary:hover {
+      background-color: #3a5747;
+    }
+    .btn-danger {
+      background-color: var(--danger);
+      color: var(--light);
+    }
+    .btn-danger:hover {
+      background-color: #c0392b;
+    }
+    .btn-success {
+      background-color: var(--success);
+      color: var(--light);
+    }
+    .btn-success:hover {
+      background-color: #27ae60;
+    }
+    .btn-sm {
+      padding: 8px 12px;
+      font-size: 13px;
+      min-height: 36px;
+    }
+    /* Table Styles */
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      background: var(--light);
+      margin-bottom: 20px;
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 400px; /* Minimum table width for small screens */
+    }
+    th, td {
+      padding: 12px 8px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 13px;
+    }
+    th {
+      background-color: var(--primary);
+      color: var(--light);
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+      white-space: nowrap;
+    }
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 6px;
+    }
+    /* User Grid */
+    .user-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    .user-card {
+      background: var(--light);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 15px;
+      transition: var(--transition);
+      text-align: center;
+    }
+    .user-card h3 {
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .user-actions {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    /* Data Containers */
+    .data-container {
+      display: none;
+      margin-top: 20px;
+    }
+    .data-container.active {
+      display: block;
+    }
+    .back-btn {
+      margin-bottom: 15px;
+    }
+    /* Animations */
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .animate-slide-in {
+      animation: slideIn 0.4s ease forwards;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3a5747;
+    }
+    /* Mobile Navigation */
+    .mobile-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--light);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      font-size: 12px;
+      color: #555;
+      text-decoration: none;
+      border-radius: var(--border-radius);
+      min-width: 60px;
+    }
+    .nav-btn i {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .nav-btn.active {
+      color: var(--primary);
+      background: #f0f5f2;
+    }
+    /* Responsive adjustments */
+    @media (min-width: 768px) {
+      body {
+        font-size: 15px;
+      }
+      .container {
+        max-width: 1200px;
+        padding: 20px;
+      }
+      .header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .form-row {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .form-group {
+        flex: 1 1 calc(50% - 10px);
+      }
+      .card {
+        padding: 25px 20px;
+      }
+      th, td {
+        padding: 12px 10px;
+        font-size: 14px;
+      }
+      .btn {
+        padding: 12px 20px;
+      }
+      .user-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+      }
+      .mobile-nav {
+        display: none; /* Hide mobile nav on desktop */
+      }
+    }
+    @media (min-width: 992px) {
+      .form-group {
+        flex: 1 1 calc(33.333% - 15px);
+      }
+    }
+    @media (max-width: 767px) {
+      .user-actions {
+        flex-direction: column;
+      }
+      .user-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2><i class="fas fa-users-cog"></i> Agro Admin Panel</h2>
+      <button onclick="window.location.href='index.html'" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+    
+    <div class="card">
+      <div class="card-title"><i class="fas fa-users"></i> Users</div>
+      <div class="user-grid" id="user-grid">
+        <!-- Users will be loaded here -->
+      </div>
+    </div>
+    
+    <div class="card data-container" id="spray-data-container">
+      <div class="card-title"><i class="fas fa-wine-bottle"></i> Main Page Data</div>
+      <button onclick="backToUsers()" class="btn btn-danger back-btn"><i class="fas fa-arrow-left"></i> Back</button>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Plot</th>
+              <th>Date</th>
+              <th>Pruning Date</th>
+              <th>Days After Pruning</th>
+              <th>Medicine and Fertilizers</th>
+              <th>Dose per Liter</th>
+              <th>Dose per Plot</th>
+              <th>Water per Plot</th>
+              <th>Spraying Time</th>
+            </tr>
+          </thead>
+          <tbody id="spray-table-body">
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="card data-container" id="irrigation-data-container">
+      <div class="card-title"><i class="fas fa-tint"></i> Irrigation Data</div>
+      <button onclick="backToUsers()" class="btn btn-danger back-btn"><i class="fas fa-arrow-left"></i> Back</button>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Plot</th>
+              <th>Date</th>
+              <th>Watering Hours</th>
+              <th>Water Per Tree (L)</th>
+              <th>Fertilizer</th>
+            </tr>
+          </thead>
+          <tbody id="irrigation-table-body">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav">
+    <a href="index.html" class="nav-btn">
+      <i class="fas fa-home"></i>
+      <span>मुख्य</span>
+    </a>
+    <a href="drip.html" class="nav-btn">
+      <i class="fas fa-tint"></i>
+      <span>इरिगेशन</span>
+    </a>
+    <a href="admin.html" class="nav-btn">
+      <i class="fas fa-users-cog"></i>
+      <span>Admin</span>
+    </a>
+  </div>
+
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <!-- Firebase Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDvGRPEIhwZ3-k9YNL597xsNXayTMW6YrE",
+      authDomain: "grapes-7477e.firebaseapp.com",
+      projectId: "grapes-7477e",
+      storageBucket: "grapes-7477e.firebasestorage.app",
+      messagingSenderId: "995160881797",
+      appId: "1:995160881797:web:89fb268a4601129c8d87ec"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    let currentUserData = "";
+    
+    // Function to load all users
+    function loadUsers() {
+      db.collection("usernames").get()
+        .then((querySnapshot) => {
+          const userGrid = document.getElementById("user-grid");
+          userGrid.innerHTML = "";
+          querySnapshot.forEach((doc) => {
+            const user = doc.data();
+            const userCard = document.createElement("div");
+            userCard.className = "user-card";
+            userCard.innerHTML = `
+              <h3>${user.username}</h3>
+              <div class="user-actions">
+                <button onclick="loadUserSprayData('${user.username}')" class="btn btn-primary btn-sm"><i class="fas fa-wine-bottle"></i> Main Page</button>
+                <button onclick="loadUserIrrigationData('${user.username}')" class="btn btn-info btn-sm"><i class="fas fa-tint"></i> Irrigation</button>
+              </div>
+            `;
+            userGrid.appendChild(userCard);
+          });
+        })
+        .catch((error) => {
+          console.error("Error loading users: ", error);
+        });
+    }
+    
+    // Function to load spray data for a user
+    function loadUserSprayData(username) {
+      currentUserData = username;
+      document.querySelectorAll(".data-container").forEach(container => {
+        container.classList.remove("active");
+      });
+      document.getElementById("spray-data-container").classList.add("active");
+      db.collection("users").doc(username).collection("sprayData")
+        .orderBy("createdAt", "desc")
+        .get()
+        .then((querySnapshot) => {
+          const tableBody = document.getElementById("spray-table-body");
+          tableBody.innerHTML = "";
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+              <td>${data.plot}</td>
+              <td>${data.date}</td>
+              <td>${data.pruningDate}</td>
+              <td>${data.daysAfterPruning}</td>
+              <td>${data.medicineName}</td>
+              <td>${data.dosePerLiter}</td>
+              <td>${data.dosePerPlot}</td>
+              <td>${data.waterPerPlot}</td>
+              <td>${data.sprayTime}</td>
+            `;
+            tableBody.appendChild(newRow);
+          });
+        })
+        .catch((error) => {
+          console.error("Error loading spray data: ", error);
+        });
+    }
+    
+    // Function to load irrigation data for a user
+    function loadUserIrrigationData(username) {
+      currentUserData = username;
+      document.querySelectorAll(".data-container").forEach(container => {
+        container.classList.remove("active");
+      });
+      document.getElementById("irrigation-data-container").classList.add("active");
+      db.collection("users").doc(username).collection("irrigationData")
+        .orderBy("createdAt", "desc")
+        .get()
+        .then((querySnapshot) => {
+          const tableBody = document.getElementById("irrigation-table-body");
+          tableBody.innerHTML = "";
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const fertilizersDisplay = data.fertilizers.map(f =>
+              `${f.name} (${f.amount} ${f.unit})`
+            ).join(', ');
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+              <td>${data.plot}</td>
+              <td>${data.date}</td>
+              <td>${data.hours}</td>
+              <td>${data.waterPerUnit}</td>
+              <td>${fertilizersDisplay}</td>
+            `;
+            tableBody.appendChild(newRow);
+          });
+        })
+        .catch((error) => {
+          console.error("Error loading irrigation data: ", error);
+        });
+    }
+    
+    // Function to go back to users
+    function backToUsers() {
+      document.querySelectorAll(".data-container").forEach(container => {
+        container.classList.remove("active");
+      });
+    }
+    
+    // Load users on page load
+    window.onload = loadUsers;
+  </script>
+</body>
+</html>
