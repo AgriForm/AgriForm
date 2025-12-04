@@ -517,7 +517,7 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <input type="text" id="newPlotName" class="form-control" placeholder="New Plot Name" >
+            <input type="text" id="newPlotName" class="form-control" placeholder="New Plot Name">
           </div>
           <div class="form-group">
             <button onclick="addPlot()" class="btn btn-primary">
@@ -676,6 +676,26 @@
   <script src="lang.js"></script>
 
   <script>
+    // ✅ Safe language toggle (no ReferenceError if currentLang/switchLanguage are not defined yet)
+    function toggleLanguage() {
+      const current = window.currentLang === "mr" ? "mr" : "en"; // default to en
+      const next = current === "en" ? "mr" : "en";
+      window.currentLang = next;
+      if (typeof window.switchLanguage === "function") {
+        window.switchLanguage(next);
+      }
+    }
+
+    // ✅ On load, set default language safely
+    document.addEventListener("DOMContentLoaded", function () {
+      if (!window.currentLang) {
+        window.currentLang = "en";
+      }
+      if (typeof window.switchLanguage === "function") {
+        window.switchLanguage(window.currentLang);
+      }
+    });
+
     // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDvGRPEIhwZ3-k9YNL597xsNXayTMW6YrE",
@@ -689,15 +709,8 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     let currentUser = "";
-    let editingRow = null;
     let tableData = [];
 
-    // 🔹 Toggle language using lang.js
-    function toggleLanguage() {
-      currentLang = currentLang === "en" ? "mr" : "en";
-      switchLanguage(currentLang);
-    }
-    
     // Function to handle login
     function login() {
       const username = document.getElementById("username").value;
@@ -711,7 +724,10 @@
         return;
       }
       
-      db.collection("usernames").where("username", "==", username).where("password", "==", password).get()
+      db.collection("usernames")
+        .where("username", "==", username)
+        .where("password", "==", password)
+        .get()
         .then((querySnapshot) => {
           if (!querySnapshot.empty) {
             currentUser = username;
@@ -747,7 +763,7 @@
     
     // Function to redirect to admin panel
     function redirectToAdminPanel() {
-      window.location.href = 'admin.html?user=' + currentUser;
+      window.location.href = 'admin.html?user=' + encodeURIComponent(currentUser);
     }
     
     // Function to load the plots from Firestore
@@ -780,7 +796,7 @@
       if (!currentUser) return;
       const newPlotName = document.getElementById("newPlotName").value.trim();
       if (!newPlotName) {
-        alert("कृपया वैध प्लॉट नाव द्या.");
+        alert("קृपया वैध प्लॉट नाव द्या.");
         return;
       }
       db.collection("users").doc(currentUser).collection("plots").add({
@@ -915,8 +931,7 @@
       document.getElementById("waterPerPlot").value = data.waterPerPlot.replace(" L", "");
       document.getElementById("sprayTime").value = data.sprayTime;
       
-      editingRow = docId;
-      
+      // Delete old doc so when user saves, it behaves like "update"
       db.collection("users").doc(currentUser).collection("sprayData").doc(docId).delete()
         .then(() => {
           loadData();
@@ -950,7 +965,7 @@
         const cells = row.children;
         const plot = cells[0].textContent.toLowerCase();
         const date = cells[1].textContent;
-        const year = new Date(date).getFullYear();
+        const year = date ? new Date(date).getFullYear() : "";
         
         const matchPlot = filterPlot ? plot.includes(filterPlot) : true;
         const matchDate = filterDate ? date.includes(filterDate) : true;
@@ -972,9 +987,11 @@
         ["Plot", "Date", "Pruning Date", "Days After Pruning", "Medicine and Fertilizers",
         "Dose per Liter", "Dose per Plot", "Water per Plot", "Spraying Time"]
       ];
-      const tableDataArr = Array.from(document.querySelectorAll("#table-body tr")).filter(row => row.style.display !== "none").map(row => {
-        return Array.from(row.children).slice(0, -1).map(cell => cell.textContent);
-      });
+      const tableDataArr = Array.from(document.querySelectorAll("#table-body tr"))
+        .filter(row => row.style.display !== "none")
+        .map(row => {
+          return Array.from(row.children).slice(0, -1).map(cell => cell.textContent);
+        });
       
       doc.autoTable({
         head: tableHeaders,
@@ -989,9 +1006,8 @@
     
     // Function to redirect to the second page
     function redirectToSecondPage() {
-      window.location.href = 'Drip.html?user=' + currentUser;
+      window.location.href = 'Drip.html?user=' + encodeURIComponent(currentUser);
     }
   </script>
 </body>
 </html>
-
