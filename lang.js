@@ -12,41 +12,30 @@ const translations = {
     agroForm: "Agri Form",
 
     // Plot area
-    addPlotTitle: "Add New Plot",
+    addPlot: "Add Plot",
     newPlotName: "New Plot Name",
-    addPlotBtn: "Add Plot",
-    plot: "Plot",
 
     // Data Entry
-    dataEntry: "Data Entry",
+    addData: "Add Data",
+    plot: "Plot",
     date: "Date",
     pruningDate: "Pruning Date",
     medicineName: "Medicine & Fertilizers",
-    medicinePlaceholder: "Enter medicine or fertilizer",
+    medicinePlaceholder: "Medicine & fertilizer name",
     dosePerLiter: "Dose per Liter",
     dosePerPlot: "Dose per Plot",
     waterPerPlot: "Water per Plot",
     sprayTime: "Spray Time",
-    addData: "Add Data",
+    save: "Save",
 
     // Filters
     filter: "Filter",
-    filterPlot: "Plot",
-    filterDate: "Date",
-    filterYear: "Year",
+    year: "Year",
     allPlots: "All Plots",
 
     // Table headers
-    thPlot: "Plot",
-    thDate: "Date",
-    thPruningDate: "Pruning Date",
-    thDaysAfter: "Days After Pruning",
-    thMedicine: "Medicine",
-    thDoseLiter: "Dose per Liter",
-    thDosePlot: "Dose per Plot",
-    thWaterPlot: "Water per Plot",
-    thSprayTime: "Spray Time",
-    thActions: "Actions",
+    daysAfterPruning: "Days After Pruning",
+    actions: "Actions",
 
     // Buttons
     downloadPDF: "Download PDF",
@@ -69,41 +58,30 @@ const translations = {
     agroForm: "कृषी फॉर्म",
 
     // Plot area
-    addPlotTitle: "नवीन प्लॉट जोडा",
+    addPlot: "प्लॉट जोडा",
     newPlotName: "नवीन प्लॉट नाव",
-    addPlotBtn: "प्लॉट जोडा",
-    plot: "प्लॉट",
 
     // Data Entry
-    dataEntry: "डेटा एंट्री",
+    addData: "डेटा जोडा",
+    plot: "प्लॉट",
     date: "तारीख",
-    pruningDate: "छाटणी ची तारीख",
+    pruningDate: "छाटणीची तारीख",
     medicineName: "औषधे आणि खतांचे नाव",
     medicinePlaceholder: "औषध किंवा खत प्रविष्ट करा",
     dosePerLiter: "प्रति लिटर डोस",
     dosePerPlot: "प्रति प्लॉट डोस",
     waterPerPlot: "प्रति प्लॉट पाणी",
     sprayTime: "स्प्रे करण्याचा वेळ",
-    addData: "डेटा जोडा",
+    save: "सेव्ह",
 
     // Filters
     filter: "फिल्टर",
-    filterPlot: "प्लॉट",
-    filterDate: "तारीख",
-    filterYear: "वर्ष",
+    year: "वर्ष",
     allPlots: "सर्व प्लॉट",
 
     // Table headers
-    thPlot: "प्लॉट",
-    thDate: "तारीख",
-    thPruningDate: "छाटणी तारीख",
-    thDaysAfter: "छाटणीनंतरचे दिवस",
-    thMedicine: "औषधे",
-    thDoseLiter: "प्रति लिटर डोस",
-    thDosePlot: "प्रति प्लॉट डोस",
-    thWaterPlot: "प्रति प्लॉट पाणी",
-    thSprayTime: "स्प्रे वेळ",
-    thActions: "कारवाई",
+    daysAfterPruning: "छाटणीनंतरचे दिवस",
+    actions: "कारवाई",
 
     // Buttons
     downloadPDF: "PDF डाउनलोड",
@@ -120,24 +98,23 @@ const translations = {
 
 // Apply language to UI
 function applyLanguage() {
+  // Text (labels, buttons, headings, spans, th, etc.)
   document.querySelectorAll("[data-key]").forEach(el => {
     const key = el.getAttribute("data-key");
-    if (translations[currentLang][key]) {
-      el.innerHTML = translations[currentLang][key];
+    const value = translations[currentLang][key];
+    if (value !== undefined) {
+      el.textContent = value;
     }
   });
 
-  // Apply placeholders
+  // Placeholders (inputs with data-placeholder)
   document.querySelectorAll("[data-placeholder]").forEach(el => {
     const key = el.getAttribute("data-placeholder");
-    if (translations[currentLang][key]) {
-      el.placeholder = translations[currentLang][key];
+    const value = translations[currentLang][key];
+    if (value !== undefined) {
+      el.placeholder = value;
     }
   });
-
-  // Update the top language switcher text
-  const langSwitch = document.getElementById("lang-switch");
-  if (langSwitch) langSwitch.textContent = translations[currentLang].language;
 }
 
 // Toggle English ↔ Marathi
