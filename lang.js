@@ -1,133 +1,161 @@
-// Default language = English
-let currentLang = "en";
+// ---------------------------------------------
+// Global Language Manager
+// Supports:
+//  - Text translation using data-key
+//  - Placeholder translation using data-placeholder
+//  - Persists language across pages
+// ---------------------------------------------
+
+// Load last language or default to English
+let currentLang = localStorage.getItem("lang") || "en";
 
 const translations = {
   en: {
-    // General
+    // UI language label
     language: "English | मराठी",
+
+    // Login
     login: "Login",
     logout: "Logout",
     username: "Username",
     password: "Password",
+    usernamePlaceholder: "Enter Username",
+    passwordPlaceholder: "Enter Password",
+
+    // Admin
+    adminLogin: "Admin Login",
+    adminPanelTitle: "Admin Panel",
+    newUser: "Add New User",
+    users: "Users",
     addUser: "Add User",
     delete: "Delete",
-    actions: "Actions",
 
-    // Index Page (Main Agro Form)
+    // Main Form
     agroForm: "Agro Form",
     addPlot: "Add Plot",
     newPlotName: "New Plot Name",
+    newPlotNamePlaceholder: "Enter Plot Name",
+
     plot: "Plot",
     date: "Date",
     pruningDate: "Pruning Date",
     daysAfterPruning: "Days After Pruning",
+
     medicineName: "Medicine & Fertilizers",
+    medicinePlaceholder: "Enter medicine/fertilizer name",
+
     dosePerLiter: "Dose Per Liter",
     dosePerPlot: "Dose Per Plot",
     waterPerPlot: "Water Per Plot",
     sprayTime: "Spray Time",
+
     addData: "Add Data",
+    save: "Save",
     filter: "Filter",
     year: "Year",
     downloadPDF: "Download PDF",
     irrigation: "Irrigation",
     adminPanel: "Admin Panel",
-
-    // Drip (Irrigation)
-    irrigationForm: "Irrigation Form",
-    irrigationTime: "Irrigation Time (minutes)",
-    waterUsed: "Water Used (Liters)",
-    irrigationType: "Irrigation Type",
     mainPage: "Main Page",
 
-    // Admin Panel
-    adminLogin: "Admin Login",
-    adminPanelTitle: "Admin Panel",
-    newUser: "Add New User",
-    users: "Users",
-    mainPageData: "Main Page Data",
-    irrigationData: "Irrigation Data",
+    // Irrigation page
+    irrigationForm: "Irrigation Form",
+    irrigationTime: "Irrigation Time (minutes)",
+    irrigationTimePlaceholder: "Enter time in minutes",
 
-    // Buttons
-    save: "Save",
-    back: "Back",
+    waterUsed: "Water Used (Liters)",
+    waterUsedPlaceholder: "Enter water in liters",
 
-    // Irrigation Table
-    wateringHours: "Watering Hours",
-    waterPerUnit: "Water Per Tree (L)",
-    fertilizer: "Fertilizer",
+    irrigationType: "Irrigation Type",
+
+    // Table Actions
+    actions: "Actions",
   },
 
   mr: {
-    // General
     language: "मराठी | English",
+
     login: "लॉगिन",
     logout: "लॉगआऊट",
     username: "वापरकर्तानाव",
     password: "पासवर्ड",
+    usernamePlaceholder: "वापरकर्तानाव प्रविष्ट करा",
+    passwordPlaceholder: "पासवर्ड प्रविष्ट करा",
+
+    adminLogin: "Admin Login",
+    adminPanelTitle: "Admin Panel",
+    newUser: "नवीन वापरकर्ता",
+    users: "वापरकर्ते",
     addUser: "वापरकर्ता जोडा",
     delete: "हटवा",
-    actions: "कारवाया",
 
-    // Index Page
     agroForm: "कृषी फॉर्म",
     addPlot: "प्लॉट जोडा",
     newPlotName: "नवीन प्लॉट नाव",
+    newPlotNamePlaceholder: "प्लॉटचे नाव प्रविष्ट करा",
+
     plot: "प्लॉट",
     date: "तारीख",
     pruningDate: "छाटणीची तारीख",
     daysAfterPruning: "छाटणीनंतरचे दिवस",
+
     medicineName: "औषधे व खते",
+    medicinePlaceholder: "औषधे / खते प्रविष्ट करा",
+
     dosePerLiter: "प्रति लिटर डोस",
     dosePerPlot: "प्रति प्लॉट डोस",
     waterPerPlot: "प्रति प्लॉट पाणी",
     sprayTime: "स्प्रे वेळ",
+
     addData: "डेटा जोडा",
+    save: "सेव्ह",
     filter: "फिल्टर",
     year: "वर्ष",
     downloadPDF: "PDF डाउनलोड",
     irrigation: "इरिगेशन",
     adminPanel: "Admin Panel",
-
-    // Drip page
-    irrigationForm: "इरिगेशन फॉर्म",
-    irrigationTime: "इरिगेशन वेळ (मिनिटे)",
-    waterUsed: "वापरलेले पाणी (लिटर)",
-    irrigationType: "इरिगेशन प्रकार",
     mainPage: "मुख्य पृष्ठ",
 
-    // Admin Panel
-    adminLogin: "Admin Login",
-    adminPanelTitle: "Admin Panel",
-    newUser: "नवीन वापरकर्ता जोडा",
-    users: "वापरकर्ते",
-    mainPageData: "मुख्य पृष्ठ डेटा",
-    irrigationData: "इरिगेशन डेटा",
+    irrigationForm: "इरिगेशन फॉर्म",
+    irrigationTime: "इरिगेशन वेळ (मिनिटे)",
+    irrigationTimePlaceholder: "वेळ (मिनिटे) लिहा",
 
-    // Buttons
-    save: "सेव्ह",
-    back: "मागे",
+    waterUsed: "वापरलेले पाणी (लिटर)",
+    waterUsedPlaceholder: "पाणी (लिटर) लिहा",
 
-    // Irrigation Table
-    wateringHours: "पाणी देण्याचा वेळ",
-    waterPerUnit: "प्रति झाड पाणी (L)",
-    fertilizer: "खत",
-  },
+    irrigationType: "इरिगेशन प्रकार",
+
+    actions: "कारवाया",
+  }
 };
 
-// Switch Language Function
-function switchLanguage(lang) {
-  currentLang = lang;
-
+// ------------------------------------------------------------
+// Apply translation to all elements
+// ------------------------------------------------------------
+function applyTranslations() {
   document.querySelectorAll("[data-key]").forEach((el) => {
     const key = el.getAttribute("data-key");
-    if (translations[lang][key]) {
-      el.textContent = translations[lang][key];
+    if (translations[currentLang][key]) {
+      el.textContent = translations[currentLang][key];
+    }
+  });
+
+  document.querySelectorAll("[data-placeholder]").forEach((el) => {
+    const key = el.getAttribute("data-placeholder");
+    if (translations[currentLang][key]) {
+      el.placeholder = translations[currentLang][key];
     }
   });
 }
 
-// Automatic load on page
-document.addEventListener("DOMContentLoaded", () => {
-  switchLanguage(currentLang);
-});
+// ------------------------------------------------------------
+// Switch Language
+// ------------------------------------------------------------
+function toggleLanguage() {
+  currentLang = currentLang === "en" ? "mr" : "en";
+  localStorage.setItem("lang", currentLang);
+  applyTranslations();
+}
+
+// Load translations when page loads
+document.addEventListener("DOMContentLoaded", applyTranslations);
