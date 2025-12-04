@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-key="irrigationForm">Irrigation Form</title>
+  <title>Irrigation Form</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
   <style>
     :root {
       --primary: #4a6b57;
@@ -21,906 +22,569 @@
       --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       --transition: all 0.3s ease;
     }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f5f7fa;
       color: var(--text);
-      line-height: 1.6;
       font-size: 14px;
-    }
-    .container {
-      width: 100%;
-      padding: 15px;
-      margin: 0 auto;
+      line-height: 1.6;
     }
 
-    /* 🌐 Language Switcher */
-    .language-switcher {
-      position: fixed;
-      top: 10px;
-      right: 15px;
-      background: var(--light);
-      padding: 6px 12px;
-      border-radius: 20px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      cursor: pointer;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      z-index: 9999;
-      color: var(--primary);
-    }
-    .language-switcher i {
-      font-size: 15px;
-    }
+    .container { width: 100%; padding: 15px; margin: 0 auto; }
 
     /* Login Section */
     .login-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa, #e4e8eb);
       padding: 20px;
     }
+
     .login-card {
       background: var(--light);
       padding: 25px 20px;
       border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
       width: 100%;
       max-width: 400px;
       text-align: center;
+      box-shadow: var(--box-shadow);
     }
+
     .login-card h2 {
       color: var(--primary);
       margin-bottom: 20px;
       font-size: 22px;
       font-weight: 600;
     }
+
     .input-group {
       position: relative;
       margin-bottom: 20px;
     }
+
     .input-group i {
       position: absolute;
       left: 12px;
       top: 50%;
       transform: translateY(-50%);
+      font-size: 16px;
       color: var(--primary);
       opacity: 0.7;
-      font-size: 16px;
     }
+
     .login-card input {
       width: 100%;
       padding: 12px 12px 12px 40px;
+      background: #f8f9fa;
       border: 1px solid #e0e0e0;
       border-radius: var(--border-radius);
       font-size: 16px;
-      transition: var(--transition);
-      background-color: #f8f9fa;
     }
-    .login-card input:focus {
-      border-color: var(--primary);
-      outline: none;
-      background-color: var(--light);
-      box-shadow: 0 0 0 2px rgba(74, 107, 87, 0.2);
-    }
-    .login-card button {
-      width: 100%;
-      padding: 12px;
-      background-color: var(--primary);
-      color: var(--light);
+
+    /* Buttons */
+    .btn {
       border: none;
-      border-radius: var(--border-radius);
-      font-size: 16px;
-      font-weight: 500;
       cursor: pointer;
-      transition: var(--transition);
-      margin-top: 5px;
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      min-height: 44px;
     }
-    .login-card button:hover {
-      background-color: #3a5747;
-    }
-    /* Data Entry Section */
-    #data-entry-section {
-      display: none;
-      animation: fadeIn 0.5s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-warning { background: var(--warning); color: white; }
+    .btn-info { background: var(--info); color: white; }
+
+    .btn-primary:hover { background: #3a5747; }
+    .btn-success:hover { background: #27ae60; }
+    .btn-danger:hover { background: #c0392b; }
+
+    /* Form Section */
+    #data-entry-section { display: none; animation: fadeIn 0.5s ease; }
+
     .header {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid #e0e0e0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 15px; border-bottom: 1px solid #e0e0e0; margin-bottom: 20px;
     }
-    .header h2 {
+
+    .card {
+      background: white;
+      padding: 20px 15px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      margin-bottom: 20px;
+    }
+
+    .card-title {
       color: var(--primary);
-      font-size: 22px;
+      font-size: 18px;
       font-weight: 600;
       display: flex;
       align-items: center;
       gap: 8px;
-    }
-    .user-info {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .card {
-      background: var(--light);
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
-      padding: 20px 15px;
-      margin-bottom: 20px;
-    }
-    .card-title {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-    }
-    .card-title i {
-      margin-right: 8px;
-      font-size: 18px;
-    }
-    .card-title span[data-key] {
-      display: inline-block;
-    }
-    .form-row {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
       margin-bottom: 15px;
     }
-    .form-group {
-      width: 100%;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 500;
-      color: #555;
-      font-size: 14px;
-    }
+
+    .form-row { display: flex; gap: 15px; flex-wrap: wrap; }
+    .form-group { flex: 1 1 calc(33.33% - 10px); }
+
+    label { font-weight: 500; margin-bottom: 6px; display: block; }
+
     .form-control {
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #e0e0e0;
+      padding: 10px;
       border-radius: var(--border-radius);
-      font-size: 15px;
-      transition: var(--transition);
-      background-color: #f8f9fa;
-    }
-    .form-control:focus {
-      border-color: var(--primary);
-      outline: none;
-      background-color: var(--light);
-      box-shadow: 0 0 0 2px rgba(74, 107, 87, 0.2);
-    }
-    .input-with-unit {
-      display: flex;
-      align-items: center;
-    }
-    .input-with-unit input {
-      flex: 1;
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-    .input-with-unit select {
-      width: 80px;
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      border-left: none;
-    }
-    .input-with-unit span {
-      padding: 0 12px;
+      border: 1px solid #ddd;
       background: #f8f9fa;
-      display: flex;
-      align-items: center;
-      height: 100%;
-      border: 1px solid #e0e0e0;
-      border-left: none;
-      border-radius: 0 var(--border-radius) var(--border-radius) 0;
-      font-size: 14px;
     }
-    .btn {
-      padding: 10px 16px;
-      border-radius: var(--border-radius);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: var(--transition);
-      border: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px; /* Minimum touch target size */
-    }
-    .btn i {
-      margin-right: 6px;
-      font-size: 14px;
-    }
-    .btn-primary {
-      background-color: var(--primary);
-      color: var(--light);
-    }
-    .btn-primary:hover {
-      background-color: #3a5747;
-    }
-    .btn-success {
-      background-color: var(--success);
-      color: var(--light);
-    }
-    .btn-success:hover {
-      background-color: #27ae60;
-    }
-    .btn-danger {
-      background-color: var(--danger);
-      color: var(--light);
-    }
-    .btn-danger:hover {
-      background-color: #c0392b;
-    }
-    .btn-warning {
-      background-color: var(--warning);
-      color: var(--light);
-    }
-    .btn-warning:hover {
-      background-color: #e67e22;
-    }
-    .btn-info {
-      background-color: var(--info);
-      color: var(--light);
-    }
-    .btn-info:hover {
-      background-color: #2980b9;
-    }
-    .btn-sm {
-      padding: 8px 12px;
-      font-size: 13px;
-      min-height: 36px;
-    }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    /* Table Styles */
-    .table-responsive {
-      overflow-x: auto;
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
-      background: var(--light);
-      margin-bottom: 20px;
-      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 600px; /* Minimum table width for small screens */
-    }
-    th, td {
-      padding: 12px 8px;
-      text-align: left;
-      border-bottom: 1px solid #e0e0e0;
-      font-size: 13px;
-    }
-    th {
-      background-color: var(--primary);
-      color: var(--light);
-      font-weight: 500;
-      position: sticky;
-      top: 0;
-      white-space: nowrap;
-    }
-    tr:nth-child(even) {
-      background-color: #f8f9fa;
-    }
-    tr:hover {
-      background-color: #f1f1f1;
-    }
-    .action-buttons {
-      display: flex;
-      gap: 6px;
-    }
-    /* Animations */
-    @keyframes slideIn {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    .animate-slide-in {
-      animation: slideIn 0.4s ease forwards;
-    }
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--primary);
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #3a5747;
-    }
-    .loading {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(255,255,255,.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 1s ease-in-out infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    /* Responsive adjustments */
-    @media (min-width: 768px) {
-      body {
-        font-size: 15px;
-      }
-      .container {
-        max-width: 1200px;
-        padding: 20px;
-      }
-      .header {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .form-row {
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-      .form-group {
-        flex: 1 1 calc(50% - 10px);
-      }
-      .login-card {
-        padding: 30px 25px;
-      }
-      .card {
-        padding: 25px 20px;
-      }
-      th, td {
-        padding: 12px 10px;
-        font-size: 14px;
-      }
-      .btn {
-        padding: 12px 20px;
-      }
-    }
-    @media (min-width: 992px) {
-      .form-group {
-        flex: 1 1 calc(33.333% - 15px);
-      }
-    }
-    @media (max-width: 767px) {
-      .actions {
-        flex-direction: column;
-      }
-      .actions .btn {
-        width: 100%;
-      }
-      .user-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-    }
+
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 650px; }
+    th { background: var(--primary); color: white; padding: 10px; }
+    td { padding: 10px; border-bottom: 1px solid #eee; }
+
   </style>
 </head>
 <body>
-  <!-- 🌐 Language Switcher -->
-  <div class="language-switcher" onclick="toggleLanguage()">
-    <i class="fas fa-language"></i>
-    <span data-key="language">English | मराठी</span>
-  </div>
 
-  <!-- Login Section -->
-  <div class="login-container" id="login-section">
-    <div class="login-card animate-slide-in" id="login-card">
-      <h2><i class="fas fa-user-shield"></i> <span data-key="login">Login</span></h2>
-      <div class="input-group">
-        <i class="fas fa-user"></i>
-        <input type="text" id="username" placeholder="Username" >
+<!-- LOGIN -->
+<div class="login-container" id="login-section">
+  <div class="login-card">
+    <h2><i class="fas fa-user-shield"></i> Login</h2>
+
+    <div class="input-group">
+      <i class="fas fa-user"></i>
+      <input type="text" id="username" placeholder="वापरकर्तानाव">
+    </div>
+
+    <div class="input-group">
+      <i class="fas fa-lock"></i>
+      <input type="password" id="password" placeholder="संकेतशब्द">
+    </div>
+
+    <button class="btn btn-primary" onclick="login()" id="login-btn">
+      <i class="fas fa-sign-in-alt"></i> Login
+    </button>
+  </div>
+</div>
+
+<!-- MAIN FORM -->
+<div id="data-entry-section">
+  <div class="container">
+
+    <div class="header">
+      <h2><i class="fas fa-tint"></i> Irrigation Form</h2>
+      <div>
+        <span id="current-user-display"></span>
+        <button class="btn btn-danger btn-sm" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
       </div>
-      <div class="input-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" id="password" placeholder="Password" >
+    </div>
+
+    <!-- Add Plot -->
+    <div class="card">
+      <div class="card-title"><i class="fas fa-plus-circle"></i> Add Plot</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <input type="text" id="newPlotName" class="form-control" placeholder="नवीन प्लॉटचे नाव">
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="addPlot()">
+            <i class="fas fa-plus"></i> Add Plot
+          </button>
+        </div>
       </div>
-      <button onclick="login()" id="login-btn">
-        <i class="fas fa-sign-in-alt"></i> <span data-key="login">Login</span>
+    </div>
+
+    <!-- Add Data -->
+    <div class="card">
+      <div class="card-title"><i class="fas fa-edit"></i> Add Data</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Plot</label>
+          <select id="plotSelection" class="form-control">
+            <option disabled selected>प्लॉट निवडा</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="date" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label>Pruning Date</label>
+          <input type="date" id="pruningDate" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Irrigation Time (minutes)</label>
+          <input type="number" id="irrigationTime" class="form-control" placeholder="वेळ (मिनिटे)">
+        </div>
+
+        <div class="form-group">
+          <label>Water Used (Liters)</label>
+          <input type="number" id="waterUsed" class="form-control" placeholder="पाणी (लिटर)">
+        </div>
+
+        <div class="form-group">
+          <label>Irrigation Type</label>
+          <select id="irrigationType" class="form-control">
+            <option disabled selected>प्रकार निवडा</option>
+            <option value="ड्रिप">ड्रिप</option>
+            <option value="स्प्रिंकलर">स्प्रिंकलर</option>
+            <option value="फवारणी">फवारणी</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn-success" onclick="addRowFromInputs()">
+        <i class="fas fa-save"></i> Save
       </button>
     </div>
-  </div>
-  
-  <!-- Data Entry Form Section -->
-  <div id="data-entry-section" style="display: none;">
-    <div class="container">
-      <div class="header">
-        <h2>
-          <i class="fas fa-tint"></i>
-          <span data-key="irrigationForm">Irrigation Form</span>
-        </h2>
-        <div class="user-info">
-          <span id="current-user-display"></span>
-          <button onclick="logout()" class="btn btn-danger btn-sm">
-            <i class="fas fa-sign-out-alt"></i> <span data-key="logout">Logout</span>
-          </button>
+
+    <!-- Filter -->
+    <div class="card">
+      <div class="card-title"><i class="fas fa-filter"></i> Filter</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Plot</label>
+          <select id="filterPlot" class="form-control" onchange="filterTable()">
+            <option value="">सर्व प्लॉट</option>
+          </select>
         </div>
-      </div>
-      
-      <!-- Input Section -->
-      <div class="card">
-        <div class="card-title">
-          <i class="fas fa-plus-circle"></i>
-          <span data-key="addPlot">Add Plot</span>
+
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="filterDate" class="form-control" onchange="filterTable()">
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <input type="text" id="newPlotName" class="form-control" placeholder="नवीन प्लॉट नाव">
-          </div>
-          <div class="form-group">
-            <button onclick="addPlot()" class="btn btn-primary">
-              <i class="fas fa-plus"></i> <span data-key="addPlot">Add Plot</span>
-            </button>
-          </div>
+
+        <div class="form-group">
+          <label>Year</label>
+          <input type="number" id="filterYear" class="form-control" placeholder="वर्ष" onchange="filterTable()">
         </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-title">
-          <i class="fas fa-edit"></i>
-          <span data-key="addData">Add Data</span>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="plotSelection" data-key="plot">Plot</label>
-            <select id="plotSelection" class="form-control" required>
-              <option value="" disabled selected>प्लॉट निवडा</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="date" data-key="date">Date</label>
-            <input type="date" id="date" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label for="pruningDate" data-key="pruningDate">Pruning Date</label>
-            <input type="date" id="pruningDate" class="form-control" required>
-          </div>
-        </div>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="irrigationTime" data-key="irrigationTime">Irrigation Time (minutes)</label>
-            <input type="number" id="irrigationTime" class="form-control" placeholder="वेळ (मिनिटे)" required>
-          </div>
-          <div class="form-group">
-            <label for="waterUsed" data-key="waterUsed">Water Used (Liters)</label>
-            <input type="number" id="waterUsed" class="form-control" placeholder="पाणी (लिटर)" required>
-          </div>
-          <div class="form-group">
-            <label for="irrigationType" data-key="irrigationType">Irrigation Type</label>
-            <select id="irrigationType" class="form-control" required>
-              <option value="" disabled selected>प्रकार निवडा</option>
-              <option value="ड्रिप">ड्रिप</option>
-              <option value="स्प्रिंकलर">स्प्रिंकलर</option>
-              <option value="फवारणी">फवारणी</option>
-            </select>
-          </div>
-        </div>
-        
-        <div class="actions">
-          <button onclick="addRowFromInputs()" class="btn btn-success">
-            <i class="fas fa-save"></i> <span data-key="save">Save</span>
-          </button>
-        </div>
-      </div>
-      
-      <!-- Filter Section -->
-      <div class="card">
-        <div class="card-title">
-          <i class="fas fa-filter"></i>
-          <span data-key="filter">Filter</span>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="filterPlot" data-key="plot">Plot</label>
-            <select id="filterPlot" class="form-control" onchange="filterTable()">
-              <option value="">सर्व प्लॉट</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="filterDate" data-key="date">Date</label>
-            <input type="date" id="filterDate" class="form-control" onchange="filterTable()">
-          </div>
-          <div class="form-group">
-            <label for="filterYear" data-key="year">Year</label>
-            <input type="number" id="filterYear" class="form-control" placeholder="वर्ष" onchange="filterTable()">
-          </div>
-        </div>
-      </div>
-      
-      <!-- Table -->
-      <div class="card">
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th data-key="plot">Plot</th>
-                <th data-key="date">Date</th>
-                <th data-key="pruningDate">Pruning Date</th>
-                <th data-key="daysAfterPruning">Days After Pruning</th>
-                <th data-key="irrigationTime">Irrigation Time (minutes)</th>
-                <th data-key="waterUsed">Water Used (Liters)</th>
-                <th data-key="irrigationType">Irrigation Type</th>
-                <th data-key="actions">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="table-body">
-            </tbody>
-          </table>
-        </div>
-      </div>
-      
-      <!-- Actions -->
-      <div class="actions">
-        <button onclick="downloadPDF()" class="btn btn-info">
-          <i class="fas fa-file-pdf"></i> <span data-key="downloadPDF">Download PDF</span>
-        </button>
-        <button onclick="redirectToMainPage()" class="btn btn-primary">
-          <i class="fas fa-wine-bottle"></i> <span data-key="mainPage">Main Page</span>
-        </button>
-        <button id="adminPanelBtn" onclick="redirectToAdminPanel()" class="btn btn-warning" style="display: none;">
-          <i class="fas fa-users-cog"></i> <span data-key="adminPanel">Admin Panel</span>
-        </button>
       </div>
     </div>
+
+    <!-- Table -->
+    <div class="card">
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Plot</th>
+              <th>Date</th>
+              <th>Pruning Date</th>
+              <th>Days After Pruning</th>
+              <th>Irrigation Time</th>
+              <th>Water Used</th>
+              <th>Irrigation Type</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-info" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> Download PDF
+      </button>
+
+      <button class="btn btn-primary" onclick="redirectToMainPage()">
+        <i class="fas fa-wine-bottle"></i> Main Page
+      </button>
+
+      <button class="btn btn-warning" id="adminPanelBtn" onclick="redirectToAdminPanel()" style="display:none">
+        <i class="fas fa-users-cog"></i> Admin Panel
+      </button>
+    </div>
+
   </div>
+</div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.22/jspdf.plugin.autotable.min.js"></script>
-  <!-- Firebase App (the core Firebase SDK) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <!-- Firebase Firestore -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<!-- Firebase + JS -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.22/jspdf.plugin.autotable.min.js"></script>
 
-  <!-- Global language file -->
-  <script src="lang.js"></script>
+<script>
+/* ------------ FIREBASE CONFIG ---------------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyDvGRPEIhwZ3-k9YNL597xsNXayTMW6YrE",
+  authDomain: "grapes-7477e.firebaseapp.com",
+  projectId: "grapes-7477e",
+  storageBucket: "grapes-7477e.firebasestorage.app",
+  messagingSenderId: "995160881797",
+  appId: "1:995160881797:web:89fb268a4601129c8d87ec"
+};
 
-  <script>
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyDvGRPEIhwZ3-k9YNL597xsNXayTMW6YrE",
-      authDomain: "grapes-7477e.firebaseapp.com",
-      projectId: "grapes-7477e",
-      storageBucket: "grapes-7477e.firebasestorage.app",
-      messagingSenderId: "995160881797",
-      appId: "1:995160881797:web:89fb268a4601129c8d87ec"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    let currentUser = "";
-    let editingRow = null;
-    let tableData = [];
-    
-    // Check if user parameter is present in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const userFromUrl = urlParams.get('user');
-    if (userFromUrl) {
-      currentUser = userFromUrl;
-      document.getElementById("login-section").style.display = "none";
-      document.getElementById("data-entry-section").style.display = "block";
-      document.getElementById("current-user-display").textContent = `User: ${currentUser}`;
-      if (currentUser === "admin") {
-        document.getElementById("adminPanelBtn").style.display = "inline-flex";
-      }
-      loadPlots();
-      loadData();
-    }
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-    // 🔹 Toggle language using lang.js
-    function toggleLanguage() {
-      currentLang = currentLang === "en" ? "mr" : "en";
-      switchLanguage(currentLang);
-    }
-    
-    // Function to handle login
-    function login() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      const loginBtn = document.getElementById("login-btn");
-      loginBtn.innerHTML = '<div class="loading"></div> Logging in...';
-      loginBtn.disabled = true;
-      
-      db.collection("usernames").where("username", "==", username).where("password", "==", password).get()
-        .then((querySnapshot) => {
-          if (!querySnapshot.empty) {
-            currentUser = username;
-            document.getElementById("login-section").style.display = "none";
-            document.getElementById("data-entry-section").style.display = "block";
-            document.getElementById("current-user-display").textContent = `User: ${currentUser}`;
-            if (username === "admin") {
-              document.getElementById("adminPanelBtn").style.display = "inline-flex";
-            }
-            loadPlots();
-            loadData();
-          } else {
-            alert("Invalid username or password");
-          }
-          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span data-key="login">Login</span>';
-          loginBtn.disabled = false;
-        })
-        .catch((error) => {
-          alert("Error: " + error.message);
-          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span data-key="login">Login</span>';
-          loginBtn.disabled = false;
-        });
-    }
-    
-    // Function to logout
-    function logout() {
-      currentUser = "";
-      document.getElementById("data-entry-section").style.display = "none";
-      document.getElementById("login-section").style.display = "flex";
-      document.getElementById("username").value = "";
-      document.getElementById("password").value = "";
-    }
-    
-    // Function to redirect to admin panel
-    function redirectToAdminPanel() {
-      window.location.href = 'admin.html?user=' + currentUser;
-    }
-    
-    // Function to redirect to main page
-    function redirectToMainPage() {
-      window.location.href = 'index.html?user=' + currentUser;
-    }
-    
-    // Function to load the plots from Firestore
-    function loadPlots() {
-      if (!currentUser) return;
-      db.collection("users").doc(currentUser).collection("plots")
-        .orderBy("createdAt", "asc")
-        .get()
-        .then((querySnapshot) => {
-          const plotSelection = document.getElementById("plotSelection");
-          const filterPlot = document.getElementById("filterPlot");
-          plotSelection.innerHTML = '<option value="" disabled selected>प्लॉट निवडा</option>';
-          filterPlot.innerHTML = '<option value="">सर्व प्लॉट</option>';
-          querySnapshot.forEach((doc) => {
-            const plot = doc.data().name;
-            const option = document.createElement("option");
-            option.value = plot;
-            option.textContent = plot;
-            plotSelection.appendChild(option);
-            filterPlot.appendChild(option.cloneNode(true));
-          });
-        })
-        .catch((error) => {
-          console.error("Error loading plots: ", error);
-        });
-    }
-    
-    // Function to add a new plot
-    function addPlot() {
-      if (!currentUser) return;
-      const newPlotName = document.getElementById("newPlotName").value.trim();
-      if (!newPlotName) {
-        alert("कृपया वैध प्लॉट नाव द्या.");
-        return;
-      }
-      db.collection("users").doc(currentUser).collection("plots").add({
-        name: newPlotName,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(() => {
-        loadPlots();
-        alert("प्लॉट यशस्वीरित्या जोडला.");
-        document.getElementById("newPlotName").value = "";
-      })
-      .catch((error) => {
-        alert("Error adding plot: " + error.message);
-      });
-    }
-    
-    // Function to add a row from inputs to the table
-    function addRowFromInputs() {
-      if (!currentUser) return;
-      const date = document.getElementById("date").value;
-      const pruningDate = document.getElementById("pruningDate").value;
-      const irrigationTime = document.getElementById("irrigationTime").value;
-      const waterUsed = document.getElementById("waterUsed").value;
-      const irrigationType = document.getElementById("irrigationType").value;
-      const plotSelection = document.getElementById("plotSelection").value;
-      
-      if (!date || !pruningDate || !irrigationTime || !waterUsed || !irrigationType || !plotSelection) {
-        alert("कृपया सर्व आवश्यक फील्ड भरा.");
-        return;
-      }
-      
-      const daysAfterPruning = calculateDaysAfterPruning(date, pruningDate);
-      
-      db.collection("users").doc(currentUser).collection("irrigationData").add({
-        plot: plotSelection,
-        date: date,
-        pruningDate: pruningDate,
-        daysAfterPruning: daysAfterPruning,
-        irrigationTime: irrigationTime + " minutes",
-        waterUsed: waterUsed + " L",
-        irrigationType: irrigationType,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(() => {
-        document.getElementById("date").value = "";
-        document.getElementById("pruningDate").value = "";
-        document.getElementById("irrigationTime").value = "";
-        document.getElementById("waterUsed").value = "";
-        document.getElementById("irrigationType").selectedIndex = 0;
-        document.getElementById("plotSelection").selectedIndex = 0;
-        loadData();
-      })
-      .catch((error) => {
-        alert("Error saving data: " + error.message);
-      });
-    }
-    
-    // Function to calculate days after pruning
-    function calculateDaysAfterPruning(date, pruningDate) {
-      const dateObj = new Date(date);
-      const pruningDateObj = new Date(pruningDate);
-      const differenceInTime = dateObj.getTime() - pruningDateObj.getTime();
-      const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-      return Math.floor(differenceInDays);
-    }
-    
-    // Function to load data from Firestore
-    function loadData() {
-      if (!currentUser) return;
-      db.collection("users").doc(currentUser).collection("irrigationData")
-        .orderBy("createdAt", "desc")
-        .get()
-        .then((querySnapshot) => {
-          const tableBody = document.getElementById("table-body");
-          tableBody.innerHTML = "";
-          tableData = [];
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            tableData.push({id: doc.id, ...data});
-            const newRow = document.createElement("tr");
-            newRow.innerHTML = `
-              <td>${data.plot}</td>
-              <td>${data.date}</td>
-              <td>${data.pruningDate}</td>
-              <td>${data.daysAfterPruning}</td>
-              <td>${data.irrigationTime}</td>
-              <td>${data.waterUsed}</td>
-              <td>${data.irrigationType}</td>
-              <td>
-                <div class="action-buttons">
-                  <button class="btn btn-warning btn-sm" onclick="editRow('${doc.id}')"><i class="fas fa-edit"></i></button>
-                  <button class="btn btn-danger btn-sm" onclick="deleteRow('${doc.id}')"><i class="fas fa-trash"></i></button>
-                </div>
-              </td>
-            `;
-            tableBody.appendChild(newRow);
-          });
-        })
-        .catch((error) => {
-          console.error("Error loading data: ", error);
-        });
-    }
-    
-    // Function to edit a row
-    function editRow(docId) {
-      const data = tableData.find(item => item.id === docId);
-      if (!data) return;
-      
-      document.getElementById("plotSelection").value = data.plot;
-      document.getElementById("date").value = data.date;
-      document.getElementById("pruningDate").value = data.pruningDate;
-      
-      const irrigationTimeParts = data.irrigationTime.split(' ');
-      document.getElementById("irrigationTime").value = irrigationTimeParts[0];
-      
-      const waterUsedParts = data.waterUsed.split(' ');
-      document.getElementById("waterUsed").value = waterUsedParts[0];
-      
-      document.getElementById("irrigationType").value = data.irrigationType;
-      
-      editingRow = docId;
-      
-      db.collection("users").doc(currentUser).collection("irrigationData").doc(docId).delete()
-        .then(() => {
-          loadData();
-        })
-        .catch((error) => {
-          alert("Error preparing for edit: " + error.message);
-        });
-    }
-    
-    // Function to delete a row
-    function deleteRow(docId) {
-      if (confirm("तुम्हाला ही पंक्ती हटवायची आहे का?")) {
-        db.collection("users").doc(currentUser).collection("irrigationData").doc(docId).delete()
-          .then(() => {
-            loadData();
-          })
-          .catch((error) => {
-            alert("Error deleting data: " + error.message);
-          });
-      }
-    }
-    
-    // Function to filter the table
-    function filterTable() {
-      const filterPlot = document.getElementById("filterPlot").value.toLowerCase();
-      const filterDate = document.getElementById("filterDate").value;
-      const filterYear = document.getElementById("filterYear").value;
-      const rows = document.querySelectorAll("#table-body tr");
-      
-      rows.forEach(row => {
-        const cells = row.children;
-        const plot = cells[0].textContent.toLowerCase();
-        const date = cells[1].textContent;
-        const year = new Date(date).getFullYear();
-        
-        const matchPlot = filterPlot ? plot.includes(filterPlot) : true;
-        const matchDate = filterDate ? date.includes(filterDate) : true;
-        const matchYear = filterYear ? year.toString().includes(filterYear) : true;
-        
-        if (matchPlot && matchDate && matchYear) {
-          row.style.display = "";
-        } else {
-          row.style.display = "none";
+let currentUser = "";
+let tableData = [];
+
+/* ------------ AUTO LOGIN USING URL ---------------- */
+const urlParams = new URLSearchParams(window.location.search);
+const userFromUrl = urlParams.get("user");
+
+if (userFromUrl) {
+  currentUser = userFromUrl;
+  document.getElementById("login-section").style.display = "none";
+  document.getElementById("data-entry-section").style.display = "block";
+  document.getElementById("current-user-display").textContent = "User: " + currentUser;
+
+  if (currentUser === "admin") {
+    document.getElementById("adminPanelBtn").style.display = "inline-flex";
+  }
+
+  loadPlots();
+  loadData();
+}
+
+/* ------------ LOGIN -------------- */
+function login() {
+  let username = document.getElementById("username").value;
+  let password = document.getElementById("password").value;
+
+  db.collection("usernames")
+    .where("username", "==", username)
+    .where("password", "==", password)
+    .get()
+    .then((snap) => {
+      if (!snap.empty) {
+        currentUser = username;
+
+        document.getElementById("login-section").style.display = "none";
+        document.getElementById("data-entry-section").style.display = "block";
+        document.getElementById("current-user-display").textContent = "User: " + currentUser;
+
+        if (username === "admin") {
+          document.getElementById("adminPanelBtn").style.display = "inline-flex";
         }
+
+        loadPlots();
+        loadData();
+      } else {
+        alert("Invalid username or password");
+      }
+    });
+}
+
+/* ------------ LOGOUT -------------- */
+function logout() {
+  currentUser = "";
+  location.reload();
+}
+
+/* ------------ NAVIGATION -------------- */
+function redirectToAdminPanel() {
+  window.location.href = "admin.html?user=" + currentUser;
+}
+
+function redirectToMainPage() {
+  window.location.href = "index.html?user=" + currentUser;
+}
+
+/* ------------ LOAD PLOTS -------------- */
+function loadPlots() {
+  db.collection("users")
+    .doc(currentUser)
+    .collection("plots")
+    .orderBy("createdAt", "asc")
+    .get()
+    .then((snap) => {
+      let plotSel = document.getElementById("plotSelection");
+      let filterSel = document.getElementById("filterPlot");
+
+      plotSel.innerHTML = '<option disabled selected>प्लॉट निवडा</option>';
+      filterSel.innerHTML = '<option value="">सर्व प्लॉट</option>';
+
+      snap.forEach((doc) => {
+        let name = doc.data().name;
+        let opt = new Option(name, name);
+        plotSel.appendChild(opt);
+        filterSel.appendChild(new Option(name, name));
       });
-    }
-    
-    // Function to download the table data as a PDF
-    function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const tableHeaders = [
-        ["Plot", "Date", "Pruning Date", "Days After Pruning", "Irrigation Time", 
-        "Water Used", "Irrigation Type"]
-      ];
-      const tableDataArr = Array.from(document.querySelectorAll("#table-body tr")).filter(row => row.style.display !== "none").map(row => {
-        return Array.from(row.children).slice(0, -1).map(cell => cell.textContent);
+    });
+}
+
+/* ------------ ADD PLOT -------------- */
+function addPlot() {
+  let plot = document.getElementById("newPlotName").value.trim();
+  if (!plot) return alert("कृपया वैध प्लॉट नाव द्या.");
+
+  db.collection("users")
+    .doc(currentUser)
+    .collection("plots")
+    .add({
+      name: plot,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    })
+    .then(() => {
+      alert("प्लॉट यशस्वीरित्या जोडला.");
+      document.getElementById("newPlotName").value = "";
+      loadPlots();
+    });
+}
+
+/* ------------ ADD DATA -------------- */
+function addRowFromInputs() {
+  let plot = document.getElementById("plotSelection").value;
+  let date = document.getElementById("date").value;
+  let pruning = document.getElementById("pruningDate").value;
+  let irTime = document.getElementById("irrigationTime").value;
+  let water = document.getElementById("waterUsed").value;
+  let type = document.getElementById("irrigationType").value;
+
+  if (!plot || !date || !pruning || !irTime || !water || !type)
+    return alert("कृपया सर्व आवश्यक फील्ड भरा.");
+
+  let days = Math.floor((new Date(date) - new Date(pruning)) / 86400000);
+
+  db.collection("users")
+    .doc(currentUser)
+    .collection("irrigationData")
+    .add({
+      plot,
+      date,
+      pruningDate: pruning,
+      daysAfterPruning: days,
+      irrigationTime: irTime + " minutes",
+      waterUsed: water + " L",
+      irrigationType: type,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    })
+    .then(() => {
+      document.getElementById("date").value = "";
+      document.getElementById("pruningDate").value = "";
+      document.getElementById("irrigationTime").value = "";
+      document.getElementById("waterUsed").value = "";
+      document.getElementById("irrigationType").selectedIndex = 0;
+
+      loadData();
+    });
+}
+
+/* ------------ LOAD DATA -------------- */
+function loadData() {
+  db.collection("users")
+    .doc(currentUser)
+    .collection("irrigationData")
+    .orderBy("createdAt", "desc")
+    .get()
+    .then((snap) => {
+      let body = document.getElementById("table-body");
+      body.innerHTML = "";
+      tableData = [];
+
+      snap.forEach((doc) => {
+        let d = doc.data();
+        tableData.push({ id: doc.id, ...d });
+
+        body.innerHTML += `
+          <tr>
+            <td>${d.plot}</td>
+            <td>${d.date}</td>
+            <td>${d.pruningDate}</td>
+            <td>${d.daysAfterPruning}</td>
+            <td>${d.irrigationTime}</td>
+            <td>${d.waterUsed}</td>
+            <td>${d.irrigationType}</td>
+            <td>
+              <button class="btn btn-warning btn-sm" onclick="editRow('${doc.id}')">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-danger btn-sm" onclick="deleteRow('${doc.id}')">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
       });
-      
-      doc.autoTable({
-        head: tableHeaders,
-        body: tableDataArr,
-        theme: 'grid',
-        margin: { top: 10 },
-        styles: { fontSize: 12, cellPadding: 2, font: "helvetica" }
-      });
-      
-      doc.save("irrigation_data.pdf");
-    }
-  </script>
+    });
+}
+
+/* ------------ DELETE ROW -------------- */
+function deleteRow(id) {
+  if (confirm("तुम्हाला ही पंक्ती हटवायची आहे का?")) {
+    db.collection("users")
+      .doc(currentUser)
+      .collection("irrigationData")
+      .doc(id)
+      .delete()
+      .then(loadData);
+  }
+}
+
+/* ------------ FILTER -------------- */
+function filterTable() {
+  let fPlot = document.getElementById("filterPlot").value.toLowerCase();
+  let fDate = document.getElementById("filterDate").value;
+  let fYear = document.getElementById("filterYear").value;
+
+  document.querySelectorAll("#table-body tr").forEach((row) => {
+    let plot = row.children[0].textContent.toLowerCase();
+    let date = row.children[1].textContent;
+    let year = new Date(date).getFullYear().toString();
+
+    let ok =
+      (!fPlot || plot.includes(fPlot)) &&
+      (!fDate || date.includes(fDate)) &&
+      (!fYear || year.includes(fYear));
+
+    row.style.display = ok ? "" : "none";
+  });
+}
+
+/* ------------ DOWNLOAD PDF -------------- */
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const rows = [...document.querySelectorAll("#table-body tr")].map((tr) =>
+    [...tr.children].slice(0, 7).map((td) => td.textContent)
+  );
+
+  doc.autoTable({
+    head: [
+      [
+        "Plot",
+        "Date",
+        "Pruning Date",
+        "Days After Pruning",
+        "Irrigation Time",
+        "Water Used",
+        "Irrigation Type",
+      ],
+    ],
+    body: rows,
+    theme: "grid",
+    margin: { top: 10 },
+  });
+
+  doc.save("irrigation_data.pdf");
+}
+</script>
+
 </body>
 </html>
