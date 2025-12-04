@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-key="agroForm">Agro Form</title>
+  <title>Agro Form</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -37,27 +37,6 @@
       width: 100%;
       padding: 15px;
       margin: 0 auto;
-    }
-
-    /* 🔹 Language Switcher */
-    .language-switcher {
-      position: fixed;
-      top: 10px;
-      right: 15px;
-      background: var(--light);
-      padding: 6px 12px;
-      border-radius: 20px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      cursor: pointer;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      z-index: 9999;
-      color: var(--primary);
-    }
-    .language-switcher i {
-      font-size: 15px;
     }
 
     /* Login Section */
@@ -178,9 +157,6 @@
     .card-title i {
       margin-right: 8px;
       font-size: 18px;
-    }
-    .card-title span[data-key] {
-      display: inline-block;
     }
     .form-row {
       display: flex;
@@ -469,26 +445,20 @@
   </style>
 </head>
 <body>
-  <!-- 🌐 Language Switcher -->
-  <div class="language-switcher" onclick="toggleLanguage()">
-    <i class="fas fa-language"></i>
-    <span data-key="language">English | मराठी</span>
-  </div>
-
   <!-- Login Section -->
   <div class="login-container" id="login-section">
     <div class="login-card animate-slide-in" id="login-card">
-      <h2><i class="fas fa-user-shield"></i> <span data-key="login">Login</span></h2>
+      <h2><i class="fas fa-user-shield"></i> Login</h2>
       <div class="input-group">
         <i class="fas fa-user"></i>
-        <input type="text" id="username" placeholder="Username">
+        <input type="text" id="username" placeholder="वापरकर्तानाव">
       </div>
       <div class="input-group">
         <i class="fas fa-lock"></i>
-        <input type="password" id="password" placeholder="Password">
+        <input type="password" id="password" placeholder="संकेतशब्द">
       </div>
       <button onclick="login()" id="login-btn">
-        <i class="fas fa-sign-in-alt"></i> <span data-key="login">Login</span>
+        <i class="fas fa-sign-in-alt"></i> Login
       </button>
     </div>
   </div>
@@ -499,12 +469,12 @@
       <div class="header">
         <h2>
           <i class="fas fa-wine-bottle"></i>
-          <span data-key="agroForm">Agro Form</span>
+          Agro Form
         </h2>
         <div class="user-info">
           <span id="current-user-display"></span>
           <button onclick="logout()" class="btn btn-danger btn-sm">
-            <i class="fas fa-sign-out-alt"></i> <span data-key="logout">Logout</span>
+            <i class="fas fa-sign-out-alt"></i> Logout
           </button>
         </div>
       </div>
@@ -513,15 +483,15 @@
       <div class="card">
         <div class="card-title">
           <i class="fas fa-plus-circle"></i>
-          <span data-key="addPlot">Add Plot</span>
+          Add Plot
         </div>
         <div class="form-row">
           <div class="form-group">
-            <input type="text" id="newPlotName" class="form-control" placeholder="New Plot Name">
+            <input type="text" id="newPlotName" class="form-control" placeholder="नवीन प्लॉटचे नाव">
           </div>
           <div class="form-group">
             <button onclick="addPlot()" class="btn btn-primary">
-              <i class="fas fa-plus"></i> <span data-key="addPlot">Add Plot</span>
+              <i class="fas fa-plus"></i> Add Plot
             </button>
           </div>
         </div>
@@ -530,35 +500,35 @@
       <div class="card">
         <div class="card-title">
           <i class="fas fa-edit"></i>
-          <span data-key="addData">Add Data</span>
+          Add Data
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label for="plotSelection" data-key="plot">Plot</label>
+            <label for="plotSelection">Plot</label>
             <select id="plotSelection" class="form-control" required>
               <option value="" disabled selected>प्लॉट निवडा</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="date" data-key="date">Date</label>
+            <label for="date">Date</label>
             <input type="date" id="date" class="form-control" required>
           </div>
           <div class="form-group">
-            <label for="pruningDate" data-key="pruningDate">Pruning Date</label>
+            <label for="pruningDate">Pruning Date</label>
             <input type="date" id="pruningDate" class="form-control" required>
           </div>
         </div>
         
         <div class="form-row">
           <div class="form-group">
-            <label for="medicineName" data-key="medicineName">Medicine & Fertilizers</label>
+            <label for="medicineName">Medicine &amp; Fertilizers</label>
             <input type="text" id="medicineName" class="form-control" placeholder="औषधे आणि खतांचे नाव" required>
           </div>
         </div>
         
         <div class="form-row">
           <div class="form-group">
-            <label for="dosePerLiter" data-key="dosePerLiter">Dose Per Liter</label>
+            <label for="dosePerLiter">Dose Per Liter</label>
             <div class="input-with-unit">
               <input type="number" id="dosePerLiter" class="form-control" placeholder="डोस" required>
               <select id="doseUnit" class="form-control" required>
@@ -568,7 +538,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="dosePerPlot" data-key="dosePerPlot">Dose Per Plot</label>
+            <label for="dosePerPlot">Dose Per Plot</label>
             <div class="input-with-unit">
               <input type="number" id="dosePerPlot" class="form-control" placeholder="डोस" required>
               <select id="dosePlotUnit" class="form-control" required>
@@ -580,7 +550,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="waterPerPlot" data-key="waterPerPlot">Water Per Plot</label>
+            <label for="waterPerPlot">Water Per Plot</label>
             <div class="input-with-unit">
               <input type="number" id="waterPerPlot" class="form-control" placeholder="पाणी (लिटर)" required>
               <span>L</span>
@@ -590,14 +560,14 @@
         
         <div class="form-row">
           <div class="form-group">
-            <label for="sprayTime" data-key="sprayTime">Spray Time</label>
+            <label for="sprayTime">Spray Time</label>
             <input type="time" id="sprayTime" class="form-control" required>
           </div>
         </div>
         
         <div class="actions">
           <button onclick="addRowFromInputs()" class="btn btn-success">
-            <i class="fas fa-save"></i> <span data-key="save">Save</span>
+            <i class="fas fa-save"></i> Save
           </button>
         </div>
       </div>
@@ -606,21 +576,21 @@
       <div class="card">
         <div class="card-title">
           <i class="fas fa-filter"></i>
-          <span data-key="filter">Filter</span>
+          Filter
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label for="filterPlot" data-key="plot">Plot</label>
+            <label for="filterPlot">Plot</label>
             <select id="filterPlot" class="form-control" onchange="filterTable()">
               <option value="">सर्व प्लॉट</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="filterDate" data-key="date">Date</label>
+            <label for="filterDate">Date</label>
             <input type="date" id="filterDate" class="form-control" onchange="filterTable()">
           </div>
           <div class="form-group">
-            <label for="filterYear" data-key="year">Year</label>
+            <label for="filterYear">Year</label>
             <input type="number" id="filterYear" class="form-control" placeholder="वर्ष" onchange="filterTable()">
           </div>
         </div>
@@ -632,16 +602,16 @@
           <table>
             <thead>
               <tr>
-                <th data-key="plot">Plot</th>
-                <th data-key="date">Date</th>
-                <th data-key="pruningDate">Pruning Date</th>
-                <th data-key="daysAfterPruning">Days After Pruning</th>
-                <th data-key="medicineName">Medicine & Fertilizers</th>
-                <th data-key="dosePerLiter">Dose Per Liter</th>
-                <th data-key="dosePerPlot">Dose Per Plot</th>
-                <th data-key="waterPerPlot">Water Per Plot</th>
-                <th data-key="sprayTime">Spray Time</th>
-                <th data-key="actions">Actions</th>
+                <th>Plot</th>
+                <th>Date</th>
+                <th>Pruning Date</th>
+                <th>Days After Pruning</th>
+                <th>Medicine &amp; Fertilizers</th>
+                <th>Dose Per Liter</th>
+                <th>Dose Per Plot</th>
+                <th>Water Per Plot</th>
+                <th>Spray Time</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="table-body">
@@ -653,13 +623,13 @@
       <!-- Actions -->
       <div class="actions">
         <button onclick="downloadPDF()" class="btn btn-info">
-          <i class="fas fa-file-pdf"></i> <span data-key="downloadPDF">Download PDF</span>
+          <i class="fas fa-file-pdf"></i> Download PDF
         </button>
         <button onclick="redirectToSecondPage()" class="btn btn-primary">
-          <i class="fas fa-tint"></i> <span data-key="irrigation">Irrigation</span>
+          <i class="fas fa-tint"></i> Irrigation
         </button>
         <button id="adminPanelBtn" onclick="redirectToAdminPanel()" class="btn btn-warning" style="display: none;">
-          <i class="fas fa-users-cog"></i> <span data-key="adminPanel">Admin Panel</span>
+          <i class="fas fa-users-cog"></i> Admin Panel
         </button>
       </div>
     </div>
@@ -672,30 +642,7 @@
   <!-- Firebase Firestore -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
-  <!-- Global language file -->
-  <script src="lang.js"></script>
-
   <script>
-    // ✅ Safe language toggle (no ReferenceError if currentLang/switchLanguage are not defined yet)
-    function toggleLanguage() {
-      const current = window.currentLang === "mr" ? "mr" : "en"; // default to en
-      const next = current === "en" ? "mr" : "en";
-      window.currentLang = next;
-      if (typeof window.switchLanguage === "function") {
-        window.switchLanguage(next);
-      }
-    }
-
-    // ✅ On load, set default language safely
-    document.addEventListener("DOMContentLoaded", function () {
-      if (!window.currentLang) {
-        window.currentLang = "en";
-      }
-      if (typeof window.switchLanguage === "function") {
-        window.switchLanguage(window.currentLang);
-      }
-    });
-
     // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDvGRPEIhwZ3-k9YNL597xsNXayTMW6YrE",
@@ -742,12 +689,12 @@
           } else {
             alert("Invalid username or password");
           }
-          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span data-key="login">Login</span>';
+          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
           loginBtn.disabled = false;
         })
         .catch((error) => {
           alert("Error: " + error.message);
-          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span data-key="login">Login</span>';
+          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
           loginBtn.disabled = false;
         });
     }
@@ -796,7 +743,7 @@
       if (!currentUser) return;
       const newPlotName = document.getElementById("newPlotName").value.trim();
       if (!newPlotName) {
-        alert("קृपया वैध प्लॉट नाव द्या.");
+        alert("कृपया वैध प्लॉट नाव द्या.");
         return;
       }
       db.collection("users").doc(currentUser).collection("plots").add({
