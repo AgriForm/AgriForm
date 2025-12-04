@@ -1,161 +1,151 @@
-// ---------------------------------------------
-// Global Language Manager
-// Supports:
-//  - Text translation using data-key
-//  - Placeholder translation using data-placeholder
-//  - Persists language across pages
-// ---------------------------------------------
-
-// Load last language or default to English
+// Load saved language or default to English
 let currentLang = localStorage.getItem("lang") || "en";
 
+// Translation dictionary
 const translations = {
   en: {
-    // UI language label
     language: "English | मराठी",
-
-    // Login
     login: "Login",
+    usernamePlaceholder: "Username",
+    passwordPlaceholder: "Password",
     logout: "Logout",
-    username: "Username",
-    password: "Password",
-    usernamePlaceholder: "Enter Username",
-    passwordPlaceholder: "Enter Password",
+    agroForm: "Agri Form",
 
-    // Admin
-    adminLogin: "Admin Login",
-    adminPanelTitle: "Admin Panel",
-    newUser: "Add New User",
-    users: "Users",
-    addUser: "Add User",
-    delete: "Delete",
-
-    // Main Form
-    agroForm: "Agro Form",
-    addPlot: "Add Plot",
+    // Plot area
+    addPlotTitle: "Add New Plot",
     newPlotName: "New Plot Name",
-    newPlotNamePlaceholder: "Enter Plot Name",
-
+    addPlotBtn: "Add Plot",
     plot: "Plot",
+
+    // Data Entry
+    dataEntry: "Data Entry",
     date: "Date",
     pruningDate: "Pruning Date",
-    daysAfterPruning: "Days After Pruning",
-
     medicineName: "Medicine & Fertilizers",
-    medicinePlaceholder: "Enter medicine/fertilizer name",
-
-    dosePerLiter: "Dose Per Liter",
-    dosePerPlot: "Dose Per Plot",
-    waterPerPlot: "Water Per Plot",
+    medicinePlaceholder: "Enter medicine or fertilizer",
+    dosePerLiter: "Dose per Liter",
+    dosePerPlot: "Dose per Plot",
+    waterPerPlot: "Water per Plot",
     sprayTime: "Spray Time",
-
     addData: "Add Data",
-    save: "Save",
+
+    // Filters
     filter: "Filter",
-    year: "Year",
+    filterPlot: "Plot",
+    filterDate: "Date",
+    filterYear: "Year",
+    allPlots: "All Plots",
+
+    // Table headers
+    thPlot: "Plot",
+    thDate: "Date",
+    thPruningDate: "Pruning Date",
+    thDaysAfter: "Days After Pruning",
+    thMedicine: "Medicine",
+    thDoseLiter: "Dose per Liter",
+    thDosePlot: "Dose per Plot",
+    thWaterPlot: "Water per Plot",
+    thSprayTime: "Spray Time",
+    thActions: "Actions",
+
+    // Buttons
     downloadPDF: "Download PDF",
     irrigation: "Irrigation",
     adminPanel: "Admin Panel",
-    mainPage: "Main Page",
 
-    // Irrigation page
-    irrigationForm: "Irrigation Form",
-    irrigationTime: "Irrigation Time (minutes)",
-    irrigationTimePlaceholder: "Enter time in minutes",
-
-    waterUsed: "Water Used (Liters)",
-    waterUsedPlaceholder: "Enter water in liters",
-
-    irrigationType: "Irrigation Type",
-
-    // Table Actions
-    actions: "Actions",
+    // Alerts
+    invalidLogin: "Invalid username or password.",
+    enterAllFields: "Please fill out all required fields.",
+    plotAdded: "Plot added successfully.",
+    confirmDelete: "Are you sure you want to delete this entry?",
   },
 
   mr: {
     language: "मराठी | English",
-
     login: "लॉगिन",
-    logout: "लॉगआऊट",
-    username: "वापरकर्तानाव",
-    password: "पासवर्ड",
-    usernamePlaceholder: "वापरकर्तानाव प्रविष्ट करा",
-    passwordPlaceholder: "पासवर्ड प्रविष्ट करा",
-
-    adminLogin: "Admin Login",
-    adminPanelTitle: "Admin Panel",
-    newUser: "नवीन वापरकर्ता",
-    users: "वापरकर्ते",
-    addUser: "वापरकर्ता जोडा",
-    delete: "हटवा",
-
+    usernamePlaceholder: "वापरकर्तानाव",
+    passwordPlaceholder: "पासवर्ड",
+    logout: "लॉगआउट",
     agroForm: "कृषी फॉर्म",
-    addPlot: "प्लॉट जोडा",
+
+    // Plot area
+    addPlotTitle: "नवीन प्लॉट जोडा",
     newPlotName: "नवीन प्लॉट नाव",
-    newPlotNamePlaceholder: "प्लॉटचे नाव प्रविष्ट करा",
-
+    addPlotBtn: "प्लॉट जोडा",
     plot: "प्लॉट",
+
+    // Data Entry
+    dataEntry: "डेटा एंट्री",
     date: "तारीख",
-    pruningDate: "छाटणीची तारीख",
-    daysAfterPruning: "छाटणीनंतरचे दिवस",
-
-    medicineName: "औषधे व खते",
-    medicinePlaceholder: "औषधे / खते प्रविष्ट करा",
-
+    pruningDate: "छाटणी ची तारीख",
+    medicineName: "औषधे आणि खतांचे नाव",
+    medicinePlaceholder: "औषध किंवा खत प्रविष्ट करा",
     dosePerLiter: "प्रति लिटर डोस",
     dosePerPlot: "प्रति प्लॉट डोस",
     waterPerPlot: "प्रति प्लॉट पाणी",
-    sprayTime: "स्प्रे वेळ",
-
+    sprayTime: "स्प्रे करण्याचा वेळ",
     addData: "डेटा जोडा",
-    save: "सेव्ह",
+
+    // Filters
     filter: "फिल्टर",
-    year: "वर्ष",
+    filterPlot: "प्लॉट",
+    filterDate: "तारीख",
+    filterYear: "वर्ष",
+    allPlots: "सर्व प्लॉट",
+
+    // Table headers
+    thPlot: "प्लॉट",
+    thDate: "तारीख",
+    thPruningDate: "छाटणी तारीख",
+    thDaysAfter: "छाटणीनंतरचे दिवस",
+    thMedicine: "औषधे",
+    thDoseLiter: "प्रति लिटर डोस",
+    thDosePlot: "प्रति प्लॉट डोस",
+    thWaterPlot: "प्रति प्लॉट पाणी",
+    thSprayTime: "स्प्रे वेळ",
+    thActions: "कारवाई",
+
+    // Buttons
     downloadPDF: "PDF डाउनलोड",
     irrigation: "इरिगेशन",
     adminPanel: "Admin Panel",
-    mainPage: "मुख्य पृष्ठ",
 
-    irrigationForm: "इरिगेशन फॉर्म",
-    irrigationTime: "इरिगेशन वेळ (मिनिटे)",
-    irrigationTimePlaceholder: "वेळ (मिनिटे) लिहा",
-
-    waterUsed: "वापरलेले पाणी (लिटर)",
-    waterUsedPlaceholder: "पाणी (लिटर) लिहा",
-
-    irrigationType: "इरिगेशन प्रकार",
-
-    actions: "कारवाया",
+    // Alerts
+    invalidLogin: "अवैध वापरकर्तानाव किंवा पासवर्ड.",
+    enterAllFields: "कृपया सर्व आवश्यक फील्ड भरा.",
+    plotAdded: "प्लॉट यशस्वीरित्या जोडला.",
+    confirmDelete: "ही नोंद हटवायची आहे का?",
   }
 };
 
-// ------------------------------------------------------------
-// Apply translation to all elements
-// ------------------------------------------------------------
-function applyTranslations() {
-  document.querySelectorAll("[data-key]").forEach((el) => {
+// Apply language to UI
+function applyLanguage() {
+  document.querySelectorAll("[data-key]").forEach(el => {
     const key = el.getAttribute("data-key");
     if (translations[currentLang][key]) {
-      el.textContent = translations[currentLang][key];
+      el.innerHTML = translations[currentLang][key];
     }
   });
 
-  document.querySelectorAll("[data-placeholder]").forEach((el) => {
+  // Apply placeholders
+  document.querySelectorAll("[data-placeholder]").forEach(el => {
     const key = el.getAttribute("data-placeholder");
     if (translations[currentLang][key]) {
       el.placeholder = translations[currentLang][key];
     }
   });
+
+  // Update the top language switcher text
+  const langSwitch = document.getElementById("lang-switch");
+  if (langSwitch) langSwitch.textContent = translations[currentLang].language;
 }
 
-// ------------------------------------------------------------
-// Switch Language
-// ------------------------------------------------------------
+// Toggle English ↔ Marathi
 function toggleLanguage() {
   currentLang = currentLang === "en" ? "mr" : "en";
   localStorage.setItem("lang", currentLang);
-  applyTranslations();
+  applyLanguage();
 }
 
-// Load translations when page loads
-document.addEventListener("DOMContentLoaded", applyTranslations);
+// Apply language on first load
+document.addEventListener("DOMContentLoaded", applyLanguage);
