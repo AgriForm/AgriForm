@@ -640,7 +640,6 @@
       <div class="actions">
         <button onclick="downloadPDF()" class="btn btn-info"><i class="fas fa-file-pdf"></i> PDF डाउनलोड</button>
         <button onclick="redirectToSecondPage()" class="btn btn-primary"><i class="fas fa-tint"></i> इरिगेशन</button>
-        <button id="adminPanelBtn" onclick="redirectToAdminPanel()" class="btn btn-warning" style="display: none;"><i class="fas fa-users-cog"></i> Admin Panel</button>
       </div>
     </div>
     
@@ -650,13 +649,9 @@
         <i class="fas fa-home"></i>
         <span>मुख्य</span>
       </a>
-      <a href="Drip.html" class="nav-btn">
+      <a href="drip.html" class="nav-btn">
         <i class="fas fa-tint"></i>
         <span>इरिगेशन</span>
-      </a>
-      <a href="admin.html" class="nav-btn">
-        <i class="fas fa-users-cog"></i>
-        <span>Admin</span>
       </a>
     </div>
   </div>
@@ -704,9 +699,6 @@
             document.getElementById("login-section").style.display = "none";
             document.getElementById("data-entry-section").style.display = "block";
             document.getElementById("current-user-display").textContent = `User: ${currentUser}`;
-            if (username === "admin") {
-              document.getElementById("adminPanelBtn").style.display = "inline-flex";
-            }
             loadPlots();
             loadData();
           } else {
@@ -729,11 +721,6 @@
       document.getElementById("login-section").style.display = "flex";
       document.getElementById("username").value = "";
       document.getElementById("password").value = "";
-    }
-    
-    // Function to redirect to admin panel
-    function redirectToAdminPanel() {
-      window.location.href = 'admin.html?user=' + currentUser;
     }
     
     // Function to load the plots from Firestore
@@ -975,9 +962,8 @@
     
     // Function to redirect to the second page
     function redirectToSecondPage() {
-      window.location.href = 'Drip.html?user=' + currentUser;
+      window.location.href = 'drip.html?user=' + currentUser;
     }
   </script>
 </body>
 </html>
-
