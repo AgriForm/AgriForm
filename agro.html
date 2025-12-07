@@ -343,7 +343,7 @@
     </div>
     
     <div class="card data-container" id="spray-data-container">
-      <div class="card-title"><i class="fas fa-wine-bottle"></i> Main Page Data</div>
+      <div class="card-title"><i class="fas fa-wine-bottle"></i> Spray Data</div>
       <button onclick="backToUsers()" class="btn btn-danger back-btn"><i class="fas fa-arrow-left"></i> Back</button>
       <div class="table-responsive">
         <table>
@@ -390,8 +390,8 @@
   <!-- Mobile Navigation -->
   <div class="mobile-nav">
     <a href="index.html" class="nav-btn">
-      <i class="fas fa-home"></i>
-      <span>मुख्य</span>
+      <i class="fas fa-spray-can"></i>
+      <span>स्प्रे</span>
     </a>
     <a href="drip.html" class="nav-btn">
       <i class="fas fa-tint"></i>
@@ -435,7 +435,7 @@
             userCard.innerHTML = `
               <h3>${user.username}</h3>
               <div class="user-actions">
-                <button onclick="loadUserSprayData('${user.username}')" class="btn btn-primary btn-sm"><i class="fas fa-wine-bottle"></i> Main Page</button>
+                <button onclick="loadUserSprayData('${user.username}')" class="btn btn-primary btn-sm"><i class="fas fa-wine-bottle"></i> Spray</button>
                 <button onclick="loadUserIrrigationData('${user.username}')" class="btn btn-info btn-sm"><i class="fas fa-tint"></i> Irrigation</button>
               </div>
             `;
