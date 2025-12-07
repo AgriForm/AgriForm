@@ -37,6 +37,27 @@
       margin: 0 auto;
       padding: 20px;
     }
+    /* Language Toggle Button */
+    .language-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 15px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .language-toggle i {
+      font-size: 16px;
+    }
     /* Login Section */
     .login-container {
       display: flex;
@@ -342,6 +363,12 @@
       .medicine-row {
         flex-wrap: wrap;
       }
+      .language-toggle {
+        top: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        font-size: 12px;
+      }
     }
     /* Animations */
     @keyframes slideIn {
@@ -381,10 +408,16 @@
   </style>
 </head>
 <body>
+  <!-- Language Toggle Button -->
+  <button id="languageToggle" class="language-toggle" onclick="toggleLanguage()">
+    <i class="fas fa-language"></i>
+    <span id="languageText">English</span>
+  </button>
+  
   <!-- Login Section -->
   <div class="login-container" id="login-section">
     <div class="login-card animate-slide-in" id="login-card">
-      <h2><i class="fas fa-user-shield"></i> Login</h2>
+      <h2><i class="fas fa-user-shield"></i> <span data-key="loginTitle">Login</span></h2>
       <div class="input-group">
         <i class="fas fa-user"></i>
         <input type="text" id="username" placeholder="Username" required>
@@ -393,119 +426,127 @@
         <i class="fas fa-lock"></i>
         <input type="password" id="password" placeholder="Password" required>
       </div>
-      <button onclick="login()" id="login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+      <button onclick="login()" id="login-btn"><i class="fas fa-sign-in-alt"></i> <span data-key="loginButton">Login</span></button>
     </div>
   </div>
+  
   <!-- Data Entry Form Section -->
   <div id="data-entry-section" style="display: none;">
     <div class="container">
       <div class="header">
-        <h2><i class="fas fa-tint"></i> इरिगेशन</h2>
+        <h2><i class="fas fa-tint"></i> <span data-key="pageTitle">Irrigation</span></h2>
         <div class="user-info">
           <span id="current-user-display"></span>
-          <button onclick="logout()" class="btn btn-danger btn-sm"><i class="fas fa-sign-out-alt"></i> Logout</button>
+          <button onclick="logout()" class="btn btn-danger btn-sm"><i class="fas fa-sign-out-alt"></i> <span data-key="logoutButton">Logout</span></button>
         </div>
       </div>
+      
       <!-- Input Section -->
       <div class="card">
-        <div class="card-title"><i class="fas fa-plus-circle"></i> नवीन प्लॉट जोडा</div>
+        <div class="card-title"><i class="fas fa-plus-circle"></i> <span data-key="addPlotTitle">Add New Plot</span></div>
         <div class="form-row">
           <div class="form-group" style="flex-grow: 2;">
-            <input type="text" id="newPlotName" class="form-control" placeholder="नवीन प्लॉट नाव">
+            <input type="text" id="newPlotName" class="form-control" placeholder="New Plot Name">
           </div>
           <div class="form-group">
-            <button onclick="addPlot()" class="btn btn-primary"><i class="fas fa-plus"></i> प्लॉट जोडा</button>
+            <button onclick="addPlot()" class="btn btn-primary"><i class="fas fa-plus"></i> <span data-key="addPlotButton">Add Plot</span></button>
           </div>
         </div>
       </div>
+      
       <div class="card">
-        <div class="card-title"><i class="fas fa-edit"></i> डेटा एंट्री</div>
+        <div class="card-title"><i class="fas fa-edit"></i> <span data-key="dataEntryTitle">Data Entry</span></div>
         <div class="form-row">
           <div class="form-group">
-            <label for="plotSelection">प्लॉट निवडा</label>
+            <label for="plotSelection" data-key="plotSelectionLabel">Select Plot</label>
             <select id="plotSelection" class="form-control" required>
-              <option value="" disabled selected>प्लॉट निवडा</option>
+              <option value="" disabled selected><span data-key="selectPlotPlaceholder">Select Plot</span></option>
             </select>
           </div>
           <div class="form-group">
-            <label for="date">तारीख</label>
+            <label for="date" data-key="dateLabel">Date</label>
             <input type="date" id="date" class="form-control" required>
           </div>
         </div>
+        
         <div class="form-row">
           <div class="form-group">
-            <label for="hours">पाण्याचे तास</label>
-            <input type="number" id="hours" class="form-control" placeholder="पाण्याचे तास" required>
+            <label for="hours" data-key="hoursLabel">Watering Hours</label>
+            <input type="number" id="hours" class="form-control" placeholder="Watering Hours" required>
           </div>
           <div class="form-group">
-            <label for="waterPerUnit">प्रति झाड पाणी</label>
+            <label for="waterPerUnit" data-key="waterPerUnitLabel">Water Per Tree</label>
             <div class="input-with-unit">
-              <input type="number" id="waterPerUnit" class="form-control" placeholder="पाणी" required>
+              <input type="number" id="waterPerUnit" class="form-control" placeholder="Water" required>
               <span style="padding: 0 15px; background: #f8f9fa; display: flex; align-items: center; border: 2px solid #e0e0e0; border-left: none; border-radius: 0 var(--border-radius) var(--border-radius) 0;">L</span>
             </div>
           </div>
         </div>
+        
         <div class="medicine-container">
-          <div class="card-title"><i class="fas fa-pills"></i> खते</div>
+          <div class="card-title"><i class="fas fa-pills"></i> <span data-key="fertilizersTitle">Fertilizers</span></div>
           <div id="medicine-container">
             <div class="medicine-row">
               <div class="form-group">
-                <label>खताचे नाव</label>
+                <label data-key="fertilizerNameLabel">Fertilizer Name</label>
                 <input type="text" class="fertilizerName form-control" required>
               </div>
               <div class="form-group">
-                <label>खताची मात्रा</label>
+                <label data-key="fertilizerAmountLabel">Fertilizer Amount</label>
                 <input type="number" class="fertilizerAmount form-control" required>
               </div>
               <div class="form-group">
-                <label>एकक निवडा</label>
+                <label data-key="fertilizerUnitLabel">Select Unit</label>
                 <select class="fertilizerUnit form-control unit-select" required>
-                  <option value="" disabled selected></option>
+                  <option value="" disabled selected data-key="selectUnitPlaceholder">Select</option>
                   <option value="Kg">Kg</option>
                   <option value="L">L</option>
                 </select>
               </div>
-              <button type="button" class="btn btn-danger btn-sm" onclick="removeMedicineRow(this)" style="margin-bottom: 8px;"><i class="fas fa-trash"></i></button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="removeMedicineRow(this)" style="margin-bottom: 8px;"><i class="fas fa-trash"></i> <span data-key="removeButton">Remove</span></button>
             </div>
           </div>
-          <button type="button" class="btn btn-primary" onclick="addMedicineRow()" style="margin-top: 10px;"><i class="fas fa-plus"></i> खत जोडा</button>
+          <button type="button" class="btn btn-primary" onclick="addMedicineRow()" style="margin-top: 10px;"><i class="fas fa-plus"></i> <span data-key="addFertilizerButton">Add Fertilizer</span></button>
         </div>
+        
         <div class="actions">
-          <button onclick="addRowFromInputs()" class="btn btn-success"><i class="fas fa-save"></i> डेटा जोडा</button>
+          <button onclick="addRowFromInputs()" class="btn btn-success"><i class="fas fa-save"></i> <span data-key="addDataButton">Add Data</span></button>
         </div>
       </div>
+      
       <!-- Filter Section -->
       <div class="card">
-        <div class="card-title"><i class="fas fa-filter"></i> फिल्टर</div>
+        <div class="card-title"><i class="fas fa-filter"></i> <span data-key="filterTitle">Filter</span></div>
         <div class="form-row">
           <div class="form-group">
-            <label for="filterPlot">प्लॉट</label>
+            <label for="filterPlot" data-key="filterPlotLabel">Plot</label>
             <select id="filterPlot" class="form-control" onchange="filterTable()">
-              <option value="">सर्व प्लॉट</option>
+              <option value="" data-key="allPlotsOption">All Plots</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="filterDate">तारीख</label>
+            <label for="filterDate" data-key="filterDateLabel">Date</label>
             <input type="date" id="filterDate" class="form-control" onchange="filterTable()">
           </div>
           <div class="form-group">
-            <label for="filterYear">वर्ष</label>
-            <input type="number" id="filterYear" class="form-control" placeholder="वर्ष" onchange="filterTable()">
+            <label for="filterYear" data-key="filterYearLabel">Year</label>
+            <input type="number" id="filterYear" class="form-control" placeholder="Year" onchange="filterTable()">
           </div>
         </div>
       </div>
+      
       <!-- Table -->
       <div class="card">
         <div class="table-responsive">
           <table>
             <thead>
               <tr>
-                <th>प्लॉट</th>
-                <th>तारीख</th>
-                <th>पाण्याचे तास</th>
-                <th>प्रति झाड पाणी</th>
-                <th>खताचे नाव</th>
-                <th>कारवाया</th>
+                <th><span data-key="plotColumn">Plot</span></th>
+                <th><span data-key="dateColumn">Date</span></th>
+                <th><span data-key="wateringHoursColumn">Watering Hours</span></th>
+                <th><span data-key="waterPerTreeColumn">Water Per Tree</span></th>
+                <th><span data-key="fertilizerColumn">Fertilizer</span></th>
+                <th><span data-key="actionsColumn">Actions</span></th>
               </tr>
             </thead>
             <tbody id="table-body">
@@ -513,13 +554,15 @@
           </table>
         </div>
       </div>
+      
       <!-- Actions -->
       <div class="actions">
-        <button onclick="downloadPDF()" class="btn btn-info"><i class="fas fa-file-pdf"></i> PDF डाउनलोड</button>
-        <button onclick="redirectToIndex()" class="btn btn-primary"><i class="fas fa-home"></i> मुख्यपृष्ठ</button>
+        <button onclick="downloadPDF()" class="btn btn-info"><i class="fas fa-file-pdf"></i> <span data-key="downloadPDFButton">Download PDF</span></button>
+        <button onclick="redirectToSpray()" class="btn btn-primary"><i class="fas fa-spray-can"></i> <span data-key="sprayButton">Spray</span></button>
       </div>
     </div>
   </div>
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.22/jspdf.plugin.autotable.min.js"></script>
   <!-- Firebase App (the core Firebase SDK) -->
@@ -527,6 +570,161 @@
   <!-- Firebase Firestore -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <script>
+    // Translation dictionary
+    const translations = {
+      "en": {
+        "loginTitle": "Login",
+        "loginButton": "Login",
+        "pageTitle": "Irrigation",
+        "logoutButton": "Logout",
+        "addPlotTitle": "Add New Plot",
+        "addPlotButton": "Add Plot",
+        "dataEntryTitle": "Data Entry",
+        "plotSelectionLabel": "Select Plot",
+        "selectPlotPlaceholder": "Select Plot",
+        "dateLabel": "Date",
+        "hoursLabel": "Watering Hours",
+        "waterPerUnitLabel": "Water Per Tree",
+        "fertilizersTitle": "Fertilizers",
+        "fertilizerNameLabel": "Fertilizer Name",
+        "fertilizerAmountLabel": "Fertilizer Amount",
+        "fertilizerUnitLabel": "Select Unit",
+        "selectUnitPlaceholder": "Select",
+        "removeButton": "Remove",
+        "addFertilizerButton": "Add Fertilizer",
+        "addDataButton": "Add Data",
+        "filterTitle": "Filter",
+        "filterPlotLabel": "Plot",
+        "allPlotsOption": "All Plots",
+        "filterDateLabel": "Date",
+        "filterYearLabel": "Year",
+        "plotColumn": "Plot",
+        "dateColumn": "Date",
+        "wateringHoursColumn": "Watering Hours",
+        "waterPerTreeColumn": "Water Per Tree",
+        "fertilizerColumn": "Fertilizer",
+        "actionsColumn": "Actions",
+        "downloadPDFButton": "Download PDF",
+        "sprayButton": "Spray",
+        "confirmDelete": "Do you want to delete this row?",
+        "invalidCredentials": "Invalid username or password",
+        "plotAddedSuccess": "Plot added successfully.",
+        "enterValidPlotName": "Please enter a valid plot name.",
+        "fillAllFields": "Please fill all required fields.",
+        "fillAllFertilizerFields": "Please fill all fertilizer fields.",
+        "addAtLeastOneFertilizer": "Please add at least one fertilizer.",
+        "errorAddingPlot": "Error adding plot:",
+        "errorSavingData": "Error saving ",
+        "errorLoadingPlots": "Error loading plots:",
+        "errorLoadingData": "Error loading ",
+        "minOneFertilizerRequired": "At least one fertilizer row is required."
+      },
+      "mr": {
+        "loginTitle": "लॉगिन",
+        "loginButton": "लॉगिन",
+        "pageTitle": "इरिगेशन",
+        "logoutButton": "लॉगआउट",
+        "addPlotTitle": "नवीन प्लॉट जोडा",
+        "addPlotButton": "प्लॉट जोडा",
+        "dataEntryTitle": "डेटा एंट्री",
+        "plotSelectionLabel": "प्लॉट निवडा",
+        "selectPlotPlaceholder": "प्लॉट निवडा",
+        "dateLabel": "तारीख",
+        "hoursLabel": "पाण्याचे तास",
+        "waterPerUnitLabel": "प्रति झाड पाणी",
+        "fertilizersTitle": "खते",
+        "fertilizerNameLabel": "खताचे नाव",
+        "fertilizerAmountLabel": "खताची मात्रा",
+        "fertilizerUnitLabel": "एकक निवडा",
+        "selectUnitPlaceholder": "निवडा",
+        "removeButton": "हटवा",
+        "addFertilizerButton": "खत जोडा",
+        "addDataButton": "डेटा जोडा",
+        "filterTitle": "फिल्टर",
+        "filterPlotLabel": "प्लॉट",
+        "allPlotsOption": "सर्व प्लॉट",
+        "filterDateLabel": "तारीख",
+        "filterYearLabel": "वर्ष",
+        "plotColumn": "प्लॉट",
+        "dateColumn": "तारीख",
+        "wateringHoursColumn": "पाण्याचे तास",
+        "waterPerTreeColumn": "प्रति झाड पाणी",
+        "fertilizerColumn": "खताचे नाव",
+        "actionsColumn": "कारवाया",
+        "downloadPDFButton": "PDF डाउनलोड",
+        "sprayButton": "स्प्रे", // Changed from "मुख्यपृष्ठ" to "स्प्रे"
+        "confirmDelete": "तुम्हाला ही पंक्ती हटवायची आहे का?",
+        "invalidCredentials": "अवैध वापरकर्तानाव किंवा पासवर्ड",
+        "plotAddedSuccess": "प्लॉट यशस्वीरित्या जोडला.",
+        "enterValidPlotName": "कृपया वैध प्लॉट नाव द्या.",
+        "fillAllFields": "कृपया सर्व आवश्यक फील्ड भरा.",
+        "fillAllFertilizerFields": "कृपया सर्व खताची फील्ड भरा.",
+        "addAtLeastOneFertilizer": "कृपया किमान एक खत जोडा.",
+        "errorAddingPlot": "प्लॉट जोडताना त्रुटी:",
+        "errorSavingData": "डेटा सेव्ह करताना त्रुटी:",
+        "errorLoadingPlots": "प्लॉट लोड करताना त्रुटी:",
+        "errorLoadingData": "डेटा लोड करताना त्रुटी:",
+        "minOneFertilizerRequired": "कमीत कमी एक खताची पंक्ती आवश्यक आहे."
+      }
+    };
+
+    // Initialize language
+    let currentLanguage = 'mr'; // Default to Marathi
+    
+    // Set initial language
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      document.documentElement.lang = lang === 'mr' ? 'mr' : 'en';
+      
+      // Update all elements with data-key attributes
+      document.querySelectorAll('[data-key]').forEach(element => {
+        const key = element.getAttribute('data-key');
+        if (translations[lang] && translations[lang][key]) {
+          if (element.tagName === 'SELECT' && element.querySelector('option')) {
+            // Handle select options
+            element.querySelectorAll('option').forEach(option => {
+              if (option.textContent.trim()) {
+                option.textContent = translations[lang][key] || option.textContent;
+              } else {
+                option.innerHTML = `<span data-key="${key}">${translations[lang][key] || ''}</span>`;
+              }
+            });
+          } else {
+            element.textContent = translations[lang][key] || element.textContent;
+          }
+        }
+      });
+      
+      // Update language toggle button text
+      const languageText = document.getElementById('languageText');
+      languageText.textContent = lang === 'mr' ? 'English' : 'मराठी';
+      
+      // Update placeholders
+      document.getElementById('username').placeholder = lang === 'mr' ? 'वापरकर्तानाव' : 'Username';
+      document.getElementById('password').placeholder = lang === 'mr' ? 'पासवर्ड' : 'Password';
+      document.getElementById('newPlotName').placeholder = lang === 'mr' ? 'नवीन प्लॉट नाव' : 'New Plot Name';
+      document.getElementById('hours').placeholder = lang === 'mr' ? 'पाण्याचे तास' : 'Watering Hours';
+      document.getElementById('waterPerUnit').placeholder = lang === 'mr' ? 'पाणी' : 'Water';
+      document.getElementById('filterYear').placeholder = lang === 'mr' ? 'वर्ष' : 'Year';
+      
+      // Update unit select options
+      document.querySelectorAll('.fertilizerUnit option[value="Kg"]').forEach(option => {
+        option.textContent = lang === 'mr' ? 'किलो' : 'Kg';
+      });
+      document.querySelectorAll('.fertilizerUnit option[value="L"]').forEach(option => {
+        option.textContent = lang === 'mr' ? 'लिटर' : 'L';
+      });
+    }
+    
+    // Toggle between languages
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'mr' ? 'en' : 'mr';
+      setLanguage(currentLanguage);
+    }
+    
+    // Initialize with Marathi
+    setLanguage('mr');
+    
     // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDvGRPEIhwZ3-k9YNL597xsNXayTMW6YrE",
@@ -564,15 +762,19 @@
             loadPlots();
             loadData();
           } else {
-            alert("Invalid username or password");
+            alert(translations[currentLanguage]["invalidCredentials"]);
           }
-          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span data-key="loginButton">Login</span>';
           loginBtn.disabled = false;
+          // Update text after language change
+          setLanguage(currentLanguage);
         })
         .catch((error) => {
           alert("Error: " + error.message);
-          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span data-key="loginButton">Login</span>';
           loginBtn.disabled = false;
+          // Update text after language change
+          setLanguage(currentLanguage);
         });
     }
 
@@ -594,8 +796,8 @@
         .then((querySnapshot) => {
           const plotSelection = document.getElementById("plotSelection");
           const filterPlot = document.getElementById("filterPlot");
-          plotSelection.innerHTML = '<option value="" disabled selected>प्लॉट निवडा</option>';
-          filterPlot.innerHTML = '<option value="">सर्व प्लॉट</option>';
+          plotSelection.innerHTML = '<option value="" disabled selected><span data-key="selectPlotPlaceholder">Select Plot</span></option>';
+          filterPlot.innerHTML = '<option value=""><span data-key="allPlotsOption">All Plots</span></option>';
           querySnapshot.forEach((doc) => {
             const plot = doc.data().name;
             const option = document.createElement("option");
@@ -604,9 +806,11 @@
             plotSelection.appendChild(option);
             filterPlot.appendChild(option.cloneNode(true));
           });
+          // Update text after language change
+          setLanguage(currentLanguage);
         })
         .catch((error) => {
-          console.error("Error loading plots: ", error);
+          console.error(translations[currentLanguage]["errorLoadingPlots"], error);
         });
     }
 
@@ -615,7 +819,7 @@
       if (!currentUser) return;
       const newPlotName = document.getElementById("newPlotName").value.trim();
       if (!newPlotName) {
-        alert("कृपया वैध प्लॉट नाव द्या.");
+        alert(translations[currentLanguage]["enterValidPlotName"]);
         return;
       }
       db.collection("users").doc(currentUser).collection("plots").add({
@@ -624,11 +828,11 @@
       })
       .then(() => {
         loadPlots();
-        alert("प्लॉट यशस्वीरित्या जोडला.");
+        alert(translations[currentLanguage]["plotAddedSuccess"]);
         document.getElementById("newPlotName").value = "";
       })
       .catch((error) => {
-        alert("Error adding plot: " + error.message);
+        alert(translations[currentLanguage]["errorAddingPlot"] + " " + error.message);
       });
     }
 
@@ -639,24 +843,26 @@
       newRow.className = "medicine-row";
       newRow.innerHTML = `
         <div class="form-group">
-          <label>खताचे नाव</label>
+          <label data-key="fertilizerNameLabel">Fertilizer Name</label>
           <input type="text" class="fertilizerName form-control" required>
         </div>
         <div class="form-group">
-          <label>खताची मात्रा</label>
+          <label data-key="fertilizerAmountLabel">Fertilizer Amount</label>
           <input type="number" class="fertilizerAmount form-control" required>
         </div>
         <div class="form-group">
-          <label>एकक</label>
+          <label data-key="fertilizerUnitLabel">Unit</label>
           <select class="fertilizerUnit form-control unit-select" required>
-            <option value="" disabled selected>निवडा</option>
-            <option value="Kg">Kg</option>
-            <option value="L">L</option>
+            <option value="" disabled selected data-key="selectUnitPlaceholder">Select</option>
+            <option value="Kg">${currentLanguage === 'mr' ? 'किलो' : 'Kg'}</option>
+            <option value="L">${currentLanguage === 'mr' ? 'लिटर' : 'L'}</option>
           </select>
         </div>
-        <button type="button" class="btn btn-danger btn-sm" onclick="removeMedicineRow(this)" style="margin-bottom: 8px;"><i class="fas fa-trash"></i></button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="removeMedicineRow(this)" style="margin-bottom: 8px;"><i class="fas fa-trash"></i> <span data-key="removeButton">Remove</span></button>
       `;
       medicineContainer.appendChild(newRow);
+      // Update text after language change
+      setLanguage(currentLanguage);
     }
 
     // Function to remove a medicine row
@@ -665,7 +871,7 @@
       if (document.querySelectorAll(".medicine-row").length > 1) {
         row.remove();
       } else {
-        alert("कमीत कमी एक खताची पंक्ती आवश्यक आहे.");
+        alert(translations[currentLanguage]["minOneFertilizerRequired"]);
       }
     }
 
@@ -679,7 +885,7 @@
       const medicineRows = document.querySelectorAll(".medicine-row");
 
       if (!date || !hours || !waterPerUnit || !plotSelection) {
-        alert("कृपया सर्व आवश्यक फील्ड भरा.");
+        alert(translations[currentLanguage]["fillAllFields"]);
         return;
       }
 
@@ -701,11 +907,11 @@
       });
 
       if (hasEmptyFields) {
-        alert("कृपया सर्व खताची फील्ड भरा.");
+        alert(translations[currentLanguage]["fillAllFertilizerFields"]);
         return;
       }
       if (fertilizers.length === 0) {
-        alert("कृपया किमान एक खत जोडा.");
+        alert(translations[currentLanguage]["addAtLeastOneFertilizer"]);
         return;
       }
 
@@ -738,29 +944,31 @@
           medicineContainer.innerHTML = `
             <div class="medicine-row">
               <div class="form-group">
-                <label>खताचे नाव</label>
+                <label data-key="fertilizerNameLabel">Fertilizer Name</label>
                 <input type="text" class="fertilizerName form-control" required>
               </div>
               <div class="form-group">
-                <label>खताची मात्रा</label>
+                <label data-key="fertilizerAmountLabel">Fertilizer Amount</label>
                 <input type="number" class="fertilizerAmount form-control" required>
               </div>
               <div class="form-group">
-                <label>एकक</label>
+                <label data-key="fertilizerUnitLabel">Unit</label>
                 <select class="fertilizerUnit form-control unit-select" required>
-                  <option value="" disabled selected>निवडा</option>
-                  <option value="Kg">Kg</option>
-                  <option value="L">L</option>
+                  <option value="" disabled selected data-key="selectUnitPlaceholder">Select</option>
+                  <option value="Kg">${currentLanguage === 'mr' ? 'किलो' : 'Kg'}</option>
+                  <option value="L">${currentLanguage === 'mr' ? 'लिटर' : 'L'}</option>
                 </select>
               </div>
-              <button type="button" class="btn btn-danger btn-sm" onclick="removeMedicineRow(this)" style="margin-bottom: 8px;"><i class="fas fa-trash"></i></button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="removeMedicineRow(this)" style="margin-bottom: 8px;"><i class="fas fa-trash"></i> <span data-key="removeButton">Remove</span></button>
             </div>
           `;
           editingRow = null; // Clear editing state
           loadData();
+          // Update text after language change
+          setLanguage(currentLanguage);
         })
         .catch((error) => {
-          alert("Error saving data: " + error.message);
+          alert(translations[currentLanguage]["errorSavingData"] + " " + error.message);
         });
     }
 
@@ -798,7 +1006,7 @@
           });
         })
         .catch((error) => {
-          console.error("Error loading data: ", error);
+          console.error(translations[currentLanguage]["errorLoadingData"], error);
         });
     }
 
@@ -819,38 +1027,39 @@
         newRow.className = "medicine-row";
         newRow.innerHTML = `
           <div class="form-group">
-            <label>खताचे नाव</label>
+            <label data-key="fertilizerNameLabel">Fertilizer Name</label>
             <input type="text" class="fertilizerName form-control" value="${fertilizer.name}" required>
           </div>
           <div class="form-group">
-            <label>खताची मात्रा</label>
+            <label data-key="fertilizerAmountLabel">Fertilizer Amount</label>
             <input type="number" class="fertilizerAmount form-control" value="${fertilizer.amount}" required>
           </div>
           <div class="form-group">
-            <label>एकक</label>
+            <label data-key="fertilizerUnitLabel">Unit</label>
             <select class="fertilizerUnit form-control unit-select" required>
-              <option value="" disabled>निवडा</option>
-              <option value="Kg" ${fertilizer.unit === 'Kg' ? 'selected' : ''}>Kg</option>
-              <option value="L" ${fertilizer.unit === 'L' ? 'selected' : ''}>L</option>
+              <option value="" disabled data-key="selectUnitPlaceholder">Select</option>
+              <option value="Kg" ${fertilizer.unit === 'Kg' ? 'selected' : ''}>${currentLanguage === 'mr' ? 'किलो' : 'Kg'}</option>
+              <option value="L" ${fertilizer.unit === 'L' ? 'selected' : ''}>${currentLanguage === 'mr' ? 'लिटर' : 'L'}</option>
             </select>
           </div>
-          <button type="button" class="btn btn-danger btn-sm" onclick="removeMedicineRow(this)" style="margin-bottom: 8px;"><i class="fas fa-trash"></i></button>
+          <button type="button" class="btn btn-danger btn-sm" onclick="removeMedicineRow(this)" style="margin-bottom: 8px;"><i class="fas fa-trash"></i> <span data-key="removeButton">Remove</span></button>
         `;
         medicineContainer.appendChild(newRow);
       });
-
       editingRow = docId;
+      // Update text after language change
+      setLanguage(currentLanguage);
     }
 
     // Function to delete a row
     function deleteRow(docId) {
-      if (confirm("तुम्हाला ही पंक्ती हटवायची आहे का?")) {
+      if (confirm(translations[currentLanguage]["confirmDelete"])) {
         db.collection("users").doc(currentUser).collection("irrigationData").doc(docId).delete()
           .then(() => {
             loadData();
           })
           .catch((error) => {
-            alert("Error deleting data: " + error.message);
+            alert("Error deleting  " + error.message);
           });
       }
     }
@@ -882,7 +1091,11 @@
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
       const tableHeaders = [
-        ["Plot", "Date", "Watering Hours", "Water Per Tree (L)", "Fertilizer"]
+        [translations[currentLanguage]["plotColumn"], 
+         translations[currentLanguage]["dateColumn"], 
+         translations[currentLanguage]["wateringHoursColumn"], 
+         translations[currentLanguage]["waterPerTreeColumn"], 
+         translations[currentLanguage]["fertilizerColumn"]]
       ];
       const tableData = Array.from(document.querySelectorAll("#table-body tr")).filter(row => row.style.display !== "none").map(row => {
         return Array.from(row.children).slice(0, -1).map(cell => cell.textContent);
@@ -897,8 +1110,8 @@
       doc.save("irrigation_data.pdf");
     }
 
-    // Function to redirect to the index page
-    function redirectToIndex() {
+    // Function to redirect to the spray page
+    function redirectToSpray() {
       window.location.href = 'index.html?user=' + currentUser;
     }
   </script>
