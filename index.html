@@ -111,7 +111,7 @@
     #data-entry-section {
       display: none;
       animation: fadeIn 0.5s ease;
-      padding-bottom: 70px; /* Space for mobile nav */
+      padding-bottom: 70px;
     }
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -223,7 +223,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 44px; /* Minimum touch target size */
+      min-height: 44px;
     }
     .btn i {
       margin-right: 6px;
@@ -282,12 +282,12 @@
       box-shadow: var(--box-shadow);
       background: var(--light);
       margin-bottom: 20px;
-      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      -webkit-overflow-scrolling: touch;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 600px; /* Minimum table width for small screens */
+      min-width: 600px;
     }
     th, td {
       padding: 12px 8px;
@@ -454,10 +454,10 @@
         margin-left: 10px;
       }
       #data-entry-section {
-        padding-bottom: 0; /* Remove padding for desktop */
+        padding-bottom: 0;
       }
       .mobile-nav {
-        display: none; /* Hide mobile nav on desktop */
+        display: none;
       }
     }
     @media (min-width: 992px) {
@@ -687,11 +687,7 @@
       loginBtn.innerHTML = '<div class="loading"></div> Logging in...';
       loginBtn.disabled = true;
       
-      if (username === "agro" && password === "Data") {
-        window.location.href = "agro.html";
-        return;
-      }
-      
+      // Only use Firestore for authentication
       db.collection("usernames").where("username", "==", username).where("password", "==", password).get()
         .then((querySnapshot) => {
           if (!querySnapshot.empty) {
