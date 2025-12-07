@@ -789,23 +789,19 @@
 
     // Initialize language
     let currentLanguage = 'mr'; // Default to Marathi
-    
+
     // Set initial language
     function setLanguage(lang) {
       currentLanguage = lang;
       document.documentElement.lang = lang === 'mr' ? 'mr' : 'en';
       
-      // Update all elements with data-key attributes
       document.querySelectorAll('[data-key]').forEach(element => {
         const key = element.getAttribute('data-key');
         if (translations[lang] && translations[lang][key]) {
           if (element.tagName === 'SELECT' && element.querySelector('option')) {
-            // Handle select options
             element.querySelectorAll('option').forEach(option => {
               if (option.textContent.trim()) {
                 option.textContent = translations[lang][key] || option.textContent;
-              } else {
-                option.innerHTML = `<span data-key="${key}">${translations[lang][key] || ''}</span>`;
               }
             });
           } else {
@@ -814,11 +810,9 @@
         }
       });
       
-      // Update language toggle button text
       const languageText = document.getElementById('languageText');
       languageText.textContent = lang === 'mr' ? 'English' : 'मराठी';
       
-      // Update placeholders
       document.getElementById('username').placeholder = lang === 'mr' ? 'वापरकर्तानाव' : 'Username';
       document.getElementById('password').placeholder = lang === 'mr' ? 'पासवर्ड' : 'Password';
       document.getElementById('newPlotName').placeholder = lang === 'mr' ? 'नवीन प्लॉट नाव' : 'New Plot Name';
@@ -828,16 +822,14 @@
       document.getElementById('waterPerPlot').placeholder = lang === 'mr' ? 'पाणी (लिटर)' : 'Water (L)';
       document.getElementById('filterYear').placeholder = lang === 'mr' ? 'वर्ष' : 'Year';
     }
-    
-    // Toggle between languages
+
     function toggleLanguage() {
       currentLanguage = currentLanguage === 'mr' ? 'en' : 'mr';
       setLanguage(currentLanguage);
     }
-    
-    // Initialize with Marathi
+
     setLanguage('mr');
-    
+
     // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDvGRPEIhwZ3-k9YNL597xsNXayTMW6YrE",
@@ -847,14 +839,36 @@
       messagingSenderId: "995160881797",
       appId: "1:995160881797:web:89fb268a4601129c8d87ec"
     };
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     let currentUser = "";
     let editingRow = null;
     let tableData = [];
-    
-    // Function to handle login
+
+    // ✅ AUTO-LOGIN CHECK
+    function checkExistingSession() {
+      const storedUser = sessionStorage.getItem('agriUser');
+      if (storedUser) {
+        const { username, loginTime } = JSON.parse(storedUser);
+        const currentTime = Date.now();
+        const sessionDuration = 3 * 60 * 1000; // 3 minutes
+
+        if (currentTime - loginTime < sessionDuration) {
+          currentUser = username;
+          document.getElementById("login-section").style.display = "none";
+          document.getElementById("data-entry-section").style.display = "block";
+          document.getElementById("current-user-display").textContent = `User: ${currentUser}`;
+          loadPlots();
+          loadData();
+          return true;
+        } else {
+          sessionStorage.removeItem('agriUser');
+        }
+      }
+      return false;
+    }
+
+    // ✅ LOGIN
     function login() {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
@@ -862,11 +876,16 @@
       loginBtn.innerHTML = '<div class="loading"></div> Logging in...';
       loginBtn.disabled = true;
       
-      // Only use Firestore for authentication
       db.collection("usernames").where("username", "==", username).where("password", "==", password).get()
         .then((querySnapshot) => {
           if (!querySnapshot.empty) {
             currentUser = username;
+            // ✅ STORE SESSION
+            sessionStorage.setItem('agriUser', JSON.stringify({
+              username: currentUser,
+              loginTime: Date.now()
+            }));
+            
             document.getElementById("login-section").style.display = "none";
             document.getElementById("data-entry-section").style.display = "block";
             document.getElementById("current-user-display").textContent = `User: ${currentUser}`;
@@ -877,28 +896,27 @@
           }
           loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span data-key="loginButton">Login</span>';
           loginBtn.disabled = false;
-          // Update button text after language change
           setLanguage(currentLanguage);
         })
         .catch((error) => {
           alert("Error: " + error.message);
           loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span data-key="loginButton">Login</span>';
           loginBtn.disabled = false;
-          // Update button text after language change
           setLanguage(currentLanguage);
         });
     }
-    
-    // Function to logout
+
+    // ✅ LOGOUT
     function logout() {
       currentUser = "";
+      sessionStorage.removeItem('agriUser'); // ✅ CLEAR SESSION
       document.getElementById("data-entry-section").style.display = "none";
       document.getElementById("login-section").style.display = "flex";
       document.getElementById("username").value = "";
       document.getElementById("password").value = "";
     }
-    
-    // Function to load the plots from Firestore
+
+    // Load plots
     function loadPlots() {
       if (!currentUser) return;
       db.collection("users").doc(currentUser).collection("plots")
@@ -917,15 +935,14 @@
             plotSelection.appendChild(option);
             filterPlot.appendChild(option.cloneNode(true));
           });
-          // Update text after language change
           setLanguage(currentLanguage);
         })
         .catch((error) => {
           console.error(translations[currentLanguage]["errorLoadingPlots"], error);
         });
     }
-    
-    // Function to add a new plot
+
+    // Add plot
     function addPlot() {
       if (!currentUser) return;
       const newPlotName = document.getElementById("newPlotName").value.trim();
@@ -946,8 +963,8 @@
         alert(translations[currentLanguage]["errorAddingPlot"] + " " + error.message);
       });
     }
-    
-    // Function to add a row from inputs to the table
+
+    // Add row from inputs
     function addRowFromInputs() {
       if (!currentUser) return;
       const date = document.getElementById("date").value;
@@ -995,8 +1012,8 @@
         alert(translations[currentLanguage]["errorSavingData"] + " " + error.message);
       });
     }
-    
-    // Function to calculate days after pruning
+
+    // Calculate days after pruning
     function calculateDaysAfterPruning(date, pruningDate) {
       const dateObj = new Date(date);
       const pruningDateObj = new Date(pruningDate);
@@ -1004,8 +1021,8 @@
       const differenceInDays = differenceInTime / (1000 * 3600 * 24);
       return Math.floor(differenceInDays);
     }
-    
-    // Function to load data from Firestore
+
+    // Load data
     function loadData() {
       if (!currentUser) return;
       db.collection("users").doc(currentUser).collection("sprayData")
@@ -1043,8 +1060,8 @@
           console.error(translations[currentLanguage]["errorLoadingData"], error);
         });
     }
-    
-    // Function to edit a row
+
+    // Edit row
     function editRow(docId) {
       const data = tableData.find(item => item.id === docId);
       if (!data) return;
@@ -1075,8 +1092,8 @@
           alert("Error preparing for edit: " + error.message);
         });
     }
-    
-    // Function to delete a row
+
+    // Delete row
     function deleteRow(docId) {
       if (confirm(translations[currentLanguage]["confirmDelete"])) {
         db.collection("users").doc(currentUser).collection("sprayData").doc(docId).delete()
@@ -1088,8 +1105,8 @@
           });
       }
     }
-    
-    // Function to filter the table
+
+    // Filter table
     function filterTable() {
       const filterPlot = document.getElementById("filterPlot").value.toLowerCase();
       const filterDate = document.getElementById("filterDate").value;
@@ -1113,8 +1130,8 @@
         }
       });
     }
-    
-    // Function to download the table data as a PDF
+
+    // Download PDF
     function downloadPDF() {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
@@ -1143,10 +1160,15 @@
       
       doc.save("table_data.pdf");
     }
-    
-    // Function to redirect to the second page
+
+    // Redirect to second page
     function redirectToSecondPage() {
       window.location.href = 'drip.html?user=' + currentUser;
+    }
+
+    // ✅ INITIALIZE SESSION CHECK AFTER FIREBASE
+    if (!checkExistingSession()) {
+      document.getElementById("login-section").style.display = "flex";
     }
   </script>
 </body>
