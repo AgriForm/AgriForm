@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgriForm</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: #010A05;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        font-family: "Poppins", sans-serif;
+    }
+
+    /* BIG Glow */
+    .glow {
+        position: absolute;
+        width: 650px;
+        height: 650px;
+        background: radial-gradient(circle, rgba(0,255,120,0.25), transparent 70%);
+        border-radius: 50%;
+        filter: blur(25px);
+        animation: glowPulse 6s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+        0% { transform: scale(1); opacity: .5; }
+        50% { transform: scale(1.25); opacity: 1; }
+        100% { transform: scale(1); opacity: .5; }
+    }
+
+    /* HUGE TITLE */
+    .title {
+        font-size: 160px;
+        font-weight: 900;
+        text-align: center;
+        background: linear-gradient(90deg,#00ff78,#e1ffef);
+        -webkit-background-clip: text;
+        color: transparent;
+        text-shadow: 0 0 40px #00ff78;
+        animation: mainGlow 3s infinite ease-in-out;
+    }
+    @keyframes mainGlow {
+        0% { text-shadow: 0 0 40px #00ff78; }
+        50% { text-shadow: 0 0 80px #8affc2; }
+        100% { text-shadow: 0 0 40px #00ff78; }
+    }
+
+    /* BIG Subtitle */
+    .subtitle {
+        font-size: 70px;
+        font-weight: 700;
+        margin-top: -20px;
+        background: linear-gradient(90deg,#c0ffe0,#ffffff);
+        -webkit-background-clip: text;
+        color: transparent;
+        opacity: 0;
+        animation: fadeIn 4s infinite;
+    }
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        30% { opacity: 1; }
+        70% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+
+    /* Big vine line */
+    .vine {
+        position: absolute;
+        top: 68%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 8px;
+        background: #00ff78;
+        border-radius: 4px;
+        animation: vineGrow 4s infinite ease-in-out;
+    }
+    @keyframes vineGrow {
+        0% { width: 0; opacity: 0; }
+        20% { width: 420px; opacity: 1; }
+        70% { width: 420px; opacity: 1; }
+        100% { width: 0; opacity: 0; }
+    }
+
+    /* Shimmer sliding */
+    .shimmer {
+        position: absolute;
+        top: 68%;
+        left: 50%;
+        width: 0;
+        height: 8px;
+        background: rgba(255,255,255,0.8);
+        border-radius: 3px;
+        animation: shimmerSlide 4s infinite ease-in-out;
+        filter: blur(2px);
+    }
+    @keyframes shimmerSlide {
+        0%   { transform: translateX(-210px); opacity: 0; }
+        30%  { opacity: 1; }
+        60%  { transform: translateX(210px); opacity: 1; }
+        100% { opacity: 0; }
+    }
+
+    /* Leaf grows at end */
+    .leaf {
+        position: absolute;
+        top: 62%;
+        left: calc(50% + 210px);
+        width: 0;
+        height: 0;
+        background: #00ff78;
+        border-radius: 35px 35px 0 35px;
+        transform: rotate(-40deg);
+        animation: leafGrow 4s infinite ease-in-out;
+    }
+    @keyframes leafGrow {
+        0% { width: 0; height: 0; opacity: 0; }
+        30% { width: 35px; height: 50px; opacity: 1; }
+        70% { width: 35px; height: 50px; opacity: 1; }
+        100% { width: 0; height: 0; opacity: 0; }
+    }
+</style>
+</head>
+<body>
+
+<div class="glow"></div>
+
+<div style="position:relative;text-align:center;">
+    <div class="title">AgriForm</div>
+    <div class="subtitle">For Grapes</div>
+
+    <div class="vine"></div>
+    <div class="shimmer"></div>
+    <div class="leaf"></div>
+</div>
+
+</body>
+</html>
